@@ -1,0 +1,14 @@
+.idea
+composer.lock
+*.log
+runtime
+public/img
+database.php
+.svn
+data/sessions
+data/cache
+data/tplcache
+
+src/config
+
+
