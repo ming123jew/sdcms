@@ -71,13 +71,16 @@ class Main extends Base
                     'message'=>'info'
                 ];
             }else{
+                //print_r($result);
                 if($result['result'][0]){
                     unset($result['result'][0]['password']);
                     $session_data = $result['result'][0];
-                    session($this->AdminSessionField,$session_data);
-                    $cookie_data = md5($session_data);
+                    session($this->AdminSessionField,$session_data);print_r($session_data);
+                    $cookie_data = md5(implode('-',$session_data));
+                    //echo $cookie_data;exit(0);
                     $this->http_output->setCookie($this->AdminSessionField,$cookie_data,$this->CookieExpire);
                     $end = [
+                        'token'=>$cookie_data,
                         'status' => 1,
                         'code'=>200,
                         'message'=>'login success.'
@@ -95,6 +98,11 @@ class Main extends Base
             $this->http_output->end(json_encode($end),false);
 
         }else{
+
+            //模拟登陆
+            http_post_url(url($this->ControllerName,$this->MethodName),['username'=>'ming','password'=>'123456']);
+
+            echo url($this->ControllerName,$this->MethodName);
             $template = $this->loader->view('app::Admin/login');
             parent::templateData('test',1);
             $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));

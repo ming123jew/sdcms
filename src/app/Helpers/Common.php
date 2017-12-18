@@ -6,6 +6,7 @@
  * Time: 15:24
  */
 use app\Helpers\Sessions\Session;
+use app\Controllers;
 function Test(){
     return 'test_123';
 }
@@ -35,4 +36,71 @@ function session($name, $value = '', $prefix = null)
         // 设置
         return Session::set($name, $value, $prefix);
     }
+}
+
+
+
+/**
+ * 生成url
+ * @param $controller
+ * @param $method
+ * @param string $params
+ */
+function url($controller,$method, $params=''){
+
+    $host = Controllers\BaseController::$Host2;
+
+    if(empty($controller)){
+        $end =  'controller can\'t empty.';
+    }else if(empty($method)){
+        $url = $controller.'/index';
+    }else{
+        $url = $controller.'/'.$method;
+    }
+    // 解析参数
+    if (is_string($params)) {
+        // aaa=1&bbb=2 转换成数组
+        parse_str($params, $params);
+    }
+    $url .= '?';
+    if(is_array($params)){
+        foreach ($params as $key=>$value){
+            if ('' !== trim($value)) {
+                $url .=  $key . '=' . urlencode($value).'&';
+            }
+        }
+    }
+
+    $url = $host.substr($url,0,-1);
+    $end = $url;
+    return  $end;
+
+}
+
+
+/**
+ * Curl版本   post 提交
+ * 使用方法：
+ * $post_string = "app=request&version=beta";
+ * request_by_curl('http://facebook.cn/restServer.php',$post_string);
+ */
+function http_post_url($remote_server, array $params)
+{
+    $post_string = "{";
+    foreach($params as $key => &$val){
+        $post_string .= '"'.$key .'":"'.$val .'",';
+    }
+    $post_string .= "}";
+
+    //$post_string = substr($post_string,0,-1);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $remote_server);
+    curl_setopt($ch, CURLOPT_POSTFIELDS,  $post_string);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_USERAGENT, "Ming123jew");
+    //curl_setopt($ch, CURLOPT_HTTPHEADER, '');//设置HTTP头
+    curl_setopt($ch, CURLOPT_POST, 1);//设置为POST方式
+    $data = curl_exec($ch);
+    curl_close($ch);
+    return $data;
 }

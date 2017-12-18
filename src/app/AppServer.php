@@ -20,7 +20,11 @@ class AppServer extends SwooleDistributedServer
     public function __construct()
     {
         $this->setLoader(new Loader());
+        //通过这个可以精确判断发生异常和错误的位置，也可以了解到SD框架的工作流程。
+        //$this->setDebugMode();
         parent::__construct();
+
+
     }
 
     /**

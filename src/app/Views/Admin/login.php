@@ -77,7 +77,7 @@ Purchase: http://wrapbootstrap.com
                 <input type="button" class="btn btn-primary btn-block" value="Login">
             </div>
             <div class="loginbox-signup">
-                <a href="register.html">Sign Up With Email</a>
+                <a href="#">Sign Up With Email</a>
             </div>
         </div>
         <div class="logobox">
@@ -90,6 +90,8 @@ Purchase: http://wrapbootstrap.com
     <script src="assets/js/bootstrap.min.js"></script>
 
     <script>
+        var Host =  "<?php  echo ($data['__HOST__']);?>";
+        var HostPost = "<?php  echo ($data['__HOST__']);?>";
         $(function(){
 
             $('.btn-primary').bind('click',function () {
@@ -114,11 +116,72 @@ Purchase: http://wrapbootstrap.com
                    return false;
                }
 
-               $.post('http://192.168.12.3:8081/Admin/Main/login?v=3&p=3',{username:username.val(),password:password.val()},function (json) {
-                    console.log(json)
+               $.post(HostPost+'Admin/Main/login?v=3&p=3',{username:username.val(),password:password.val()},function (json) {
+                   console.log(json);
+                   e = eval("("+json+")");
+                   if (e.status){
+                       try {
+                           sessionStorage.setItem("LoginTokenStorage", e.token);
+                           console.log("LoginTokenStorage write success.")
+                       }catch (err){
+                           $.cookie('LoginTokenStorage', e, { expires: 1, path: '/' });
+                       }
+                       window.location.href = Host + "Admin/Main/index"
+                   }else{
+                       try {
+                           sessionStorage.setItem("LoginTokenStorage", null);
+                       }catch (err){
+                           $.cookie('LoginTokenStorage', null, { expires: 1, path: '/' });
+                       }
+                       logobox.html(e.message)
+                   }
                })
-
             })
+
+                //token
+                /**
+                sendData={username:username.val(),password:password.val()}
+                Headers = null;
+                if (JSON.stringify(sendData)!=null){
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        headers: Headers,
+                        url: HostPost+'Admin/Main/login?v=3&p=3',
+                        async: true,
+                        type: 'post',
+                        data: JSON.stringify(sendData),
+                        beforeSend: function(xhr) {
+                            LoginTokenStorage = sessionStorage.getItem("LoginTokenStorage");
+                            if (LoginTokenStorage!=null){
+                                xhr.setRequestHeader("Content-Type","application/json")
+                                xhr.setRequestHeader("Authorization", LoginTokenStorage);
+                            }
+                        },
+                        success: function(e) {
+                            e = eval("("+e+")")
+                            if (e.status){
+                                try {
+                                    sessionStorage.setItem("LoginTokenStorage", e.token);
+                                    console.log("LoginTokenStorage write success.")
+                                }catch (err){
+                                    $.cookie('LoginTokenStorage', e, { expires: 1, path: '/' });
+                                }
+                                window.location.href = Host + "Admin/Main/index"
+                            }else{
+                                try {
+                                    sessionStorage.setItem("LoginTokenStorage", null);
+                                }catch (err){
+                                    $.cookie('LoginTokenStorage', null, { expires: 1, path: '/' });
+                                }
+                                logobox.html(e.message)
+                            }
+                        },
+                        error: function(e) {
+                            logobox.html(e)
+                        }
+                    });
+                }
+            })**/
         })
     </script>
 

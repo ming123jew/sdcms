@@ -29,6 +29,7 @@ class BaseController extends Controller
      * @var string
      */
     public $Host = '';
+    public static $Host2 = '';
 
     /**
      * 根链接
@@ -58,13 +59,14 @@ class BaseController extends Controller
     {
         parent::initialization($controller_name, $method_name);
         $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-        $host =  $http_type .($this->http_input->header('host')).'/';
-        $this->Host = $host;
+        $host =  $http_type .( $this->http_input->header('host') ).'/';
+        //print_r($this->context);
+        self::$Host2 = $this->Host = $host;
         $this->Url = str_replace(':http_','/',$method_name);
         $this->Url = $host.str_replace('\\','/', $this->Url);
         $this->Uri = $host.$this->http_input->getRequestUri();
         $this->ControllerName = str_replace('\\','/',$controller_name);
-        $this->MethodName = $method_name;
+        $this->MethodName =  str_replace('http_','',$method_name);
         self::templateData('__URI__',$this->Uri);
         self::templateData('__URL__',$this->Url);
         self::templateData('__HOST__',$this->Host);

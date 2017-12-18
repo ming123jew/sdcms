@@ -8,7 +8,7 @@
     </li>
     <!--Databoxes-->
     <li>
-        <a href="<?php \app\Extend\Helpers\Helper::url($data['__C__'],'config','i=1');?>">
+        <a href="<?php url($data['__C__'],'config','i=1');?>">
             <i class="menu-icon glyphicon glyphicon-tasks"></i>
             <span class="menu-text">系统设置</span>
         </a>
