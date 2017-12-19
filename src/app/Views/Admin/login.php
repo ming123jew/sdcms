@@ -15,15 +15,12 @@ Purchase: http://wrapbootstrap.com
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <base href="<?php echo ($data['HTML_URL']);?>"/>
     <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
-
     <!--Basic Styles-->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
     <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
     <link href="assets/css/font-awesome.min.css" rel="stylesheet" />
-
     <!--Fonts-->
     <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">-->
-
     <!--Beyond styles-->
     <link id="beyond-link" href="assets/css/beyond.min.css" rel="stylesheet" />
     <link href="assets/css/demo.min.css" rel="stylesheet" />
@@ -116,18 +113,21 @@ Purchase: http://wrapbootstrap.com
                    return false;
                }
 
-               $.post(HostPost+'Admin/Main/login?v=3&p=3',{username:username.val(),password:password.val()},function (json) {
+               $.post(HostPost+'Admin/Main/login?v=1.0.0',{username:username.val(),password:password.val()},function (json) {
                    console.log(json);
                    e = eval("("+json+")");
                    if (e.status){
                        try {
+                           //浏览器缓存方式
                            sessionStorage.setItem("LoginTokenStorage", e.token);
                            console.log("LoginTokenStorage write success.")
                        }catch (err){
+                           //cookie方式
                            $.cookie('LoginTokenStorage', e, { expires: 1, path: '/' });
                        }
                        window.location.href = Host + "Admin/Main/index"
                    }else{
+                       //清空操作
                        try {
                            sessionStorage.setItem("LoginTokenStorage", null);
                        }catch (err){
@@ -138,7 +138,7 @@ Purchase: http://wrapbootstrap.com
                })
             })
 
-                //token
+                //token方式
                 /**
                 sendData={username:username.val(),password:password.val()}
                 Headers = null;

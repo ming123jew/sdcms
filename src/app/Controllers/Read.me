@@ -1,6 +1,16 @@
 模板常量：
-__URI__  ：网址
-__URL__  ：
-__HOST__ ：网站主机域名
-__C__  :  控制器名
-__M__  ： 控制器方法名
+$data['__URI__']  ：全网址
+$data['__URL__']  ：根网址
+$data['__HOST__'] ：网站主机域名
+$data['__C__']  :  控制器名
+$data['__M__']  ： 控制器方法名
+
+控制器常用函数：
+基类，在写控制器过程中
+parent::templateData('test',1)  :   注入模板变量$data['test'],其值为1
+parent::webOrApp(function (){  //函数主体  })  :  判断是否是APP，如是APP则返回json数据，非APP则执行函数主体
+
+
+地址参数：xxx?is_app=yes
+is_app:   yes|no|null  值为yes判断app|wap端
+

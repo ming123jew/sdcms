@@ -32,13 +32,13 @@ class BaseController extends Controller
     public static $Host2 = '';
 
     /**
-     * 根链接
+     * @description 根链接
      * @var string
      */
     public $Url = '';
 
     /**
-     * 全链接
+     * @description 全链接
      * @var string
      */
     public $Uri = '';
@@ -50,6 +50,12 @@ class BaseController extends Controller
      * @var array
      */
     public $Params = [];
+
+    /**
+     * @description 判断是不是APP端
+     * @var null
+     */
+    public $IsApp = null;
 
     /**
      * @param string $controller_name
@@ -67,6 +73,7 @@ class BaseController extends Controller
         $this->Uri = $host.$this->http_input->getRequestUri();
         $this->ControllerName = str_replace('\\','/',$controller_name);
         $this->MethodName =  str_replace('http_','',$method_name);
+        $this->IsApp = $this->http_input->postGet('is_app')=='yes'??null;
         self::templateData('__URI__',$this->Uri);
         self::templateData('__URL__',$this->Url);
         self::templateData('__HOST__',$this->Host);
@@ -93,6 +100,20 @@ class BaseController extends Controller
         $v = yield $this->redis_pool->getCoroutine()->set('a','aaaa');
         print_r($v);
         print_r('test_test');
+
+    }
+
+    /**
+     * @description 判断是否是app/wap端，如是返回json数据，不是则执行闭包操作。
+     * @param $callback
+     */
+    protected function webOrApp($callback){
+        if($this->IsApp){
+            $end = ['data'=>$this->TemplateData];
+            $this->http_output->end(json_encode($end),false);
+        }else{
+            call_user_func($callback);
+        }
     }
 
     //入口可以设置IP限制操作，如1秒内同一个IP访问超出N次，将其IP放进禁止访问列表

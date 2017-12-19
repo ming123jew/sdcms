@@ -49,6 +49,9 @@ class Base extends \app\Controllers\BaseController
         $this->TemplateData = array_merge($this->TemplateData,$arr);
     }
 
+    /**
+     * @desc 默认跳转方法
+     */
     public function defaultMethod()
     {
         $this->redirectController('Admin/Main','login');

@@ -9,6 +9,7 @@ use Server\Memory\Cache;
  * User: ming123jew
  * Date: 17-09-14
  * Time: am09:51
+ * Module: 登录 | 修改当前用户信息 | 网站基本信息
  */
 class Main extends Base
 {
@@ -37,18 +38,16 @@ class Main extends Base
 
     /**
      * 后台首页 | 兼容所有端
-     * PC/WAP 使用到VIEW，其他端只在POST操作返回结果
+     * PC/WAP 使用到VIEW，其他端只在is_app=yes操作返回结果
      */
     public function http_index(){
 
-        if($this->http_input->getRequestMethod()=='POST'){
-            $end = [];
-            $this->http_output->end(json_encode($end),false);
-        }else{
+        parent::templateData('test',1);
+        //web or app
+        parent::webOrApp(function (){
             $template = $this->loader->view('app::Admin/index');
-            parent::templateData('test',1);
             $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
-        }
+        });
     }
 
     /**
@@ -100,18 +99,21 @@ class Main extends Base
         }else{
 
             //模拟登陆
-            http_post_url(url($this->ControllerName,$this->MethodName),['username'=>'ming','password'=>'123456']);
+            //http_post_url(url($this->ControllerName,$this->MethodName),['username'=>'ming','password'=>'123456']);
+            //echo url($this->ControllerName,$this->MethodName);
 
-            echo url($this->ControllerName,$this->MethodName);
-            $template = $this->loader->view('app::Admin/login');
             parent::templateData('test',1);
-            $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
-            //$this->http_output->end($endData,false);
+            //web or app
+            parent::webOrApp(function (){
+                $template = $this->loader->view('app::Admin/login');
+                $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+            });
         }
 
     }
 
     public function http_config(){
+
 
     }
 

@@ -84,8 +84,8 @@ function url($controller,$method, $params=''){
  * $post_string = "app=request&version=beta";
  * request_by_curl('http://facebook.cn/restServer.php',$post_string);
  */
-function http_post_url($remote_server, array $params)
-{
+function http_post_url($remote_server, array $params){
+
     $post_string = "{";
     foreach($params as $key => &$val){
         $post_string .= '"'.$key .'":"'.$val .'",';
