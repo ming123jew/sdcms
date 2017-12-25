@@ -38,7 +38,6 @@ Purchase: http://wrapbootstrap.com
 </head>
 <!-- /Head -->
 <!-- Body -->
-
 <!-- Loading Container -->
 <div class="loading-container">
     <div class="loading-progress">

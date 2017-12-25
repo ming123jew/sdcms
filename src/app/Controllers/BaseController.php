@@ -44,7 +44,9 @@ class BaseController extends Controller
     public $Uri = '';
 
     public $ControllerName = '';
+    public static $ControllerName2 = '';
     public $MethodName = '';
+    public static $MethodName2 = '';
 
     /**
      * @var array
@@ -72,7 +74,9 @@ class BaseController extends Controller
         $this->Url = $host.str_replace('\\','/', $this->Url);
         $this->Uri = $host.$this->http_input->getRequestUri();
         $this->ControllerName = str_replace('\\','/',$controller_name);
+        self::$ControllerName2 = $this->ControllerName;
         $this->MethodName =  str_replace('http_','',$method_name);
+        self::$MethodName2 = $this->MethodName;
         $this->IsApp = $this->http_input->postGet('is_app')=='yes'??null;
         self::templateData('__URI__',$this->Uri);
         self::templateData('__URL__',$this->Url);

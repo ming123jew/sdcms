@@ -42,21 +42,21 @@ function session($name, $value = '', $prefix = null)
 
 /**
  * 生成url
- * @param $controller
+ * @param $controller   module+controller    如 Admin/Main
  * @param $method
  * @param string $params
  */
-function url($controller,$method, $params=''){
+function url($controller='',$method='', $params=''){
 
     $host = Controllers\BaseController::$Host2;
 
     if(empty($controller)){
-        $end =  'controller can\'t empty.';
-    }else if(empty($method)){
-        $url = $controller.'/index';
-    }else{
-        $url = $controller.'/'.$method;
+        $controller = Controllers\BaseController::$ControllerName2;
     }
+    if(empty($method)){
+        $method = Controllers\BaseController::$MethodName2;
+    }
+    $url = $controller.'/'.$method;
     // 解析参数
     if (is_string($params)) {
         // aaa=1&bbb=2 转换成数组
@@ -77,6 +77,17 @@ function url($controller,$method, $params=''){
 
 }
 
+
+/**
+ * 检查路由权限 | 预留
+ * @access public static
+ * @param  string       $path       路由
+ * @param  array       $param      参数
+ * @return bool
+ */
+function checkPath($path,$param=[]){
+
+}
 
 /**
  * Curl版本   post 提交

@@ -30,6 +30,11 @@ class Main extends Base
      */
     protected function initialization($controller_name, $method_name)
     {
+        //测试 绕过登录
+        $session_data['username'] = 'ming';
+        $session_data['id'] = 1;
+        session($this->AdminSessionField,$session_data);
+
         parent::initialization($controller_name, $method_name);
         if( !in_array($method_name,['http_login']) && !self::has_login() ){
             $this->redirectController($controller_name,'login');
@@ -43,6 +48,7 @@ class Main extends Base
     public function http_index(){
 
         parent::templateData('test',1);
+
         //web or app
         parent::webOrApp(function (){
             $template = $this->loader->view('app::Admin/index');
@@ -74,7 +80,7 @@ class Main extends Base
                 if($result['result'][0]){
                     unset($result['result'][0]['password']);
                     $session_data = $result['result'][0];
-                    session($this->AdminSessionField,$session_data);print_r($session_data);
+                    session($this->AdminSessionField,$session_data);//print_r($session_data);
                     $cookie_data = md5(implode('-',$session_data));
                     //echo $cookie_data;exit(0);
                     $this->http_output->setCookie($this->AdminSessionField,$cookie_data,$this->CookieExpire);
@@ -97,11 +103,6 @@ class Main extends Base
             $this->http_output->end(json_encode($end),false);
 
         }else{
-
-            //模拟登陆
-            //http_post_url(url($this->ControllerName,$this->MethodName),['username'=>'ming','password'=>'123456']);
-            //echo url($this->ControllerName,$this->MethodName);
-
             parent::templateData('test',1);
             //web or app
             parent::webOrApp(function (){

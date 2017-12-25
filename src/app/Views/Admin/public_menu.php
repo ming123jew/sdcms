@@ -8,10 +8,20 @@
     </li>
     <!--Databoxes-->
     <li>
-        <a href="<?php url($data['__C__'],'config','i=1');?>">
+        <a href="" class="menu-dropdown">
             <i class="menu-icon glyphicon glyphicon-tasks"></i>
             <span class="menu-text">系统设置</span>
         </a>
+        <ul class="submenu">
+            <li>
+                <a href="<?php echo url('Admin/System','config','i=1');?>">
+                    <span class="menu-text">基本设置</span>
+                </a>
+                <a href="<?php echo url('Admin/System','menu','i=1');?>">
+                    <span class="menu-text">后台菜单</span>
+                </a>
+            </li>
+        </ul>
     </li>
     <!--Widgets-->
     <li>
