@@ -53,7 +53,7 @@
                 </a>
 
                 <ul class="submenu">
-                    <li>
+                    <li  class="active">
                         <a href="font-awesome.html">
                             <i class="menu-icon fa fa-rocket"></i>
                             <span class="menu-text">Font Awesome</span>

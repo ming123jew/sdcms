@@ -38,7 +38,7 @@ class System extends Base
 
             $this->MenuModel =  $this->loader->model('MenuModel',$this);
             $all = yield $this->MenuModel->getAll();
-
+            $info = '';
             if($all){
                 $tree       = new Tree();
                 $tree->nbsp = '&nbsp;&nbsp;&nbsp;';
@@ -55,7 +55,7 @@ class System extends Base
                     <td style='padding-left:20px;'>
                         <input name='listorders[\$id]' type='text' size='3' value='\$list_order' data='\$id' class='listOrder'>
                     </td>
-                    <td>\$id</td>
+                    <!--<td>\$id</td>-->
                     <td>\$spacer  \$name</td>
                     <td>\$app</td>
                     <td>\$model</td>
@@ -65,15 +65,54 @@ class System extends Base
                     <td>\$str_manage</td>
                 </tr>";
 
-                $tree->init($all);
+                $tree->init($all['result']);
                 $info = $tree->get_tree(0, $str);
-                //print_r($info);
-                parent::templateData('allmenu',$info);
+                //print_r($all);
+
             }
+            parent::templateData('allmenu',$info);
             parent::templateData('test',1);
             //web or app
             parent::webOrApp(function (){
                 $template = $this->loader->view('app::Admin/system_menu');
+                $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+            });
+        }
+    }
+
+
+    public function http_menu_add(){
+        if($this->http_input->getRequestMethod()=='POST'){
+            $end = [
+                'status' => 1,
+                'code'=>200,
+                'message'=>'message.'
+            ];
+            $this->http_output->end(json_encode($end),false);
+        }else{
+            $parent_id  =  $this->http_input->postGet('parent_id') ?? 0;
+
+            $this->MenuModel =  $this->loader->model('MenuModel',$this);
+            $all = yield $this->MenuModel->getAll();
+            $info='';
+            if($all) {
+                $selected = $parent_id;
+                $tree = new Tree();
+                foreach ($all['result'] as $r) {
+                    $r['selected'] = $r['id'] == $selected ? 'selected' : '';
+                    $array[] = $r;
+                    $str = "<option value='\$id' \$selected>\$spacer \$name</option>";
+                    $tree->init($array);
+                    $parentid = isset($where['parentid'])?$where['parentid']:0;
+                    $info = $tree->get_tree($parentid, $str);
+                }
+            }
+//here
+            parent::templateData('selectCategorys',$info);
+            parent::templateData('test',1);
+            //web or app
+            parent::webOrApp(function (){
+                $template = $this->loader->view('app::Admin/system_menu_add');
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
             });
         }
