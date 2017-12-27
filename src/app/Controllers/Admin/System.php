@@ -9,6 +9,11 @@ namespace app\Controllers\Admin;
 use app\Models\MenuModel;
 use app\Helpers\Tree;
 
+/**
+ * 系统设置  |  基本设置  |  菜单
+ * Class System
+ * @package app\Controllers\Admin
+ */
 class System extends Base
 {
     protected $UserModel;
