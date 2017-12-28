@@ -22,7 +22,6 @@ class Main extends Base
     {
         parent::initialization($controller_name, $method_name);
         $this->BaseModel = $this->loader->model('BaseModel', $this);
-
     }
 
     public function http_hello(){

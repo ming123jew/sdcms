@@ -81,8 +81,8 @@ Purchase: http://wrapbootstrap.com
                 <!-- 菜单列表 -->
                 <div class="row">
 
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','menu');?>"><i class="typcn typcn-lightbulb"></i>菜单列表</a></h5>
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','menu_add');?>"><i class="typcn typcn-lightbulb"></i>添加菜单</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','content_category_list');?>"><i class="typcn typcn-lightbulb"></i>栏目列表</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','content_category_add');?>"><i class="typcn typcn-lightbulb"></i>添加栏目</a></h5>
                     <div class="col-xs-12">
                         <div class="well with-header  with-footer">
                             <div class="header bg-blue">
@@ -95,22 +95,22 @@ Purchase: http://wrapbootstrap.com
                                         排序
                                     </th>
                                     <th>
-                                        菜单名称
+                                        id
                                     </th>
                                     <th>
-                                        应用
+                                        栏目名称
                                     </th>
                                     <th>
-                                        控制器
+                                        栏目类型
                                     </th>
                                     <th>
-                                        方法
+                                        所属模型
                                     </th>
                                     <th>
-                                        请求
+                                        数据量
                                     </th>
                                     <th>
-                                        状态
+                                        访问
                                     </th>
                                     <th>
                                         操作
@@ -118,7 +118,7 @@ Purchase: http://wrapbootstrap.com
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php echo $data['allmenu'];?>
+                                <?php //echo $data['allmenu'];?>
                                 </tbody>
                             </table>
 

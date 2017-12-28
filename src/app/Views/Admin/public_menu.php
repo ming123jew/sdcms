@@ -34,7 +34,7 @@
             <i class="menu-expand"></i>
         </a>
         <ul class="submenu">
-            <li <?php if( strpos($data['__M__'],'content_article')!==false){?>class="active open"<?php } ?>>
+            <li <?php if( strpos($data['__M__'],'content_article')!==false){?>class="open"<?php } ?>>
                 <a href="#" class="menu-dropdown">
                                     <span class="menu-text">
                                          <span class="menu-text">内容发布</span>
@@ -50,7 +50,7 @@
                     </li>
                 </ul>
             </li>
-            <li <?php if( strpos($data['__M__'],'content_category')!==false){?>class="active open"<?php } ?>>
+            <li <?php if( strpos($data['__M__'],'content_category')!==false){?>class="open"<?php } ?>>
                 <a href="#" class="menu-dropdown">
                     <span class="menu-text">
                         <span class="menu-text">栏目管理</span>
@@ -58,12 +58,12 @@
                     <i class="menu-expand"></i>
                 </a>
                 <ul class="submenu">
-                    <li <?php if($data['__M__']=='category_list'){?>class="active"<?php } ?>>
+                    <li <?php if($data['__M__']=='content_category_list'){?>class="active"<?php } ?>>
                         <a href="<?php echo url('Admin/Content','content_category_list','i=1');?>">
                             <span class="menu-text">列表</span>
                         </a>
                     </li>
-                    <li <?php if($data['__M__']=='content_category_list'){?>class="active"<?php } ?>>
+                    <li <?php if($data['__M__']=='content_category_add'){?>class="active"<?php } ?>>
                         <a href="<?php echo url('Admin/Content','content_category_add','i=1');?>">
                             <span class="menu-text">添加</span>
                         </a>

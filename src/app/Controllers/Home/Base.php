@@ -1,11 +1,6 @@
 <?php
-
 namespace app\Controllers\Home;
 
-use app\Extend\WxSdk\WechatAuth;
-use app\Extend\WxSdk\Jssdk;
-use app\Models\StatsModel;
-define(WEIXIN_CACHE_PATH,'a');
 /**
  * Created by PhpStorm.
  * User: ming123jew
@@ -14,56 +9,49 @@ define(WEIXIN_CACHE_PATH,'a');
  */
 class Base extends \app\Controllers\BaseController
 {
-    public $WechatAuth;
-    public $AppId = '';
-    public $AppSecret = '';
+    /**
+     * @var string
+     */
+    public $HtmlUrl = '';
+
+    /**
+     * @param string $controller_name
+     * @param string $method_name
+     */
     protected function initialization($controller_name, $method_name)
     {
+
         parent::initialization($controller_name, $method_name);
+        $configs = get_instance()->config;
+        $configs_config = $configs['config'];
+        //print_r($configs_config);
+        //print_r($this->ControllerName);
+        //print_r($this->MethodName);
+        $this->HtmlUrl = $configs_config[$configs_config['active']]['home']['static_url'];
 
-    }
-
-    protected function _getJsSdk(){
-        $Jssdk = new Jssdk($this->AppId, $this->AppSecret);
-        return $Jssdk->getSignPackage();
-    }
-
-
-    /**
-     * @desc 统计数据
-     * @return null
-     */
-    public function _Stats($type='click'){
-        $StatsModel = $this->loader->model('StatsModel',$this);
-        $date = date('Ymd',time());
-        $val = yield $StatsModel->updateOrInsert($date);
-        return $val;
+        parent::templateData('HTML_URL',$this->HtmlUrl);
     }
 
     /**
-     * @desc 记录分享
+     * @desc 装置模板数据
+     * @param $key
+     * @param $value
+     * @return array
      */
-    public function Share(){
-        $type=$this->request->param('type');
-        self::_Stats($type);
+    protected function templateData($key,$value)
+    {
+        $arr = [$key=>$value];
+        $this->TemplateData = array_merge($this->TemplateData,$arr);
     }
 
     /**
-     * @desc   判断是不是微信浏览器
-     * @return bool
+     * @desc 默认跳转方法
      */
-    protected function _Is_Weixin(){
-        if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
-            return true;
-        }
-        return false;
-    }
-
-
     public function defaultMethod()
     {
-        $this->redirectController('Home/Main','test');
+        $this->redirectController('Home/Main','login');
     }
+
 
 
 }

@@ -64,7 +64,7 @@ class Content extends Base
         }
     }
 
-    public function http_category_list()
+    public function http_content_category_list()
     {
         if($this->http_input->getRequestMethod()=='POST'){
             $end = [
@@ -77,11 +77,29 @@ class Content extends Base
             parent::templateData('test',1);
             //web or app
             parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/content_add');
+                $template = $this->loader->view('app::Admin/content_category_list');
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
             });
         }
     }
-
+    public function http_content_category_add()
+    {
+        if($this->http_input->getRequestMethod()=='POST'){
+            var_dump($this->http_input->postGet());
+            $end = [
+                'status' => 0,
+                'code'=>200,
+                'message'=>'message.'
+            ];
+            $this->http_output->end(json_encode($end),false);
+        }else{
+            parent::templateData('test',1);
+            //web or app
+            parent::webOrApp(function (){
+                $template = $this->loader->view('app::Admin/content_category_add');
+                $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+            });
+        }
+    }
 
 }
