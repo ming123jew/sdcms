@@ -5,10 +5,12 @@
     <title>Title</title>
     <base href="<?php echo ($data['HTML_URL']);?>"/>
     <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.json.js"></script>
 </head>
 
 <body>
 
+<div id="ws_info"></div>
 
 
 <script>
@@ -53,10 +55,10 @@
         else {
             ws = new Comet(webim.server);
         }
-        listenEvent();
+        listenEvent(ws);
     })
 
-    function listenEvent() {
+    function listenEvent(ws) {
         /**
          * 连接建立时触发
          */
@@ -65,7 +67,9 @@
             console.log("connect webim server success.");
             //发送登录信息
             msg = new Object();
-            msg.cmd = 'login';
+            msg.type='connect';
+            //msg.type = 'login';
+
             ws.send($.toJSON(msg));
         };
 
@@ -73,40 +77,40 @@
 
         //有消息到来时触发
         ws.onmessage = function (e) {
+            console.log('hee');
+            alert('heee');
+            console.log(e.data);
             var message = $.evalJSON(e.data);
-            var cmd = message.cmd;
-            if (cmd == 'login')
+
+            var method_name = message.method_name;
+            if (method_name == 'login')
             {
                 client_id = $.evalJSON(e.data).fd;
-                //获取在线列表
-                ws.send($.toJSON({cmd : 'getOnline', gid:gid}));
-                //获取历史记录
-                ws.send($.toJSON({cmd : 'getHistory', gid:gid}));
-                //alert( "收到消息了:"+e.data );
+                $('#ws_info').html('client_id'+client_id +'.more:'+ $.evalJSON(e.data));
             }
-            else if(cmd == 'Over')
+            else if(method_name == 'Over')
             {
                 console.log(message);
                 alert(message.info);
                 closeWindows();
             }
-            else if (cmd == 'getOnline')
+            else if (method_name == 'getOnline')
             {
                 showOnlineList(message);
             }
-            else if (cmd == 'getHistory')
+            else if (method_name == 'getHistory')
             {
                 showHistory(message);
             }
-            else if (cmd == 'newUser')
+            else if (method_name == 'newUser')
             {
                 showNewUser(message);
             }
-            else if (cmd == 'fromMsg')
+            else if (method_name == 'fromMsg')
             {
                 showNewMsg(message);
             }
-            else if (cmd == 'offline')
+            else if (method_name == 'offline')
             {
                 var cid = message.fd;
                 delUser(cid);

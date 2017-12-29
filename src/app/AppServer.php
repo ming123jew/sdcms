@@ -63,7 +63,16 @@ class AppServer extends SwooleDistributedServer
     {
         return true;
     }
-
+    /**
+     * ws开始连接
+     * @param $server
+     * @param $request
+     */
+    public function onSwooleWSOpen($server, $request)
+    {
+        //转发到控制器处理
+        $this->onSwooleWSAllMessage($server,$request->fd,'{"type":"connect"}');
+    }
     /**
      * @return string
      */
@@ -77,7 +86,7 @@ class AppServer extends SwooleDistributedServer
      */
     public function getEventControllerName()
     {
-        return 'AppController';
+        return 'Status';
     }
 
     /**

@@ -24,4 +24,15 @@ class Status extends Base
             $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
         });
     }
+
+
+    public function connect()
+    {
+        $uid = time();
+        $this->bindUid($uid);
+        $this->send(['type' => 'welcome', 'id' => $uid]);
+    }
+
+
+
 }
