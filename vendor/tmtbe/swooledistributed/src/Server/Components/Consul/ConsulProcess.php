@@ -24,10 +24,10 @@ class ConsulProcess extends Process
         if (!is_file(BIN_DIR . "/exec/consul")) {
             secho("[CONSUL]", "consul没有安装,请下载最新的consul安装至bin/exec目录,或者在config/consul.php中取消使能");
             get_instance()->server->shutdown();
-            return;
+            exit();
         }
 
-        $process->exec(BIN_DIR . "/exec/consul", ['agent', '-ui', '-config-dir', BIN_DIR . '/exec/consul.d']);
+        $this->exec(BIN_DIR . "/exec/consul", ['agent', '-ui', '-config-dir', BIN_DIR . '/exec/consul.d']);
     }
 
     /**
@@ -87,4 +87,8 @@ class ConsulProcess extends Process
         file_put_contents(BIN_DIR . "/exec/consul.d/consul_config.json", json_encode($newConfig));
     }
 
+    protected function onShutDown()
+    {
+        // TODO: Implement onShutDown() method.
+    }
 }

@@ -8,11 +8,15 @@
 
 namespace app\Controllers;
 
+use app\Actors\TestActor;
 use app\Models\TestModel;
 use Server\Asyn\Mysql\Miner;
 use Server\Asyn\TcpClient\SdTcpRpcPool;
+use Server\Components\CatCache\CatCacheRpcProxy;
+use Server\Components\CatCache\TimerCallBack;
 use Server\Components\Consul\ConsulServices;
 use Server\Components\Event\EventDispatcher;
+use Server\CoreBase\Actor;
 use Server\CoreBase\Controller;
 use Server\CoreBase\SelectCoroutine;
 use Server\Memory\Cache;
@@ -345,7 +349,7 @@ class TestController extends Controller
 
     public function http_testRedisLua()
     {
-        $value = yield $this->redis_pool->getCoroutine()->evalSha(getLuaSha1('sadd_from_count'), ['testlua', 100], 2);
+        $value = yield $this->redis_pool->getCoroutine()->evalSha(getLuaSha1('sadd_from_count'), ['testlua', 100], 2, [1, 2, 3]);
         $this->http_output->end($value);
     }
 
@@ -395,6 +399,56 @@ class TestController extends Controller
     {
         $uids = yield get_instance()->coroutineGetAllUids();
         $this->http_output->end($uids);
+    }
+
+    public function http_testSC1()
+    {
+        $result = yield CatCacheRpcProxy::getRpc()->offsetExists('test.bc');
+        $this->http_output->end($result, false);
+    }
+
+    public function http_testSC2()
+    {
+        unset(CatCacheRpcProxy::getRpc()['test.a']);
+        $this->http_output->end(1, false);
+    }
+
+
+    public function http_testSC3()
+    {
+        CatCacheRpcProxy::getRpc()['test.a'] = ['a' => 'a', 'b' => [1, 2, 3]];
+        $this->http_output->end(1, false);
+    }
+
+    public function http_testSC4()
+    {
+        $result = yield CatCacheRpcProxy::getRpc()['test'];
+        $this->http_output->end($result, false);
+    }
+
+    public function http_testSC5()
+    {
+        $result = yield CatCacheRpcProxy::getRpc()->getAll();
+        $this->http_output->end($result, false);
+    }
+
+    public function http_testTimerCallBack()
+    {
+        $token = yield TimerCallBack::addTimer(2, TestModel::class, 'testTimerCall', [123]);
+        $this->http_output->end($token);
+    }
+
+    public function http_testActor()
+    {
+        Actor::create(TestActor::class, "actor");
+        Actor::call("actor", "test");
+        $this->http_output->end(123);
+    }
+
+    public function http_testActor2()
+    {
+        Actor::call("actor", "destroy");
+        $this->http_output->end(123);
     }
 
 }

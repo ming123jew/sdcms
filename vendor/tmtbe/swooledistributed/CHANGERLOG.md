@@ -322,3 +322,42 @@ php start_swoole_server.php start -de --f "[ip] => 127.0.0.1"
 2.后台监控整理（VIP）
 
 热烈庆祝群主猫咖店开张～留个纪念，来深圳撸猫啊
+
+# 2.7.3.3
+1.backstage可以设置bin_path
+
+2.Install可以新增文件
+
+# 2.7.4
+1.增加CatCache，仿Redis可落地高速缓存，可以在某些情况下代替Redis，访问QPS比Redis高。可以配置catCache.php,设置自动落地表的时间和位置。
+可以通过设置CatCache的RPC代理，实现自己的缓存方法调用。
+
+2.完善Process进程管理
+
+3.修复一些bug
+
+# 2.7.5
+1.增加了TimerCallBack，通过CatCache和EventDispatch实现了按时间触发的消息队列，重启服务器可恢复，使用简单。
+
+需要开启CatCache,延迟调用Model方法。
+```php
+ $token = yield TimerCallBack::addTimer(2,TestModel::class,'testTimerCall',[123]);
+ $this->http_output->end($token);
+ 
+ public function testTimerCall($value,$token)
+ {
+     var_dump($token);
+     TimerCallBack::ack($token);
+ }
+```
+
+2.修复了集群下的一些错误。
+
+# 2.7.5.1
+1.新增Actor模型，可创建Actor，加速游戏开发。
+```
+ Actor::create(TestActor::class, "actor");
+ Actor::call("actor", "test");
+ Actor::call("actor", "destroy");
+```
+2.修复404页面http头不对的问题

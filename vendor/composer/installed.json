@@ -739,17 +739,17 @@
     },
     {
         "name": "symfony/intl",
-        "version": "v3.4.1",
-        "version_normalized": "3.4.1.0",
+        "version": "v3.4.2",
+        "version_normalized": "3.4.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/intl.git",
-            "reference": "1759b9944e45c09e05683ccf172e2bcb58a35893"
+            "reference": "8c4e3daf9df173f6a978756c2598b151d40177cf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/symfony/intl/1759b9944e45c09e05683ccf172e2bcb58a35893.zip",
-            "reference": "1759b9944e45c09e05683ccf172e2bcb58a35893",
+            "url": "https://files.phpcomposer.com/files/symfony/intl/8c4e3daf9df173f6a978756c2598b151d40177cf.zip",
+            "reference": "8c4e3daf9df173f6a978756c2598b151d40177cf",
             "shasum": ""
         },
         "require": {
@@ -762,7 +762,7 @@
         "suggest": {
             "ext-intl": "to use the component with locales other than \"en\""
         },
-        "time": "2017-11-19T18:41:20+00:00",
+        "time": "2017-12-14T19:40:10+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -816,17 +816,17 @@
     },
     {
         "name": "tmtbe/swooledistributed",
-        "version": "2.7.3.1",
-        "version_normalized": "2.7.3.1",
+        "version": "2.7.5.1",
+        "version_normalized": "2.7.5.1",
         "source": {
             "type": "git",
             "url": "https://github.com/SwooleDistributed/SwooleDistributed.git",
-            "reference": "4f602a4f6a05cc4363fa7d64e4e1994615a18d33"
+            "reference": "3cc2dc60a58ad0ba1a99474acdd2e43f97541782"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/SwooleDistributed/SwooleDistributed/4f602a4f6a05cc4363fa7d64e4e1994615a18d33.zip",
-            "reference": "4f602a4f6a05cc4363fa7d64e4e1994615a18d33",
+            "url": "https://files.phpcomposer.com/files/SwooleDistributed/SwooleDistributed/3cc2dc60a58ad0ba1a99474acdd2e43f97541782.zip",
+            "reference": "3cc2dc60a58ad0ba1a99474acdd2e43f97541782",
             "shasum": ""
         },
         "require": {
@@ -839,7 +839,7 @@
             "php-ds/php-ds": ">=1.2.0",
             "voku/anti-xss": "2.0.1"
         },
-        "time": "2017-12-04T08:42:00+00:00",
+        "time": "2018-01-02T08:37:16+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
