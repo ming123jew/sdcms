@@ -3,6 +3,7 @@
 namespace app\Controllers;
 
 use Server\CoreBase\Controller;
+use Server\SwooleMarco;
 
 /**
  * Created by PhpStorm.
@@ -65,24 +66,29 @@ class BaseController extends Controller
      */
     protected function initialization($controller_name, $method_name)
     {
-        parent::initialization($controller_name, $method_name);
-        $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-        $host =  $http_type .( $this->http_input->header('host') ).'/';
-        //print_r($this->context);
-        self::$Host2 = $this->Host = $host;
-        $this->Url = str_replace(':http_','/',$method_name);
-        $this->Url = $host.str_replace('\\','/', $this->Url);
-        $this->Uri = $host.$this->http_input->getRequestUri();
-        $this->ControllerName = str_replace('\\','/',$controller_name);
-        self::$ControllerName2 = $this->ControllerName;
-        $this->MethodName =  str_replace('http_','',$method_name);
-        self::$MethodName2 = $this->MethodName;
-        $this->IsApp = $this->http_input->postGet('is_app')=='yes'??null;
-        self::templateData('__URI__',$this->Uri);
-        self::templateData('__URL__',$this->Url);
-        self::templateData('__HOST__',$this->Host);
-        self::templateData('__C__',$this->ControllerName);
-        self::templateData('__M__',$this->MethodName);
+        if ($this->request_type==SwooleMarco::TCP_REQUEST){
+            parent::initialization($controller_name, $method_name);
+        }else{
+            parent::initialization($controller_name, $method_name);
+            $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+            $host =  $http_type .( $this->http_input->header('host') ).'/';
+            //print_r($this->context);
+            self::$Host2 = $this->Host = $host;
+            $this->Url = str_replace(':http_','/',$method_name);
+            $this->Url = $host.str_replace('\\','/', $this->Url);
+            $this->Uri = $host.$this->http_input->getRequestUri();
+            $this->ControllerName = str_replace('\\','/',$controller_name);
+            self::$ControllerName2 = $this->ControllerName;
+            $this->MethodName =  str_replace('http_','',$method_name);
+            self::$MethodName2 = $this->MethodName;
+            $this->IsApp = $this->http_input->postGet('is_app')=='yes'??null;
+            self::templateData('__URI__',$this->Uri);
+            self::templateData('__URL__',$this->Url);
+            self::templateData('__HOST__',$this->Host);
+            self::templateData('__C__',$this->ControllerName);
+            self::templateData('__M__',$this->MethodName);
+        }
+
 
 
 //$this->response->header('Access-Control-Allow-Origin', '*');

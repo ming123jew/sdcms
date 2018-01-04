@@ -1,7 +1,7 @@
 <?php
 
 
-namespace thinkcms\auth\library;
+namespace app\Helpers;
 
 /**
  * 通用的树型类，可以生成任何树型结构
@@ -60,6 +60,7 @@ class Tree
 
         //一级栏目
         $child = $this->get_child($myid);
+        //print_r($child);
         if (is_array($child)) {
             $total = count($child);
             foreach ($child as $id => $value) {

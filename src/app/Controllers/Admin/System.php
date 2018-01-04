@@ -44,17 +44,19 @@ class System extends Base
             $this->MenuModel =  $this->loader->model('MenuModel',$this);
             $all = yield $this->MenuModel->getAll();
             $info = '';
+
             if($all){
                 $tree       = new Tree();
                 $tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 
                 foreach ($all['result'] as $n=> $r) {
-                    $all[$n]['level'] = $tree->get_level($r['id'], $all);
-                    $all[$n]['parent_id_node'] = isset($r['parent_id']) ? ' class="child-of-node-' . $r['parent_id'] . '"' : '';
-                    $all[$n]['str_manage'] = checkPath('auth/menuAdd',["parent_id" => $r['id']]) ? '<a href="'.url("auth/menuAdd",["parent_id" => $r['id']]).'">添加子菜单</a> |':'';
-                    $all[$n]['str_manage'] .= checkPath('auth/menuEdit',["id" => $r['id']]) ?'<a href="'.url("auth/menuEdit",["id" => $r['id']]).'">编辑</a> |':'';
-                    $all[$n]['str_manage'] .= checkPath('auth/menuDelete',["id" => $r['id']]) ?'<a class="a-post" post-msg="你确定要删除吗" post-url="'.url("auth/menuDelete",["id" => $r['id']]).'">删除</a>|':'';
-                    $all[$n]['status'] = $r['status'] ? '开启' : '隐藏';
+
+                    $all['result'][$n]['parent_id_node'] = isset($r['parent_id']) ? ' class="child-of-node-' . $r['parent_id'] . '"' : '';
+                    $all['result'][$n]['str_manage'] = checkPath('auth/menuAdd',["parent_id" => $r['id']]) ? '<a href="'.url("auth/menuAdd",["parent_id" => $r['id']]).'">添加子菜单</a> |':'';
+                    $all['result'][$n]['str_manage'] .= checkPath('auth/menuEdit',["id" => $r['id']]) ?'<a href="'.url("auth/menuEdit",["id" => $r['id']]).'">编辑</a> |':'';
+                    $all['result'][$n]['str_manage'] .= checkPath('auth/menuDelete',["id" => $r['id']]) ?'<a class="a-post" post-msg="你确定要删除吗" post-url="'.url("auth/menuDelete",["id" => $r['id']]).'">删除</a>|':'';
+                    $all['result'][$n]['status'] = $r['status'] ? '开启' : '隐藏';
+
                 }
                 $str = "<tr id='node-\$id' \$parent_id_node>
                     <td style='padding-left:20px;'>

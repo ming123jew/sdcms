@@ -40,7 +40,8 @@ class WsRout implements IRoute
      */
     public function getControllerName()
     {
-        return 'Status';
+        //return 'Home/Status';
+        return $this->client_data->controller;
     }
     /**
      * 获取方法名称
@@ -48,7 +49,7 @@ class WsRout implements IRoute
      */
     public function getMethodName()
     {
-        return $this->client_data->type;
+        return $this->client_data->method;
     }
     public function getPath()
     {

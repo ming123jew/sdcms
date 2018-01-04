@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-<!--    <base href="--><?php //echo ($data['HTML_URL']);?><!--"/>-->
+    <!--    <base href="--><?php //echo ($data['HTML_URL']);?><!--"/>-->
     <base href="http://123.207.0.104:8082/home/"/>
 
     <script src="js/jquery-2.0.3.min.js"></script>
@@ -11,23 +11,11 @@
 </head>
 
 <body>
-<button type="button" name="btn_scroll" id="btn_scroll">开启滚动条自动往下</button>
-<input type="hidden" value="1" id="scroll">
+
 <div id="ws_info"></div>
-<div id="ws_log" style="background: black;color: #a7926d;padding: 5em;line-height: 30px;"></div>
+
+
 <script>
-
-    function scroll() {
-        //alert($('#scroll').val())
-        if($('#scroll').val()==1){
-            var div = document.getElementById('ws_log');
-            div.scrollTop = div.scrollHeight;
-            $(window).scrollTop(div.scrollHeight)
-        }else{
-
-        }
-    }
-
     var webim = {
         'server' : 'ws://123.207.0.104:8083'
     }
@@ -70,12 +58,9 @@
             ws = new Comet(webim.server);
         }
         listenEvent();
-
     })
 
     function listenEvent() {
-
-        msg = new Object();
         /**
          * 连接建立时触发
          */
@@ -83,43 +68,60 @@
             //连接成功
             console.log("connect webim server success.");
             //发送登录信息
+            var sendObj = {
+                type: 'connect',
+                message: 'test'
+            };
 
-            msg.controller = 'Home/Status';
-            msg.method='connect';
-            //msg.type = 'login';
-
-            ws.send($.toJSON(msg));
+            ws.send(JSON.stringify(sendObj));
         };
 
-        //定时获取错误信息
-        setInterval(function () {
-            msg.controller = 'Home/Status';
-            msg.method = 'getlog';
-            msg.num = GET['num'];
-            ws.send($.toJSON(msg));
-        },500)
+        //定时获取在线列表
 
         //有消息到来时触发
         ws.onmessage = function (e) {
+            console.log('hee');
+            alert('heee');
             console.log(e.data);
             var message = $.evalJSON(e.data);
 
-            var type = message.type;
-            if (type == 'welcome') {
+            var method_name = message.type;
+            if (method_name == 'welcome') {
                 client_id = $.evalJSON(e.data).fd;
                 $('#ws_info').html('client_id' + client_id + '.more:' + $.evalJSON(e.data));
             }
-            else if (type == 'getlog')
+            else if (method_name == 'login')
             {
                 client_id = $.evalJSON(e.data).fd;
-                if($.evalJSON(e.data).message!=null){
-                    var html = '';
-                    $.each($.evalJSON(e.data).message,function (i,e) {
-                        html += e + '<br />';
-                    })
-                    $('#ws_log').html(  html );
-                    scroll();
-                }
+                $('#ws_info').html('client_id'+client_id +'.more:'+ $.evalJSON(e.data));
+            }
+            else if(method_name == 'Over')
+            {
+                console.log(message);
+                alert(message.info);
+                closeWindows();
+            }
+            else if (method_name == 'getOnline')
+            {
+                showOnlineList(message);
+            }
+            else if (method_name == 'getHistory')
+            {
+                showHistory(message);
+            }
+            else if (method_name == 'newUser')
+            {
+                showNewUser(message);
+            }
+            else if (method_name == 'fromMsg')
+            {
+                showNewMsg(message);
+            }
+            else if (method_name == 'offline')
+            {
+                var cid = message.fd;
+                delUser(cid);
+                showNewMsg(message);
             }
         };
 
@@ -127,11 +129,7 @@
          * 连接关闭事件
          */
         ws.onclose = function (e) {
-            $(document.body).html("<h1 style='text-align: center'>连接已断开，正在重连...</h1>");
-            //重新连接
-            setInterval(function () {
-                location.reload();
-            },300)
+            $(document.body).html("<h1 style='text-align: center'>连接已断开，请刷新页面重新登录。</h1>");
         };
 
         /**
