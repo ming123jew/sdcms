@@ -24,6 +24,11 @@
                     <span class="menu-text">后台菜单</span>
                 </a>
             </li>
+            <li <?php if($data['__M__']=='role'){?>class="active"<?php } ?>>
+                <a href="<?php echo url('Admin/Role','menu','i=1');?>">
+                    <span class="menu-text">角色权限</span>
+                </a>
+            </li>
         </ul>
     </li>
     <!--Widgets-->
@@ -465,3 +470,39 @@
         </ul>
     </li>
 </ul>
+
+<!--Success Modal Templates-->
+<div id="modal-success" class="modal modal-message modal-success fade" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="glyphicon glyphicon-check"></i>
+            </div>
+            <div class="modal-title">Success</div>
+
+            <div class="modal-body">You have done great!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+            </div>
+        </div> <!-- / .modal-content -->
+    </div> <!-- / .modal-dialog -->
+</div>
+<!--/Success Modal Templates-->
+
+<!--Danger Modal Templates-->
+<div id="modal-warning" class="modal modal-message modal-warning fade in" style="display: none;" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fa fa-warning"></i>
+            </div>
+            <div class="modal-title">Warning</div>
+
+            <div class="modal-body">Is something wrong?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">OK</button>
+            </div>
+        </div> <!-- / .modal-content -->
+    </div> <!-- / .modal-dialog -->
+</div>
+<!--/Danger Modal Templates-->

@@ -9,6 +9,7 @@ $data['__M__']  ： 控制器方法名
 基类，在写控制器过程中
 parent::templateData('test',1)  :   注入模板变量$data['test'],其值为1
 parent::webOrApp(function (){  //函数主体  })  :  判断是否是APP，如是APP则返回json数据，非APP则执行函数主体
+parent::httpOutputEnd('更新成功.','更新失败.',$r)  : ajax。。根据传入$r结果集进行判断返回成功或失败提示
 
 常用函数：
  url($controller='',$method='', $params='');   生成地址
@@ -20,7 +21,7 @@ is_app:   yes|no|null  值为yes判断app|wap端
 
 
 常用模块
-class System{
+class System  extends Base{
     /**
      * @param string $controller_name
      * @param string $method_name

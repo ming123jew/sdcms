@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>服务器日志检测</title>
 <!--    <base href="--><?php //echo ($data['HTML_URL']);?><!--"/>-->
     <base href="http://123.207.0.104:8082/home/"/>
 
@@ -11,7 +11,6 @@
 </head>
 
 <body>
-<button type="button" name="btn_scroll" id="btn_scroll">开启滚动条自动往下</button>
 <input type="hidden" value="1" id="scroll">
 <div id="ws_info"></div>
 <div id="ws_log" style="background: black;color: #a7926d;padding: 5em;line-height: 30px;"></div>

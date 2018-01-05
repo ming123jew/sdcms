@@ -45,6 +45,9 @@ class Status extends Base
         $this->send(['type' => 'welcome', 'id' => $uid,'fd'=>$this->fd]);
     }
 
+    /**
+     * ws获取日志信息
+     */
     public function getlog()
     {
 
@@ -109,6 +112,11 @@ class Status extends Base
     protected function addbold($string){
 
         $string = str_replace(array('[',']'),array('<b>[',']</b>'),$string);
+        //给[error]加红色
+        $string = str_replace(array('<b>[ERROR]</b>'),array('<b style="color:#b53636;">[ERROR]</b>'),$string);
+
+        //给[时间]加分隔
+        $patten = "/^\d{4}[\-](0?[1-9]|1[012])[\-](0?[1-9]|[12][0-9]|3[01])(\s+(0?[0-9]|1[0-9]|2[0-3])\:(0?[0-9]|[1-5][0-9])\:(0?[0-9]|[1-5][0-9]))?$/";//未实现
 
         return  $string ;
     }

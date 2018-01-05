@@ -7,6 +7,7 @@
  */
 namespace app\Controllers\Admin;
 use app\Models\MenuModel;
+use app\Models\ConfigModel;
 use app\Helpers\Tree;
 
 /**
@@ -18,6 +19,7 @@ class System extends Base
 {
     protected $UserModel;
     protected $MenuModel;
+    protected $ConfigModel;
     /**
      * @param string $controller_name
      * @param string $method_name
@@ -131,15 +133,35 @@ class System extends Base
      */
     public function http_config()
     {
+        $this->ConfigModel = $this->loader->model('ConfigModel',$this);
+
         if($this->http_input->getRequestMethod()=='POST'){
-            $end = [
-                'status' => 0,
-                'code'=>200,
-                'message'=>'message.'
-            ];
-            $this->http_output->end(json_encode($end),false);
+
+            $post = [];
+            $post['info'] = $this->http_input->post('info');
+            $post['attachment'] = $this->http_input->post('attachment');
+            $post['params'] = $this->http_input->post('params');
+
+            $data['content'] = json_encode($post);
+            $data['id'] = 1;
+            //print_r($data);
+            $is_had = yield $this->ConfigModel->isHad();
+            if( $is_had==false ){
+                //不存在
+                $r = yield $this->ConfigModel->addOne($data);
+                parent::httpOutputEnd('添加成功.','添加失败.',$r);
+            }else{
+                //存在
+                $r = yield $this->ConfigModel->updateOne($data);
+                parent::httpOutputEnd('更新成功.','更新失败.',$r);
+            }
+
+
         }else{
-            parent::templateData('test',1);
+            $data = yield $this->ConfigModel->getOne();
+            //print_r($data);
+            $system_config = json_decode($data['result'][0]['content'],true);
+            parent::templateData('pagedata',$system_config);
             //web or app
             parent::webOrApp(function (){
                 $template = $this->loader->view('app::Admin/system_config');

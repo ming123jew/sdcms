@@ -202,23 +202,23 @@ Purchase: http://wrapbootstrap.com
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="col-lg-4 control-label">META Title（栏目标题）：<br />针对搜索引擎设置的标题</label>
+                                                            <label class="col-lg-4 control-label">META Title（栏目标题）：</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control" name="setting[meta_title]"/>
+                                                                <input type="text" data-toggle="tooltip" data-placement="top" data-original-title="针对搜索引擎设置的标题" class="form-control   tooltip-info" name="setting[meta_title]"/>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="col-lg-4 control-label">META Keywords（栏目关键词）：<br />关键字中间用半角逗号隔开</label>
+                                                            <label class="col-lg-4 control-label">META Keywords（栏目关键词）：</label>
                                                             <div class="col-lg-8">
-                                                                <input class="form-control" name="setting[meta_keywords]" type="text"/>
+                                                                <input data-toggle="tooltip" data-placement="top" data-original-title="关键字中间用半角逗号隔开" class="form-control tooltip-info" name="setting[meta_keywords]" type="text"/>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="col-lg-4 control-label">META Description（栏目描述）：<br />针对搜索引擎设置的网页描述</label>
+                                                            <label class="col-lg-4 control-label">META Description（栏目描述）：</label>
                                                             <div class="col-lg-8">
-                                                                <input class="form-control" name="setting[meta_description]" type="text"/>
+                                                                <input data-toggle="tooltip" data-placement="top" data-original-title="针对搜索引擎设置的网页描述" class="form-control tooltip-info" name="setting[meta_description]" type="text"/>
                                                             </div>
                                                         </div>
 
@@ -301,7 +301,7 @@ Purchase: http://wrapbootstrap.com
             return !$field.is(':visible');
         }]
              */
-            excluded: [ ':hidden', ':not(:visible)'],
+            excluded: [],//':hidden', ':not(:visible)'
             /**
              * 指定验证后验证字段的提示字体图标。（默认是bootstrap风格）
              * Bootstrap 版本 >= 3.1.0

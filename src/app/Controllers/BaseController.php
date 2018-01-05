@@ -126,6 +126,37 @@ class BaseController extends Controller
         }
     }
 
+    /**
+     * 简化返回结果
+     * @param $success_message      //成功返回前端的提示信息
+     * @param $fail_message      //失败返回前端的提示信息
+     * @param $result               //结果集
+     * @param string $end           //自定义数组  | 如
+     * @param bool $gzip            //gzip
+     */
+    protected function httpOutputEnd($success_message,$fail_message,$result,$end=[],$gzip=false){
+
+        if($end){
+
+        }else{
+            if($result){
+                $end = [
+                    'status' => 1,
+                    'code'=>200,
+                    'message'=> $success_message
+                ];
+            }else{
+                $end = [
+                    'status' => 0,
+                    'code'=>200,
+                    'message'=>$fail_message
+                ];
+            }
+        }
+        $this->http_output->end(json_encode($end),$gzip);
+    }
+
+
     //入口可以设置IP限制操作，如1秒内同一个IP访问超出N次，将其IP放进禁止访问列表
 
 }
