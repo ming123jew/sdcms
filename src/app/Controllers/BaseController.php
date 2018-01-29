@@ -45,8 +45,8 @@ class BaseController extends Controller
     public $Uri = '';
 
     public $ControllerName = '';
-    public static $ControllerName2 = '';
-    public $MethodName = '';
+    public static $ControllerName2 = '';//用于默认function url()默认控制器
+    public $MethodName = '';//用于默认function url()默认方法
     public static $MethodName2 = '';
 
     /**
@@ -156,6 +156,19 @@ class BaseController extends Controller
         $this->http_output->end(json_encode($end),$gzip);
     }
 
+    /**
+     * 返回提示信息，如参数不对，或其他中途请求参数不足导致提示
+     * @param $message
+     * @param bool $gzip
+     */
+    protected function httpOutputTis($message,$gzip=false){
+        $end = [
+            'status' => 0,
+            'code'=>200,
+            'message'=> $message
+        ];
+        $this->http_output->end(json_encode($end),$gzip);
+    }
 
     //入口可以设置IP限制操作，如1秒内同一个IP访问超出N次，将其IP放进禁止访问列表
 

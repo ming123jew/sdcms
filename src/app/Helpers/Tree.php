@@ -84,34 +84,30 @@ class Tree
         return $this->ret;
     }
 
-    public function get_authTree($myid){
+    public function get_roleTree($myid){
         $id     = '';
         $nstr   = '';
         $child = $this->get_child($myid);
         if (is_array($child)) {
             $level = current($child);
-
             $text  = isset($this->text[$level['level']]) ? $this->text[$level['level']] : end($this->text);
 
             foreach($child as $k=>$v){
                 @extract($v);
-
                 if($this->get_child($id)){
                     eval("\$nstr = \"$text[0]\";");
                     $this->html .=  $nstr;
 
-                    self::get_authTree($id);
+                    self::get_roleTree($id);
 
                     eval("\$nstr = \"$text[1]\";");
                     $this->html .=  $nstr;
                 }else{
-                    $a = $this->text['other'];
-                    eval("\$nstr = \"$a\";");
-
+                    $oo = $this->text['other'];
+                    //print_r( $a);
+                    eval("\$nstr = \"$oo\";");
                     $this->html .= $nstr;
                 }
-
-
             }
 
         }
@@ -144,12 +140,17 @@ class Tree
      * @return array
      */
     public function get_level($id, $array = array(), $i = 0) {
-        if ($array[$id]['parent_id']==0 || empty($array[$array[$id]['parent_id']]) || $array[$id]['parent_id']==$id){
-            return  $i;
-        }else{
-            $i++;
-            return self::get_level($array[$id]['parent_id'],$array,$i);
+        foreach ($array as $key => $value) {
+            if ($value['id']==$id){
+                if($value['parent_id']==0){
+                    return  $i;break;
+                }else{
+                    $i++;
+                    return self::get_level($value['parent_id'],$array,$i);
+                }
+            }
         }
+
     }
 
 }

@@ -51,13 +51,13 @@ class System extends Base
                 $tree       = new Tree();
                 $tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 
-                foreach ($all['result'] as $n=> $r) {
+                foreach ($all as $n=> $r) {
 
-                    $all['result'][$n]['parent_id_node'] = isset($r['parent_id']) ? ' class="child-of-node-' . $r['parent_id'] . '"' : '';
-                    $all['result'][$n]['str_manage'] = checkPath('auth/menuAdd',["parent_id" => $r['id']]) ? '<a href="'.url("auth/menuAdd",["parent_id" => $r['id']]).'">添加子菜单</a> |':'';
-                    $all['result'][$n]['str_manage'] .= checkPath('auth/menuEdit',["id" => $r['id']]) ?'<a href="'.url("auth/menuEdit",["id" => $r['id']]).'">编辑</a> |':'';
-                    $all['result'][$n]['str_manage'] .= checkPath('auth/menuDelete',["id" => $r['id']]) ?'<a class="a-post" post-msg="你确定要删除吗" post-url="'.url("auth/menuDelete",["id" => $r['id']]).'">删除</a>|':'';
-                    $all['result'][$n]['status'] = $r['status'] ? '开启' : '隐藏';
+                    $all[$n]['parent_id_node'] = isset($r['parent_id']) ? ' class="child-of-node-' . $r['parent_id'] . '"' : '';
+                    $all[$n]['str_manage'] = checkPath('auth/menuAdd',["parent_id" => $r['id']]) ? '<a href="'.url("auth/menuAdd",["parent_id" => $r['id']]).'">添加子菜单</a> |':'';
+                    $all[$n]['str_manage'] .= checkPath('auth/menuEdit',["id" => $r['id']]) ?'<a href="'.url("auth/menuEdit",["id" => $r['id']]).'">编辑</a> |':'';
+                    $all[$n]['str_manage'] .= checkPath('auth/menuDelete',["id" => $r['id']]) ?'<a class="a-post" post-msg="你确定要删除吗" post-url="'.url("auth/menuDelete",["id" => $r['id']]).'">删除</a>|':'';
+                    $all[$n]['status'] = $r['status'] ? '开启' : '隐藏';
 
                 }
                 $str = "<tr id='node-\$id' \$parent_id_node>
@@ -66,15 +66,15 @@ class System extends Base
                     </td>
                     <!--<td>\$id</td>-->
                     <td>\$spacer  \$name</td>
-                    <td>\$app</td>
-                    <td>\$model</td>
-                    <td>\$action</td>
+                    <td>\$m</td>
+                    <td>\$c</td>
+                    <td>\$a</td>
                     <td>\$request</td>
                     <td>\$status</td>
                     <td>\$str_manage</td>
                 </tr>";
 
-                $tree->init($all['result']);
+                $tree->init($all);
                 $info = $tree->get_tree(0, $str);
                 //print_r($all);
 
@@ -107,7 +107,7 @@ class System extends Base
             if($all) {
                 $selected = $parent_id;
                 $tree = new Tree();
-                foreach ($all['result'] as $r) {
+                foreach ($all as $r) {
                     $r['selected'] = $r['id'] == $selected ? 'selected' : '';
                     $array[] = $r;
                     $str = "<option value='\$id' \$selected>\$spacer \$name</option>";

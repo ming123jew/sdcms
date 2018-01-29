@@ -9,14 +9,19 @@
 namespace app\Models;
 
 
-class MenuModel extends BaseModel
+class RoleModel extends BaseModel
 {
 
     /**
      * 数据库表名称，不包含前缀
      * @var string
      */
-    private $table = 'admin_menu';
+    private $table = 'admin_role';
+
+
+
+
+
 
     /**
      * 获取所有菜单
@@ -31,9 +36,10 @@ class MenuModel extends BaseModel
         if(empty($val['result'])){
             return false;
         }else{
-            return $val['result'];
+            return $val['result'] ;
         }
     }
+
 
 
 

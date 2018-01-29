@@ -7,7 +7,7 @@
         </a>
     </li>
     <!--Databoxes-->
-    <li <?php if($data['__C__']=='Admin/System'){?>class="active open"<?php } ?>>
+    <li <?php if($data['__C__']=='Admin/System'||$data['__C__']=='Admin/Role'){?>class="active open"<?php } ?>>
         <a href="#" class="menu-dropdown">
             <i class="menu-icon glyphicon glyphicon-tasks"></i>
             <span class="menu-text">系统设置</span>
@@ -24,8 +24,8 @@
                     <span class="menu-text">后台菜单</span>
                 </a>
             </li>
-            <li <?php if($data['__M__']=='role'){?>class="active"<?php } ?>>
-                <a href="<?php echo url('Admin/Role','menu','i=1');?>">
+            <li <?php if($data['__M__']=='lists'){?>class="active"<?php } ?>>
+                <a href="<?php echo url('Admin/Role','lists','i=1');?>">
                     <span class="menu-text">角色权限</span>
                 </a>
             </li>
