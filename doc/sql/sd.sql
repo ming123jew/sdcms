@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-01-29 18:34:25
+Date: 2018-01-30 18:06:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,22 +25,22 @@ CREATE TABLE `sd_admin_menu` (
   `m` char(20) NOT NULL COMMENT '模块',
   `c` char(20) NOT NULL COMMENT '控制器',
   `a` char(20) NOT NULL COMMENT '操作名称',
-  `url_param` char(50) NOT NULL COMMENT 'url参数',
+  `url_param` char(50) DEFAULT NULL COMMENT 'url参数',
   `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '菜单类型  1：权限认证+菜单；0：只作为菜单',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态，1显示，0不显示',
   `name` varchar(50) NOT NULL COMMENT '菜单名称',
-  `icon` varchar(50) NOT NULL COMMENT '菜单图标',
-  `remark` varchar(255) NOT NULL COMMENT '备注',
+  `icon` varchar(50) DEFAULT NULL COMMENT '菜单图标',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `list_order` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT '排序ID',
-  `rule_param` varchar(255) NOT NULL COMMENT '验证规则',
+  `rule_param` varchar(255) DEFAULT NULL COMMENT '验证规则',
   `nav_id` int(11) DEFAULT '0' COMMENT 'nav ID ',
-  `request` varchar(255) NOT NULL COMMENT '请求方式（日志生成）',
-  `log_rule` varchar(255) NOT NULL COMMENT '日志规则',
+  `request` varchar(255) DEFAULT NULL COMMENT '请求方式（日志生成）',
+  `log_rule` varchar(255) DEFAULT NULL COMMENT '日志规则',
   PRIMARY KEY (`id`),
   KEY `status` (`status`) USING BTREE,
   KEY `model` (`c`) USING BTREE,
   KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=73 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
 -- Records of sd_admin_menu
@@ -61,8 +61,8 @@ INSERT INTO `sd_admin_menu` VALUES ('13', '9', 'supervise', 'auth', 'menuOrder',
 INSERT INTO `sd_admin_menu` VALUES ('14', '2', 'supervise', 'admin', 'index', '', '1', '1', '用户管理', '', '', '0', '', '0', '', '');
 INSERT INTO `sd_admin_menu` VALUES ('15', '0', 'mediaManage', 'index', 'index', '', '0', '1', '媒介库管理', 'fa-cc-mastercard', '', '20', '', '0', '', '');
 INSERT INTO `sd_admin_menu` VALUES ('16', '15', 'mediaManage', 'index', 'Index', '', '1', '1', '媒介库', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('20', '2', 'supervise', 'auth', 'log', '', '1', '1', '行为日志', '', '', '0', '', '0', '', '');
 INSERT INTO `sd_admin_menu` VALUES ('19', '16', 'mediaManage', 'index', 'index', '', '1', '1', '所有列表', '', '', '2', '', '0', '', '');
+INSERT INTO `sd_admin_menu` VALUES ('20', '2', 'supervise', 'auth', 'log', '', '1', '1', '行为日志', '', '', '0', '', '0', '', '');
 INSERT INTO `sd_admin_menu` VALUES ('21', '20', 'supervise', 'auth', 'viewLog', '', '1', '0', '查看日志', '', '', '0', '', '0', '', '');
 INSERT INTO `sd_admin_menu` VALUES ('22', '20', 'supervise', 'auth', 'clear', '', '1', '0', '清空日志', '', '', '0', '', '0', '', '');
 INSERT INTO `sd_admin_menu` VALUES ('23', '16', 'mediaManage', 'upload', 'index', '', '1', '1', '上传', '', '', '2', '', '0', '', '');
@@ -114,6 +114,7 @@ INSERT INTO `sd_admin_menu` VALUES ('69', '16', 'mediamanage', 'index', 'editinf
 INSERT INTO `sd_admin_menu` VALUES ('70', '16', 'mediamanage', 'index', 'deleteinfo', '', '1', '0', '删除单条数据', '', '', '0', '', '0', '', '');
 INSERT INTO `sd_admin_menu` VALUES ('71', '15', 'mediaManage', 'analy', 'index', '', '1', '1', '数据分析', '', '', '0', '', '0', '', '');
 INSERT INTO `sd_admin_menu` VALUES ('72', '71', 'mediaManage', 'analy', 'myproject', '', '1', '1', '我的项目', '', '', '0', '', '0', '', '');
+INSERT INTO `sd_admin_menu` VALUES ('74', '29', 'mm', 'cc', 'aa', 'fh', '0', '1', '九个头条', null, '', '0', null, '0', null, null);
 
 -- ----------------------------
 -- Table structure for `sd_admin_role`
@@ -128,12 +129,11 @@ CREATE TABLE `sd_admin_role` (
   PRIMARY KEY (`id`),
   KEY `listorder` (`list_order`) USING BTREE,
   KEY `disabled` (`status`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_admin_role
 -- ----------------------------
-INSERT INTO `sd_admin_role` VALUES ('1', '超级管理员', '超级管理员', '0', '0');
 INSERT INTO `sd_admin_role` VALUES ('2', '站点管理员', '站点管理员', '0', '0');
 INSERT INTO `sd_admin_role` VALUES ('3', '运营总监', '运营总监', '1', '0');
 INSERT INTO `sd_admin_role` VALUES ('4', '总编', '总编', '5', '0');
@@ -146,125 +146,86 @@ INSERT INTO `sd_admin_role` VALUES ('7', '发布人员', '发布人员', '0', '0
 DROP TABLE IF EXISTS `sd_admin_role_priv`;
 CREATE TABLE `sd_admin_role_priv` (
   `role_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `menu_id` tinyint(3) NOT NULL,
   `m` char(20) NOT NULL,
   `c` char(20) NOT NULL,
   `a` char(20) NOT NULL,
-  `data` char(30) NOT NULL DEFAULT '',
-  `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `menu_id` tinyint(3) NOT NULL,
-  KEY `roleid` (`role_id`,`m`,`c`,`a`,`siteid`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `data` char(30) DEFAULT '',
+  KEY `roleid` (`role_id`,`m`,`c`,`a`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_admin_role_priv
 -- ----------------------------
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'setting', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin', 'admin', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', '', '', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin_manage', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin_manage', 'add', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin_manage', 'edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin_manage', 'delete', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin_manage', 'card', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin_manage', 'creat_card', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin_manage', 'remove_card', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'add', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'pass', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'push', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'remove', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'add_othors', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'delete', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'create_html', 'batch_show', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'listorder', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'attachment', 'manage', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'attachment', 'manage', 'dir', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'attachment', 'manage', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'attachment', 'address', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'attachment', 'address', 'update', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'special', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'special', 'add', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'special', 'edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'special', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'special', 'elite', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'special', 'delete', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'special', 'listorder', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'content', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'content', 'add', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'content', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'content', 'edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'content', 'delete', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'content', 'listorder', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'special', 'import', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'album', 'import', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'special', 'html', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'special', 'special', 'create_special_list', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'block', 'block_admin', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'block', 'block_admin', 'add', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'block', 'block_admin', 'edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'block', 'block_admin', 'del', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'block', 'block_admin', 'block_update', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'block', 'block_admin', 'history_restore', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'block', 'block_admin', 'history_del', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'manage', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'add', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'del', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'col_url_list', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'publist', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'node_import', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'export', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'col_content', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'import', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'copy', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'content_del', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'import_program_add', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'import_program_del', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'collection', 'node', 'import_content', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'comment', 'comment_admin', 'listinfo', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'comment', 'check', 'checks', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'release', 'html', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'release', 'index', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'release', 'index', 'failed', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'release', 'index', 'del', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'create_html', 'show', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'create_html', 'update_urls', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'create_html', 'category', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'create_html', 'public_index', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content', 'clear_data', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'content_settings', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'position', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'position', 'add', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'position', 'edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'category', 'init', 'module=admin', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'category', 'add', 's=0', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'category', 'edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'category', 'public_cache', 'module=admin', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'category', 'add', 's=1', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'category', 'add', 's=2', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'category', 'count_items', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'category', 'batch_edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'sitemodel', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'sitemodel', 'add', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'sitemodel', 'import', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'sitemodel_field', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'sitemodel', 'edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'sitemodel', 'disabled', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'sitemodel', 'delete', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'sitemodel', 'export', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'type_manage', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'type_manage', 'add', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'type_manage', 'delete', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'type_manage', 'edit', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'index', 'public_main', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin_manage', 'init', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin_manage', 'public_edit_pwd', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'admin', 'admin_manage', 'public_edit_info', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'create_html_opt', 'index', '', '1', '0');
-INSERT INTO `sd_admin_role_priv` VALUES ('5', 'content', 'create_html', 'public_index', '', '1', '0');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '29', 'magazine', 'index', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '30', 'magazine', 'category', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '31', 'magazine', 'category', 'add', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '32', 'magazine', 'category', 'edit', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '33', 'magazine', 'category', 'delete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '34', 'magazine', 'category', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '35', 'magazine', 'content', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '36', 'magazine', 'content', 'add', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '37', 'magazine', 'content', 'edit', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '38', 'magazine', 'content', 'delete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '39', 'magazine', 'content', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '40', 'magazine', 'content', 'listsub', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '41', 'magazine', 'content', 'addsub', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '42', 'magazine', 'content', 'editsub', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '43', 'magazine', 'content', 'checksub', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '51', 'magazine', 'content', 'deletesub', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '44', 'magazine', 'content', 'check', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '45', 'magazine', 'content', 'menu', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '46', 'magazine', 'content', 'lists', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '52', 'magazine', 'content', 'uploadthumb', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '48', 'magazine', 'setting', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '49', 'magazine', 'setting', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '50', 'magazine', 'ueditor', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '54', 'vote', 'admin', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '55', 'vote', 'category', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '58', 'vote', 'category', 'edit', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '59', 'vote', 'category', 'delete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '63', 'vote', 'category', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '57', 'vote', 'category', 'add', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '56', 'vote', 'manager', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '61', 'vote', 'content', 'edit', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '62', 'vote', 'content', 'delete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '64', 'vote', 'content', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '60', 'vote', 'content', 'add', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '1', 'supervise', 'auth', 'default', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '2', 'supervise', 'auth', 'default', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '3', 'supervise', 'auth', 'role', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '4', 'supervise', 'auth', 'roleAdd', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '5', 'supervise', 'auth', 'roleEdit', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '6', 'supervise', 'auth', 'roleDelete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '7', 'supervise', 'auth', 'authorize', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '14', 'supervise', 'admin', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '20', 'supervise', 'auth', 'log', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '21', 'supervise', 'auth', 'viewLog', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '22', 'supervise', 'auth', 'clear', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '8', 'supervise', 'auth', 'default', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '9', 'supervise', 'auth', 'menu', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '10', 'supervise', 'auth', 'menuAdd', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '11', 'supervise', 'auth', 'menuEdit', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '12', 'supervise', 'auth', 'menuDelete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '13', 'supervise', 'auth', 'menuOrder', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '15', 'mediaManage', 'index', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '16', 'mediaManage', 'index', 'Index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '65', 'mediamanage', 'upload', 'ajaxupload', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '66', 'mediamanage', 'upload', 'dealfiles', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '67', 'mediamanage', 'index', 'clearrepeat', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '69', 'mediamanage', 'index', 'editinfo', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '70', 'mediamanage', 'index', 'deleteinfo', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '68', 'mediaManage', 'index', 'myindex', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '19', 'mediaManage', 'index', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '23', 'mediaManage', 'upload', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '53', 'mediaManage', 'upload', 'manage', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '24', 'mediaManage', 'category', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '25', 'mediaManage', 'category', 'add', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '26', 'mediaManage', 'category', 'edit', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '27', 'mediaManage', 'category', 'delete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '28', 'mediaManage', 'category', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '71', 'mediaManage', 'analy', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '72', 'mediaManage', 'analy', 'myproject', '');
 
 -- ----------------------------
 -- Table structure for `sd_category`
@@ -298,7 +259,7 @@ CREATE TABLE `sd_category` (
   PRIMARY KEY (`catid`),
   KEY `module` (`module`,`parentid`,`listorder`,`catid`) USING BTREE,
   KEY `siteid` (`siteid`,`type`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_category
@@ -338,7 +299,7 @@ CREATE TABLE `sd_category_priv` (
   `action` char(30) NOT NULL,
   KEY `catid` (`catid`,`roleid`,`is_admin`,`action`) USING BTREE,
   KEY `siteid` (`siteid`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_category_priv
@@ -634,7 +595,7 @@ CREATE TABLE `sd_log` (
   PRIMARY KEY (`logid`),
   KEY `module` (`module`,`file`,`action`) USING BTREE,
   KEY `username` (`username`,`action`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=4961 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4961 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_log
