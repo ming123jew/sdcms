@@ -11,7 +11,9 @@ use app\Helpers\Tree;
 class Role  extends Base{
 
     protected $RoleModel;
+    protected $RolePrivModel;
     protected $MenuModel;
+
 
     /**
      * @param string $controller_name
@@ -44,18 +46,47 @@ class Role  extends Base{
         }
     }
 
-
+    /**
+     * 权限设置页面 | 提交保存
+     */
     public function http_setting()
     {
         if($this->http_input->getRequestMethod()=='POST'){
-            $end = [
-                'status' => 0,
-                'code'=>200,
-                'message'=>'message.'
-            ];
-            $this->http_output->end(json_encode($end),false);
+            $role_id = intval($this->http_input->post('role_id'));
+            //menu_id model controllers method
+            $arr_menu_id = $this->http_input->post('menu_id');
+            if(!$role_id){
+                parent::httpOutputTis('非法请求.');
+            }else{
+                //删除当前role_id的所有数据
+                $this->RolePrivModel = $this->loader->model('RolePrivModel',$this);
+                $d_rolepriv_model = yield $this->RolePrivModel->deleteByRoleId($role_id);
+
+                if(!$d_rolepriv_model){
+                    parent::httpOutputTis('RoleModel删除请求失败.');
+                }else{
+                    if(count($arr_menu_id)){
+                        foreach ($arr_menu_id as $key=>$value){
+                            $arr_value = explode(' ',$value);
+                            array_unshift($arr_value,$role_id);
+                            $arr_menu_id[$key] =$arr_value;
+                        }
+                        //插入新的权限数据
+                        $i_rolepriv_model = yield $this->RolePrivModel->insertMultiple(['role_id','menu_id','m','c','a'],$arr_menu_id);
+                        if(!$i_rolepriv_model){
+                            parent::httpOutputTis('RolePrivModel插入请求失败.');
+                        }else{
+                            parent::httpOutputEnd('权限更新成功.','权限更新失败.',$i_rolepriv_model);
+                        }
+                    }else{
+                        parent::httpOutputTis('没有选项.');
+                    }
+                }
+            }
+
         }else{
-            $id = intval($this->http_input->get('id'));
+
+            $id = intval($this->http_input->get('id'));//role_id
             $name = intval($this->http_input->get('name'));
             if(!$id){
                 parent::httpOutputTis('参数错误.');
@@ -67,7 +98,15 @@ class Role  extends Base{
 
 //                $this->RoleModel = $this->loader->model('RoleModel',$this);
 //                $all = yield $this->RoleModel->getAll();
-                $priv_data=[];
+
+                //查找当前角色组所有权限
+                $this->RolePrivModel =  $this->loader->model('RolePrivModel',$this);
+                $d_rolepriv_model = yield $this->RolePrivModel->getByRoleId($id,'menu_id');
+                $priv_data = [];
+                foreach ($d_rolepriv_model as $key=>$value){
+                    $priv_data[] = $value['menu_id'];
+                }
+
                 $tree       = new Tree();
                 foreach ($all as $n => $t) {
                     $all[$n]['checked']  = (in_array($t['id'], $priv_data)) ? ' checked' : '';
@@ -79,7 +118,7 @@ class Role  extends Base{
                 $tree->init($all);
 
                 $tree->text =[
-                    'other' => "<label class='checkbox' data-original-title='' data-toggle='' >
+                    'other' => "<label class='checkbox'>
                         <input \$checked \$disabled[0] name='menu_id[]' value='\$id \$m \$c \$a' level='\$level'
                         onclick='javascript:checknode(this);'type='checkbox'>
                         <span class='text'>\$disabled[1] \$name</span>
@@ -87,10 +126,9 @@ class Role  extends Base{
                     '0' => [
                         '0' =>"<dl class='checkmod'>
                     <dt class='hd'>
-                        <label class='checkbox' data-original-title='' data-toggle='tooltip'>
+                        <label class='checkbox'>
                             <input \$checked \$disabled[0] name='menu_id[]' value='\$id \$m \$c \$a' level='\$level'
-                             onclick='javascript:checknode(this);'
-                             type='checkbox'>
+                             onclick='javascript:checknode(this);' type='checkbox'>
                              <span class='text'>\$disabled[1] \$name</span>
                         </label>
                     </dt>
@@ -100,14 +138,13 @@ class Role  extends Base{
                     '1' => [
                         '0' => "
                         <div class='menu_parent'>
-                            <label class='checkbox' data-original-title='' data-toggle='tooltip'>
+                            <label class='checkbox'>
                                 <input \$checked \$disabled[0] name='menu_id[]' value='\$id \$m \$c \$a' level='\$level'
                                 onclick='javascript:checknode(this);' type='checkbox'>
                                 <span class='text'>\$disabled[1] \$name</span>
                             </label>
                         </div>
                         <div class='rule_check' style='width: \$width%;'>",
-
                         '1' => "</div><span class='child_row'></span>",
                     ]
 

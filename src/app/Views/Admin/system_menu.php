@@ -149,8 +149,32 @@ Purchase: http://wrapbootstrap.com
 
 <!--Beyond Scripts-->
 <script src="assets/js/beyond.min.js"></script>
-
-
+<script src="assets/js/bootbox/bootbox.js"></script>
+<script>
+    function menu_delete(menu_id) {
+        var url = '<?php echo url('',"menu_delete");?>';
+        bootbox.confirm({
+            message: '您确认要删除该选项吗？(*其子菜单也将被删除)',
+            buttons: {
+                confirm: {
+                    label: "确认"
+                },
+                cancel:{
+                    label:"取消"
+                }
+            },
+            callback: function(yes) {
+                if(yes) {
+                    $.post(url, {menu_id:menu_id}, function(result) {
+                        if(result.status==1){
+                            window.location.reload();
+                        }
+                    })
+                }
+            }
+        });
+    }
+</script>
 
 </body>
 <!--  /Body -->

@@ -5,6 +5,12 @@ $data['__HOST__'] ：网站主机域名
 $data['__C__']  :  MODEL+CONTROLLER  模型+控制器名 如 Admin/Main
 $data['__M__']  ： 控制器方法名
 
+模板常用调用成功或失败：
+$("#modal-success").find(".modal-body").html("保存成功.");
+ $("#modal-success").modal("show");
+ $("#modal-warning").find(".modal-body").html("保存失败.");
+ $("#modal-warning").modal("show");
+
 控制器常用函数：
 基类，在写控制器过程中
 parent::templateData('test',1)  :   注入模板变量$data['test'],其值为1
@@ -48,4 +54,33 @@ class System  extends Base{
             });
         }
     }
+  }
+
+  model返回(Mysql返回值)
+  通过coroutineSend()返回的值是一个数组。
+  “result” mysql执行后返回的结果
+  “affected_rows”影响行数
+  “insert_id”插入的id
+  下面提供一个返回结构体打印的结果
+  array(3) {
+    ["result"]=>
+    array(1) {
+      [0]=>
+      array(5) {
+        ["peopleid"]=>
+        int(2)
+        ["firstname"]=>
+        string(5) "White"
+        ["lastname"]=>
+        string(3) "Cat"
+        ["age"]=>
+        int(20)
+        ["townid"]=>
+        int(10000)
+      }
+    }
+    ["insert_id"]=>
+    int(0)
+    ["affected_rows"]=>
+    int(0)
   }

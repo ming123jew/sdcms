@@ -80,13 +80,13 @@ function url($controller='',$method='', $params=''){
 
 /**
  * 检查路由权限 | 预留
- * @access public static
- * @param  string       $path       路由
- * @param  array       $param      参数
- * @return bool
+ * @param $m
+ * @param $c
+ * @param $a
+ * @param array $param
  */
-function checkPath($path,$param=[]){
-
+function check_role($m,$c,$a,$param=[]){
+    return true;
 }
 
 /**

@@ -19,19 +19,15 @@ class RoleModel extends BaseModel
     private $table = 'admin_role';
 
 
-
-
-
-
     /**
-     * 获取所有菜单
+     * 获取所有
      * @return bool
      */
     public function getAll(){
-        $val = yield $this->mysql_pool->dbQueryBuilder->select('*')
-            ->from($this->prefix.$this->table)
+        $val = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
             ->orderBy('list_order','asc')
             ->orderBy('id','asc')
+            ->select('*')
             ->coroutineSend();
         if(empty($val['result'])){
             return false;
@@ -39,9 +35,5 @@ class RoleModel extends BaseModel
             return $val['result'] ;
         }
     }
-
-
-
-
 
 }

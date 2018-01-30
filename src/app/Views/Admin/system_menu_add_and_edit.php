@@ -86,15 +86,12 @@ Purchase: http://wrapbootstrap.com
                         <div class="col-xs-12">
                             <div class="widget radius-bordered">
                                 <div class="widget-header">
-                                    <span class="widget-caption">Registration Form</span>
+                                    <span class="widget-caption"><?php echo isset($data['d_menu_model']['id'])?'编辑菜单':'添加菜单'; ?></span>
                                 </div>
                                 <div class="widget-body">
-                                    <form id="registrationForm" method="post" class="form-horizontal"
-                                          data-bv-message="This value is not valid"
-                                          data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
-                                          data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
-                                          data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
-                                        <div class="form-title">
+                                    <form id="registrationForm" method="post" class="form-horizontal">
+                                        <input type="hidden" id="menu_id" name="menu_id" value="<?php echo $data['d_menu_model']['id']??0;?>">
+                                        <div class="form-title" style="display: none">
                                             Basic Validator With HTML Attributes
                                         </div>
                                         <div class="form-group">
@@ -110,56 +107,56 @@ Purchase: http://wrapbootstrap.com
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">状态</label>
                                             <div class="col-lg-8">
-                                                <input style="position: initial;opacity: inherit;" type="radio" name="status" checked="" value="1">显示
-                                                <input style="position: initial;opacity: inherit;" type="radio" name="status" checked="" value="0">隐藏
+                                                <input style="position: initial;opacity: inherit;" type="radio" name="status" <?php echo  $data['d_menu_model']['status']==1 ? 'checked':'';?> value="1">显示
+                                                <input style="position: initial;opacity: inherit;" type="radio" name="status" <?php echo  $data['d_menu_model']['status']==0 ? 'checked':'';?> value="0">隐藏
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">名称</label>
                                             <div class="col-lg-8">
-                                                <input type="text" class="form-control" name="name"/>
+                                                <input type="text" class="form-control" name="name" value="<?php echo $data['d_menu_model']['name']??'';?>"/>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">应用</label>
                                             <div class="col-lg-8">
-                                                <input class="form-control" name="app" type="text"/>
+                                                <input class="form-control" name="m" type="text" value="<?php echo $data['d_menu_model']['m']??'';?>"/>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">控制器</label>
                                             <div class="col-lg-8">
-                                                <input class="form-control" name="model" type="text"/>
+                                                <input class="form-control" name="c" type="text" value="<?php echo $data['d_menu_model']['c']??'';?>"/>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">方法</label>
                                             <div class="col-lg-8">
-                                                <input class="form-control" name="action" type="text"/>
+                                                <input class="form-control" name="a" type="text" value="<?php echo $data['d_menu_model']['a']??'';?>" />
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">参数</label>
                                             <div class="col-lg-8">
-                                                <input class="form-control" name="url_param" type="text"/>
+                                                <input class="form-control" name="url_param" type="text" value="<?php echo $data['d_menu_model']['url_param']??'';?>"/>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">备注</label>
                                             <div class="col-lg-8">
-                                                <textarea name="remark" class="form-control" rows="3"></textarea>
+                                                <textarea name="remark" class="form-control" rows="3"><?php echo $data['d_menu_model']['remark']??'';?></textarea>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <div class="col-lg-offset-4 col-lg-8">
-                                                <button class="btn btn-palegreen" type="submit">Validate</button>
+                                                <button class="btn btn-palegreen" type="submit">提交</button>
 
                                             </div>
                                         </div>
@@ -187,18 +184,16 @@ Purchase: http://wrapbootstrap.com
 <!--Basic Scripts-->
 <script src="assets/js/jquery-2.0.3.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
-
 <!--Beyond Scripts-->
 <script src="assets/js/beyond.min.js"></script>
-
-
-
 <!--Page Related Scripts-->
 <script src="assets/js/validation/bootstrapValidator.js"></script>
 
 <script>
-    $(document).ready(function () {
 
+    $(document).ready(function () {
+        var menu_id =  $('#menu_id').val();
+        console.log(menu_id)
         $("#registrationForm").bootstrapValidator({
             /**
              *  指定不验证的情况
@@ -272,12 +267,22 @@ Purchase: http://wrapbootstrap.com
             submitHandler: function (validator, form, submitButton) {
                 // Do nothing
                 //alert('here.')
+                if(menu_id==0){
+                    var url = '<?php echo url('','menu_add');?>';
+                }else{
+                    var url = '<?php echo url('','menu_edit');?>';
+                }
 
                 // 实用ajax提交表单
-                $.post('<?php echo url('','menu_add');?>', form.serialize(), function(result) {
+                $.post(url, form.serialize(), function(result) {
                     // .自定义回调逻辑
                     if(result.status==1){
-                        window.location.href = '<?php echo url('','menu');?>';
+                        $("#modal-success").find(".modal-body").html(result.message);
+                        $("#modal-success").modal("show");
+
+                    }else{
+                        $("#modal-warning").find(".modal-body").html(result.message);
+                        $("#modal-warning").modal("show");
                     }
                 }, 'json');
             },
@@ -351,7 +356,7 @@ Purchase: http://wrapbootstrap.com
                         notEmpty:{message:"名称不能为空."},
                     }
                 },
-                app: {
+                m: {
                     //隐藏或显示 该字段的验证
                     enabled: true,
                     //错误提示信息
@@ -361,7 +366,7 @@ Purchase: http://wrapbootstrap.com
                     }
                 },
 
-                model: {
+                c: {
                     //隐藏或显示 该字段的验证
                     enabled: true,
                     //错误提示信息
@@ -370,7 +375,7 @@ Purchase: http://wrapbootstrap.com
                         notEmpty:{message:"控制器不能为空."},
                     }
                 },
-                action: {
+                a: {
                     //隐藏或显示 该字段的验证
                     enabled: true,
                     //错误提示信息
@@ -383,6 +388,9 @@ Purchase: http://wrapbootstrap.com
         });
 
     })
+
+
+
 </script>
 
 </body>

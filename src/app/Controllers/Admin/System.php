@@ -54,11 +54,10 @@ class System extends Base
                 foreach ($all as $n=> $r) {
 
                     $all[$n]['parent_id_node'] = isset($r['parent_id']) ? ' class="child-of-node-' . $r['parent_id'] . '"' : '';
-                    $all[$n]['str_manage'] = checkPath('auth/menuAdd',["parent_id" => $r['id']]) ? '<a href="'.url("auth/menuAdd",["parent_id" => $r['id']]).'">添加子菜单</a> |':'';
-                    $all[$n]['str_manage'] .= checkPath('auth/menuEdit',["id" => $r['id']]) ?'<a href="'.url("auth/menuEdit",["id" => $r['id']]).'">编辑</a> |':'';
-                    $all[$n]['str_manage'] .= checkPath('auth/menuDelete',["id" => $r['id']]) ?'<a class="a-post" post-msg="你确定要删除吗" post-url="'.url("auth/menuDelete",["id" => $r['id']]).'">删除</a>|':'';
+                    //$all[$n]['str_manage'] = checkRole('auth/menuAdd',["parent_id" => $r['id']]) ? '<a href="'.url("auth/menuAdd",["parent_id" => $r['id']]).'">添加子菜单</a> |':'';
+                    $all[$n]['str_manage'] = check_role('Admin','System','menu_edit',["menu_id" => $r['id']]) ?'<a href="'.url('','menu_edit',["menu_id" => $r['id']]).'">编辑</a> |':'';
+                    $all[$n]['str_manage'] .= check_role('Admin','System','menu_delete',["menu_id" => $r['id']]) ?'<a  onclick="menu_delete('.$r['id'].')" href="javascript:;">删除</a>':'';
                     $all[$n]['status'] = $r['status'] ? '开启' : '隐藏';
-
                 }
                 $str = "<tr id='node-\$id' \$parent_id_node>
                     <td style='padding-left:20px;'>
@@ -89,18 +88,31 @@ class System extends Base
         }
     }
 
-
+    /**
+     * 显示 | 添加菜单
+     */
     public function http_menu_add(){
         if($this->http_input->getRequestMethod()=='POST'){
-            $end = [
-                'status' => 1,
-                'code'=>200,
-                'message'=>'message.'
+            $this->MenuModel =  $this->loader->model('MenuModel',$this);
+            $data = [
+                $this->http_input->post('parent_id'),
+                $this->http_input->post('name'),
+                $this->http_input->post('m'),
+                $this->http_input->post('c'),
+                $this->http_input->post('a'),
+                $this->http_input->post('url_param'),
+                $this->http_input->post('status'),
+                $this->http_input->post('remark'),
             ];
-            $this->http_output->end(json_encode($end),false);
+            $r_menu_model = yield $this->MenuModel->insertMultiple(['parent_id','name','m','c','a','url_param','status','remark'],$data);
+            if(!$r_menu_model){
+                parent::httpOutputTis('MenuModel添加请求失败.');
+            }else{
+                parent::httpOutputEnd('菜单添加成功.','菜单添加失败.',$r_menu_model);
+            }
+
         }else{
             $parent_id  =  $this->http_input->postGet('parent_id') ?? 0;
-
             $this->MenuModel =  $this->loader->model('MenuModel',$this);
             $all = yield $this->MenuModel->getAll();
             $info='';
@@ -121,9 +133,97 @@ class System extends Base
             parent::templateData('test',1);
             //web or app
             parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/system_menu_add');
+                $template = $this->loader->view('app::Admin/system_menu_add_and_edit');
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
             });
+        }
+    }
+
+    /**
+     * 编辑菜单
+     */
+    public function http_menu_edit(){
+        $menu_id =  intval($this->http_input->post('menu_id'));
+        if($this->http_input->getRequestMethod()=='POST' && $menu_id){
+            $this->MenuModel =  $this->loader->model('MenuModel',$this);
+            $data = [
+                'parent_id'=> $this->http_input->post('parent_id'),
+                'name'=>$this->http_input->post('name'),
+                'm'=>$this->http_input->post('m'),
+                'c'=>$this->http_input->post('c'),
+                'a'=>$this->http_input->post('a'),
+                'url_param'=>$this->http_input->post('url_param'),
+                'status'=>$this->http_input->post('status'),
+                'remark'=>$this->http_input->post('remark'),
+            ];
+            $r_menu_model = yield $this->MenuModel->updateById($menu_id,$data);
+            if(!$r_menu_model){
+                parent::httpOutputTis('MenuModel编辑请求失败.');
+            }else{
+                parent::httpOutputEnd('菜单更新成功.','菜单更新失败.',$r_menu_model);
+            }
+
+        }else{
+            $menu_id = intval($this->http_input->get('menu_id'));//menu_id
+            if(!$menu_id){
+                parent::httpOutputTis('参数错误.');
+            }else{
+                $this->MenuModel =  $this->loader->model('MenuModel',$this);
+                // 查找单条记录
+                $d_menu_model = yield $this->MenuModel->getOneById($menu_id);
+                $parent_id  =  $d_menu_model['parent_id'];
+                //查找所有
+                $all = yield $this->MenuModel->getAll();
+                $info='';
+                if($all) {
+                    $selected = $parent_id;
+                    $tree = new Tree();
+                    foreach ($all as $r) {
+                        $r['selected'] = $r['id'] == $selected ? 'selected' : '';
+                        $array[] = $r;
+                        $str = "<option value='\$id' \$selected>\$spacer \$name</option>";
+                        $tree->init($array);
+                        $parentid = isset($where['parentid'])?$where['parentid']:0;
+                        $info = $tree->get_tree($parentid, $str);
+                    }
+                }
+
+                parent::templateData('selectCategorys',$info);
+                parent::templateData('d_menu_model',$d_menu_model);
+                //web or app
+                parent::webOrApp(function (){
+                    $template = $this->loader->view('app::Admin/system_menu_add_and_edit');
+                    $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+                });
+            }
+
+        }
+    }
+
+
+    public function http_menu_delete(){
+        $menu_id =  intval($this->http_input->post('menu_id'));
+        if($this->http_input->getRequestMethod()=='POST' && $menu_id){
+            //查找是否存在子菜单
+            $this->MenuModel =  $this->loader->model('MenuModel',$this);
+            $all = yield $this->MenuModel->getAll();
+            if($all){
+                $tree       = new Tree();
+                $tree->init($all);
+                $arr_all_child = $tree->get_child($menu_id);
+                $arr_delete[] = $menu_id;
+                foreach ($arr_all_child as $key=>$value){
+                    $arr_delete[] = $value['id'];
+                }
+                //print_r($arr_delete);
+                $r_menu_model = yield $this->MenuModel->delete($arr_delete);
+                //print_r($all_child);
+                if(!$r_menu_model){
+                    parent::httpOutputTis('MenuModel删除请求失败.');
+                }else{
+                    parent::httpOutputEnd('菜单删除成功.','菜单删除失败.',$r_menu_model);
+                }
+            }
         }
     }
 

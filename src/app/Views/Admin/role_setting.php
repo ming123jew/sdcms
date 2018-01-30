@@ -45,8 +45,8 @@ Purchase: http://wrapbootstrap.com
         }
         .checkmod dt{
             padding-left:10px;
-            height:30px;
-            line-height:30px;
+            height:40px;
+            line-height:40px;
             font-weight:bold;
             border-bottom: 1px solid #ebebeb;
             background-color:#ECECEC;
@@ -129,7 +129,7 @@ Purchase: http://wrapbootstrap.com
                     <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','lists');?>"><i class="typcn typcn-lightbulb"></i>角色列表</a></h5>
                     <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','role_add');?>"><i class="typcn typcn-lightbulb"></i>添加角色</a></h5>
                     <div class="col-xs-12">
-                        <form id="Form" method="post" class="form-horizontal">
+                        <form id="form" method="post" class="form-horizontal">
                             <input type="hidden" name="role_id" value="<?php echo $data['cur_role_id'];?>">
                         <div class="well with-header  with-footer">
                             <div class="header bg-blue">
@@ -144,7 +144,7 @@ Purchase: http://wrapbootstrap.com
 
                             <div class="form-group">
                                 <div class="col-lg-offset-4 col-lg-8">
-                                    <button class="btn btn-palegreen" type="submit">保存</button>
+                                    <button class="btn btn-palegreen" type="button" id="save">保存</button>
 
                                 </div>
                             </div>
@@ -177,37 +177,22 @@ Purchase: http://wrapbootstrap.com
 <!--Beyond Scripts-->
 <script src="assets/js/beyond.min.js"></script>
 
-<!--Page Related Scripts-->
-<script src="assets/js/validation/bootstrapValidator.js"></script>
 <script>
     $(document).ready(function () {
 
-        $("#Form").bootstrapValidator({
-            excluded: [ ':hidden', ':not(:visible)'],
-            feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            live: 'enabled',
-            message: 'This value is not valid',
-            submitButtons: 'button[type="submit"]',
-            submitHandler: function (validator, form, submitButton) {
-                // Do nothing
-                //alert('here.')
-
-                // 实用ajax提交表单
-                $.post('<?php echo url('','setting');?>', form.serialize(), function(result) {
-                    // .自定义回调逻辑
-                    if(result.status==1){
-
-                    }
-                    console.log(result);
-                }, 'json');
-            },
-            trigger: null,
-            threshold: null,
-            fields: {},
+        $("#save").bind('click',function () {
+            // 实用ajax提交表单
+            $.post('<?php echo url('','setting');?>', $('#form').serialize(), function(result) {
+                // .自定义回调逻辑
+                if(result.status==1){
+                    $("#modal-success").find(".modal-body").html(result.message);
+                    $("#modal-success").modal("show");
+                }else{
+                    $("#modal-warning").find(".modal-body").html(result.message);
+                    $("#modal-warning").modal("show");
+                }
+                console.log(result);
+            }, 'json');
         })
     })
 </script>
