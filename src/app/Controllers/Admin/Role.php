@@ -24,7 +24,7 @@ class Role  extends Base{
         parent::initialization($controller_name, $method_name);
     }
 
-    public function http_lists()
+    public function http_role_lists()
     {
         if($this->http_input->getRequestMethod()=='POST'){
             $end = [
@@ -49,7 +49,7 @@ class Role  extends Base{
     /**
      * 权限设置页面 | 提交保存
      */
-    public function http_setting()
+    public function http_role_setting()
     {
         if($this->http_input->getRequestMethod()=='POST'){
             $role_id = intval($this->http_input->post('role_id'));

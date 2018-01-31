@@ -403,7 +403,7 @@ Purchase: http://wrapbootstrap.com
                 //alert('here.')
 
                 // 实用ajax提交表单
-                $.post('<?php echo url('','config');?>', form.serialize(), function(result) {
+                $.post('<?php echo url('','','config');?>', form.serialize(), function(result) {
                     // .自定义回调逻辑
                     if(result.status==1){
                         //window.location.href = '<?php //echo url('','menu');?>';

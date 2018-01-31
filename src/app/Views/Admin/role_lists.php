@@ -81,8 +81,8 @@ Purchase: http://wrapbootstrap.com
                 <!-- 菜单列表 -->
                 <div class="row">
 
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','lists');?>"><i class="typcn typcn-lightbulb"></i>角色列表</a></h5>
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','role_add');?>"><i class="typcn typcn-lightbulb"></i>添加角色</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','role_lists');?>"><i class="typcn typcn-lightbulb"></i>角色列表</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','role_add');?>"><i class="typcn typcn-lightbulb"></i>添加角色</a></h5>
                     <div class="col-xs-12">
                         <div class="well with-header  with-footer">
                             <div class="header bg-blue">
@@ -121,7 +121,7 @@ Purchase: http://wrapbootstrap.com
                                         <td><?php echo $value['description'];?></td>
                                         <td><?php if($value['status']){echo '<span class="typcn typcn-tick"></span>';}else{echo  '<span class="typcn typcn-times"></span>';};?></td>
                                         <td>
-                                            <a href="<?php echo url('','setting',['id'=>$value['id'],'name'=>$value['role_name']]);?>">权限设置</a>
+                                            <a href="<?php echo url('','','role_setting',['id'=>$value['id'],'name'=>$value['role_name']]);?>">权限设置</a>
                                         </td>
                                     </tr>
                                 <?php } ?>

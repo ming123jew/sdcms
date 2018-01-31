@@ -44,10 +44,12 @@ class BaseController extends Controller
      */
     public $Uri = '';
 
+    public $ModuleName = '';
+    public static $ModuleName2 = '';
     public $ControllerName = '';
     public static $ControllerName2 = '';//用于默认function url()默认控制器
-    public $MethodName = '';//用于默认function url()默认方法
-    public static $MethodName2 = '';
+    public $ActionName = '';
+    public static $ActionName2 = '';//用于默认function url()默认方法
 
     /**
      * @var array
@@ -77,16 +79,21 @@ class BaseController extends Controller
             $this->Url = str_replace(':http_','/',$method_name);
             $this->Url = $host.str_replace('\\','/', $this->Url);
             $this->Uri = $host.$this->http_input->getRequestUri();
-            $this->ControllerName = str_replace('\\','/',$controller_name);
+            $arr_controller_name = explode('/',str_replace('\\','/',$controller_name));// admin/main 拆分
+            //print_r($arr_controller_name);
+            $this->ModuleName = $arr_controller_name[0];
+            self::$ModuleName2 = $this->ModuleName;
+            $this->ControllerName = $arr_controller_name[1];
             self::$ControllerName2 = $this->ControllerName;
-            $this->MethodName =  str_replace('http_','',$method_name);
-            self::$MethodName2 = $this->MethodName;
+            $this->ActionName =  str_replace('http_','',$method_name);
+            self::$ActionName2 = $this->ActionName;
             $this->IsApp = $this->http_input->postGet('is_app')=='yes'??null;
             self::templateData('__URI__',$this->Uri);
             self::templateData('__URL__',$this->Url);
             self::templateData('__HOST__',$this->Host);
+            self::templateData('__M__',$this->ModuleName);
             self::templateData('__C__',$this->ControllerName);
-            self::templateData('__M__',$this->MethodName);
+            self::templateData('__A__',$this->ActionName);
         }
 
 
@@ -153,6 +160,7 @@ class BaseController extends Controller
                 ];
             }
         }
+        $this->http_output->setHeader('Content-Type','application/json');
         $this->http_output->end(json_encode($end),$gzip);
     }
 
@@ -161,13 +169,19 @@ class BaseController extends Controller
      * @param $message
      * @param bool $gzip
      */
-    protected function httpOutputTis($message,$gzip=false){
+    protected function httpOutputTis($message,$json_encode=true,$gzip=false){
         $end = [
             'status' => 0,
             'code'=>200,
             'message'=> $message
         ];
-        $this->http_output->end(json_encode($end),$gzip);
+        $this->http_output->setHeader('Content-Type','application/json');
+        if($json_encode){
+            $this->http_output->end(json_encode($end),$gzip);
+        }else{
+            $this->http_output->end(($end),$gzip);
+        }
+
     }
 
     //入口可以设置IP限制操作，如1秒内同一个IP访问超出N次，将其IP放进禁止访问列表

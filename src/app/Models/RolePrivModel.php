@@ -19,6 +19,10 @@ class RolePrivModel extends BaseModel
     private $table = 'admin_role_priv';
 
 
+    public function getTable(){
+        return $this->prefix.$this->table;
+    }
+
     /**
      * 获取所有菜单
      * @return bool
@@ -92,7 +96,25 @@ class RolePrivModel extends BaseModel
     }
 
 
-
-
+    /**
+     * 用于验证权限
+     * @param int $role_id
+     * @param string $m
+     * @param string $c
+     * @param string $a
+     * @param string $fields
+     * @return bool
+     */
+    public function authRole(int $role_id,string $m,string $c,string $a,string $fields='*'){
+        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
+            ->where('role_id',$role_id)
+            ->select($fields)
+            ->coroutineSend();
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r['result'][0] ;
+        }
+    }
 
 }

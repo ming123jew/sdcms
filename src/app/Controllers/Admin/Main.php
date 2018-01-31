@@ -20,25 +20,12 @@ class Main extends Base
     protected $CookieExpire=10;
 
     /**
-     * @var string
-     */
-    protected $AdminSessionField = '__SESSION__ADMIN__';
-
-    /**
      * @param string $controller_name
      * @param string $method_name
      */
     protected function initialization($controller_name, $method_name)
     {
-        //测试 绕过登录
-        $session_data['username'] = 'ming';
-        $session_data['id'] = 1;
-        session($this->AdminSessionField,$session_data);
-
         parent::initialization($controller_name, $method_name);
-        if( !in_array($method_name,['http_login']) && !self::has_login() ){
-            $this->redirectController($controller_name,'login');
-        }
     }
 
     /**
@@ -113,6 +100,18 @@ class Main extends Base
 
     }
 
+    public function http_tis(){
+
+        $message = $this->http_input->get('message');
+        $r =  get_instance()->getMysql()->select('*')
+            ->from('sd_admin_role_priv')
+            ->limit(10)
+            ->pdoQuery();
+
+        print_r($r);
+        parent::httpOutputTis($message);
+    }
+
     public function http_config(){
 
 
@@ -130,33 +129,6 @@ class Main extends Base
 
         $this->http_output->end($end,false);
     }
-
-    /**
-     * 判断是否登录
-     * @return bool
-     */
-    protected function has_login(){
-        $s =  session($this->AdminSessionField);
-        if($s){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    /**
-     * 返回登录用户SESSION信息
-     * @return array | bool
-     */
-    protected function return_login_session(){
-        $s =   session($this->AdminSessionField);
-        if($s){
-            return $s;
-        }else{
-            return false;
-        }
-    }
-
 
 
     /**

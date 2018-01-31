@@ -79,8 +79,8 @@ Purchase: http://wrapbootstrap.com
             <div class="page-body">
                 <!-- 菜单列表 -->
                 <div class="row">
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','menu');?>"><i class="typcn typcn-lightbulb"></i>菜单列表</a></h5>
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','menu_add');?>"><i class="typcn typcn-lightbulb"></i>添加菜单</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','menu');?>"><i class="typcn typcn-lightbulb"></i>菜单列表</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','menu_add');?>"><i class="typcn typcn-lightbulb"></i>添加菜单</a></h5>
 
                     <div class="col-xs-12">
                         <div class="col-xs-12">
@@ -98,7 +98,7 @@ Purchase: http://wrapbootstrap.com
                                             <label class="col-lg-4 control-label">所属分类</label>
                                             <div class="col-lg-4">
                                                 <select class="form-control" name="parent_id" style="">
-                                                    <option value="">请选择</option>
+                                                    <option value="0">顶级分类</option>
                                                     <?php echo $data['selectCategorys'];?>
                                                 </select>
                                             </div>
@@ -118,7 +118,12 @@ Purchase: http://wrapbootstrap.com
                                                 <input type="text" class="form-control" name="name" value="<?php echo $data['d_menu_model']['name']??'';?>"/>
                                             </div>
                                         </div>
-
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">ICON</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" class="form-control" name="icon" value="<?php echo $data['d_menu_model']['icon']??'';?>"/>
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">应用</label>
                                             <div class="col-lg-8">
@@ -268,9 +273,9 @@ Purchase: http://wrapbootstrap.com
                 // Do nothing
                 //alert('here.')
                 if(menu_id==0){
-                    var url = '<?php echo url('','menu_add');?>';
+                    var url = '<?php echo url('','','menu_add');?>';
                 }else{
-                    var url = '<?php echo url('','menu_edit');?>';
+                    var url = '<?php echo url('','','menu_edit');?>';
                 }
 
                 // 实用ajax提交表单

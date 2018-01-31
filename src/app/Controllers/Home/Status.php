@@ -54,7 +54,7 @@ class Status extends Base
         //print_r($this->client_data);
         $start_time = microtime(true);
         $log_file = LOG_DIR . '/swoole.log';
-        $message = self::tail($log_file,$this->client_data->num ?? 1000);
+        $message = self::tail($log_file,$this->client_data->num ?? 300);
         //var_dump($message);
         $cache = Cache::getCache('WsCache');
         $key = 'get_log';

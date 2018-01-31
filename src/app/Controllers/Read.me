@@ -2,8 +2,9 @@
 $data['__URI__']  ：全网址
 $data['__URL__']  ：根网址
 $data['__HOST__'] ：网站主机域名
-$data['__C__']  :  MODEL+CONTROLLER  模型+控制器名 如 Admin/Main
-$data['__M__']  ： 控制器方法名
+$data['__M__']  :  MODULE 模型
+$data['__C__']  :  CONTROLLER
+$data['__A__']  ： ACTION方法名
 
 模板常用调用成功或失败：
 $("#modal-success").find(".modal-body").html("保存成功.");
@@ -18,7 +19,7 @@ parent::webOrApp(function (){  //函数主体  })  :  判断是否是APP，如�
 parent::httpOutputEnd('更新成功.','更新失败.',$r)  : ajax。。根据传入$r结果集进行判断返回成功或失败提示
 
 常用函数：
- url($controller='',$method='', $params='');   生成地址
+ url($module='',$controller='',$method='', $params='');   生成地址
 session($name, $value = '', $prefix = null);
 
 地址参数：xxx?is_app=yes

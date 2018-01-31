@@ -126,8 +126,8 @@ Purchase: http://wrapbootstrap.com
                 <!-- 菜单列表 -->
                 <div class="row">
 
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','lists');?>"><i class="typcn typcn-lightbulb"></i>角色列表</a></h5>
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','role_add');?>"><i class="typcn typcn-lightbulb"></i>添加角色</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','role_lists');?>"><i class="typcn typcn-lightbulb"></i>角色列表</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','role_add');?>"><i class="typcn typcn-lightbulb"></i>添加角色</a></h5>
                     <div class="col-xs-12">
                         <form id="form" method="post" class="form-horizontal">
                             <input type="hidden" name="role_id" value="<?php echo $data['cur_role_id'];?>">
@@ -182,7 +182,7 @@ Purchase: http://wrapbootstrap.com
 
         $("#save").bind('click',function () {
             // 实用ajax提交表单
-            $.post('<?php echo url('','setting');?>', $('#form').serialize(), function(result) {
+            $.post('<?php echo url('','','role_setting');?>', $('#form').serialize(), function(result) {
                 // .自定义回调逻辑
                 if(result.status==1){
                     $("#modal-success").find(".modal-body").html(result.message);

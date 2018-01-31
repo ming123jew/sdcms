@@ -15,17 +15,17 @@
         </a>
         <ul class="submenu">
             <li <?php if($data['__M__']=='config'){?>class="active"<?php } ?>>
-                <a href="<?php echo url('Admin','System','config','i=1');?>">
+                <a href="<?php echo url('Admin/System','config','i=1');?>">
                     <span class="menu-text">基本设置</span>
                 </a>
             </li>
             <li <?php if($data['__M__']=='menu'){?>class="active"<?php } ?>>
-                <a href="<?php echo url('Admin','System','menu','i=1');?>">
+                <a href="<?php echo url('Admin/System','menu','i=1');?>">
                     <span class="menu-text">后台菜单</span>
                 </a>
             </li>
             <li <?php if($data['__M__']=='lists'){?>class="active"<?php } ?>>
-                <a href="<?php echo url('Admin','Role','role_lists','i=1');?>">
+                <a href="<?php echo url('Admin/Role','role_lists','i=1');?>">
                     <span class="menu-text">角色权限</span>
                 </a>
             </li>
@@ -48,10 +48,10 @@
                 </a>
                 <ul class="submenu">
                     <li <?php if($data['__M__']=='content_article_list'){?>class="active"<?php } ?>>
-                        <a href="<?php echo url('Admin','Content','content_article_list','i=1');?>">列表</a>
+                        <a href="<?php echo url('Admin/Content','content_article_list','i=1');?>">列表</a>
                     </li>
                     <li <?php if($data['__M__']=='content_article_add'){?>class="active"<?php } ?>>
-                        <a href="<?php echo url('Admin','Content','content_article_add','i=1');?>">添加</a>
+                        <a href="<?php echo url('Admin/Content','content_article_add','i=1');?>">添加</a>
                     </li>
                 </ul>
             </li>
@@ -64,12 +64,12 @@
                 </a>
                 <ul class="submenu">
                     <li <?php if($data['__M__']=='content_category_list'){?>class="active"<?php } ?>>
-                        <a href="<?php echo url('Admin','Content','content_category_list','i=1');?>">
+                        <a href="<?php echo url('Admin/Content','content_category_list','i=1');?>">
                             <span class="menu-text">列表</span>
                         </a>
                     </li>
                     <li <?php if($data['__M__']=='content_category_add'){?>class="active"<?php } ?>>
-                        <a href="<?php echo url('Admin','Content','content_category_add','i=1');?>">
+                        <a href="<?php echo url('Admin/Content','content_category_add','i=1');?>">
                             <span class="menu-text">添加</span>
                         </a>
                     </li>

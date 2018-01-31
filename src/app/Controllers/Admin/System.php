@@ -55,7 +55,7 @@ class System extends Base
 
                     $all[$n]['parent_id_node'] = isset($r['parent_id']) ? ' class="child-of-node-' . $r['parent_id'] . '"' : '';
                     //$all[$n]['str_manage'] = checkRole('auth/menuAdd',["parent_id" => $r['id']]) ? '<a href="'.url("auth/menuAdd",["parent_id" => $r['id']]).'">添加子菜单</a> |':'';
-                    $all[$n]['str_manage'] = check_role('Admin','System','menu_edit',["menu_id" => $r['id']]) ?'<a href="'.url('','menu_edit',["menu_id" => $r['id']]).'">编辑</a> |':'';
+                    $all[$n]['str_manage'] = check_role('Admin','System','menu_edit',["menu_id" => $r['id']]) ?'<a href="'.url('','','menu_edit',["menu_id" => $r['id']]).'">编辑</a> |':'';
                     $all[$n]['str_manage'] .= check_role('Admin','System','menu_delete',["menu_id" => $r['id']]) ?'<a  onclick="menu_delete('.$r['id'].')" href="javascript:;">删除</a>':'';
                     $all[$n]['status'] = $r['status'] ? '开启' : '隐藏';
                 }
@@ -97,6 +97,7 @@ class System extends Base
             $data = [
                 $this->http_input->post('parent_id'),
                 $this->http_input->post('name'),
+                $this->http_input->post('icon'),
                 $this->http_input->post('m'),
                 $this->http_input->post('c'),
                 $this->http_input->post('a'),
@@ -104,7 +105,7 @@ class System extends Base
                 $this->http_input->post('status'),
                 $this->http_input->post('remark'),
             ];
-            $r_menu_model = yield $this->MenuModel->insertMultiple(['parent_id','name','m','c','a','url_param','status','remark'],$data);
+            $r_menu_model = yield $this->MenuModel->insertMultiple(['parent_id','name','icon','m','c','a','url_param','status','remark'],$data);
             if(!$r_menu_model){
                 parent::httpOutputTis('MenuModel添加请求失败.');
             }else{
@@ -131,6 +132,7 @@ class System extends Base
 //here
             parent::templateData('selectCategorys',$info);
             parent::templateData('test',1);
+            parent::templateData('d_menu_model',[]);
             //web or app
             parent::webOrApp(function (){
                 $template = $this->loader->view('app::Admin/system_menu_add_and_edit');
@@ -149,6 +151,7 @@ class System extends Base
             $data = [
                 'parent_id'=> $this->http_input->post('parent_id'),
                 'name'=>$this->http_input->post('name'),
+                'icon'=>$this->http_input->post('icon'),
                 'm'=>$this->http_input->post('m'),
                 'c'=>$this->http_input->post('c'),
                 'a'=>$this->http_input->post('a'),

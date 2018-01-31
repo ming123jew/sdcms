@@ -81,8 +81,8 @@ Purchase: http://wrapbootstrap.com
                 <!-- 菜单列表 -->
                 <div class="row">
 
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','menu');?>"><i class="typcn typcn-lightbulb"></i>菜单列表</a></h5>
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','menu_add');?>"><i class="typcn typcn-lightbulb"></i>添加菜单</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','menu');?>"><i class="typcn typcn-lightbulb"></i>菜单列表</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','menu_add');?>"><i class="typcn typcn-lightbulb"></i>添加菜单</a></h5>
                     <div class="col-xs-12">
                         <div class="well with-header  with-footer">
                             <div class="header bg-blue">
@@ -152,7 +152,7 @@ Purchase: http://wrapbootstrap.com
 <script src="assets/js/bootbox/bootbox.js"></script>
 <script>
     function menu_delete(menu_id) {
-        var url = '<?php echo url('',"menu_delete");?>';
+        var url = '<?php echo url('','',"menu_delete");?>';
         bootbox.confirm({
             message: '您确认要删除该选项吗？(*其子菜单也将被删除)',
             buttons: {

@@ -42,21 +42,25 @@ function session($name, $value = '', $prefix = null)
 
 /**
  * 生成url
- * @param $controller   module+controller    如 Admin/Main
+ * @param $module       module
+ * @param $controller   controller
  * @param $method
  * @param string $params
  */
-function url($controller='',$method='', $params=''){
+function url($module='',$controller='',$action='', $params=''){
 
     $host = Controllers\BaseController::$Host2;
-
+    if(empty($module)){
+        $module = Controllers\BaseController::$ModuleName2;
+    }
     if(empty($controller)){
         $controller = Controllers\BaseController::$ControllerName2;
     }
-    if(empty($method)){
-        $method = Controllers\BaseController::$MethodName2;
+    if(empty($action)){
+        $action = Controllers\BaseController::$ActionName2;
     }
-    $url = $controller.'/'.$method;
+    $url = $module.'/'.$controller.'/'.$action;
+    //print_r($url);
     // 解析参数
     if (is_string($params)) {
         // aaa=1&bbb=2 转换成数组
