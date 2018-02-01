@@ -79,88 +79,40 @@ Purchase: http://wrapbootstrap.com
             <div class="page-body">
                 <!-- 菜单列表 -->
                 <div class="row">
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','menu');?>"><i class="typcn typcn-lightbulb"></i>菜单列表</a></h5>
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','menu_add');?>"><i class="typcn typcn-lightbulb"></i>添加菜单</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','role_lists');?>"><i class="typcn typcn-lightbulb"></i>角色列表</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','role_add');?>"><i class="typcn typcn-lightbulb"></i>添加角色</a></h5>
 
                     <div class="col-xs-12">
                         <div class="col-xs-12">
                             <div class="widget radius-bordered">
                                 <div class="widget-header">
-                                    <span class="widget-caption"><?php echo isset($data['d_menu_model']['id'])?'编辑菜单':'添加菜单'; ?></span>
+                                    <span class="widget-caption"><?php echo isset($data['d_role_model']['id'])?'编辑角色':'添加角色'; ?></span>
                                 </div>
                                 <div class="widget-body">
-                                    <form id="registrationForm" method="post" class="form-horizontal">
-                                        <input type="hidden" id="menu_id" name="menu_id" value="<?php echo $data['d_menu_model']['id']??0;?>">
+                                    <form id="Form" method="post" class="form-horizontal">
+                                        <input type="hidden" id="role_id" name="info[id]" value="<?php echo $data['d_role_model']['id']??0;?>">
                                         <div class="form-title" style="display: none">
                                             Basic Validator With HTML Attributes
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-lg-4 control-label">所属分类</label>
-                                            <div class="col-lg-4">
-                                                <select class="form-control" name="parent_id" style="">
-                                                    <option value="0">顶级分类</option>
-                                                    <?php echo $data['selectCategorys'];?>
-                                                </select>
+                                            <label class="col-lg-4 control-label">角色名称</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" class="form-control" name="info[role_name]" value="<?php echo $data['d_role_model']['role_name']??'';?>"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">角色描述</label>
+                                            <div class="col-lg-8">
+                                                <textarea name="info[description]" class="form-control" rows="3"><?php echo $data['d_role_model']['description']??'';?></textarea>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">状态</label>
                                             <div class="col-lg-8">
-                                                <input style="position: initial;opacity: inherit;" type="radio" name="status" <?php echo  $data['d_menu_model']['status']==1 ? 'checked':'';?> value="1">显示
-                                                <input style="position: initial;opacity: inherit;" type="radio" name="status" <?php echo  $data['d_menu_model']['status']==0 ? 'checked':'';?> value="0">隐藏
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">名称</label>
-                                            <div class="col-lg-8">
-                                                <input type="text" class="form-control" name="name" value="<?php echo $data['d_menu_model']['name']??'';?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">ICON</label>
-                                            <div class="col-lg-8">
-                                                <input type="text" class="form-control" name="icon" value="<?php echo $data['d_menu_model']['icon']??'';?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">应用</label>
-                                            <div class="col-lg-8">
-                                                <input class="form-control" name="m" type="text" value="<?php echo $data['d_menu_model']['m']??'';?>"/>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">控制器</label>
-                                            <div class="col-lg-8">
-                                                <input class="form-control" name="c" type="text" value="<?php echo $data['d_menu_model']['c']??'';?>"/>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">方法</label>
-                                            <div class="col-lg-8">
-                                                <input class="form-control" name="a" type="text" value="<?php echo $data['d_menu_model']['a']??'';?>" />
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">参数</label>
-                                            <div class="col-lg-8">
-                                                <input class="form-control" name="url_param" type="text" value="<?php echo $data['d_menu_model']['url_param']??'';?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">菜单多控制器</label>
-                                            <div class="col-lg-8">
-                                                <input class="form-control" name="cc" type="text" value="<?php echo $data['d_menu_model']['cc']??'';?>"/>*用于后台菜单分类，如不填写则默认使用控制器来分类，多个用“,”隔开。
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">备注</label>
-                                            <div class="col-lg-8">
-                                                <textarea name="remark" class="form-control" rows="3"><?php echo $data['d_menu_model']['remark']??'';?></textarea>
+                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php echo  $data['d_role_model']['status']==1 ? 'checked':'';?> value="1">显示
+                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php echo  $data['d_role_model']['status']==0 ? 'checked':'';?> value="0">隐藏
                                             </div>
                                         </div>
 
@@ -202,9 +154,9 @@ Purchase: http://wrapbootstrap.com
 <script>
 
     $(document).ready(function () {
-        var menu_id =  $('#menu_id').val();
-        console.log(menu_id)
-        $("#registrationForm").bootstrapValidator({
+        var role_id =  $('#role_id').val();
+        console.log(role_id)
+        $("#Form").bootstrapValidator({
             /**
              *  指定不验证的情况
              *  值可设置为以下三种类型：
@@ -277,10 +229,10 @@ Purchase: http://wrapbootstrap.com
             submitHandler: function (validator, form, submitButton) {
                 // Do nothing
                 //alert('here.')
-                if(menu_id==0){
-                    var url = '<?php echo url('','','menu_add');?>';
+                if(role_id==0){
+                    var url = '<?php echo url('','','role_add');?>';
                 }else{
-                    var url = '<?php echo url('','','menu_edit');?>';
+                    var url = '<?php echo url('','','role_edit');?>';
                 }
 
                 // 实用ajax提交表单
@@ -311,7 +263,7 @@ Purchase: http://wrapbootstrap.com
              */
             fields: {
                 //多个重复
-                parent_id: {
+                'info[role_name]': {
                     //隐藏或显示 该字段的验证
                     enabled: true,
                     //错误提示信息
@@ -354,44 +306,7 @@ Purchase: http://wrapbootstrap.com
                          data-bv-different-message="The username and password cannot be the same as each other"-->
                          */
                     //<validatorName>: <validatorOptions>
-                        notEmpty:{message:"所属类型不能为空."},
-                    }
-                },
-                name: {
-                    //隐藏或显示 该字段的验证
-                    enabled: true,
-                    //错误提示信息
-                    message: 'This value is not valid',
-                    validators: {
-                        notEmpty:{message:"名称不能为空."},
-                    }
-                },
-                m: {
-                    //隐藏或显示 该字段的验证
-                    enabled: true,
-                    //错误提示信息
-                    message: 'This value is not valid',
-                    validators: {
-                        notEmpty:{message:"应用不能为空."},
-                    }
-                },
-
-                c: {
-                    //隐藏或显示 该字段的验证
-                    enabled: true,
-                    //错误提示信息
-                    message: 'This value is not valid',
-                    validators: {
-                        notEmpty:{message:"控制器不能为空."},
-                    }
-                },
-                a: {
-                    //隐藏或显示 该字段的验证
-                    enabled: true,
-                    //错误提示信息
-                    message: 'This value is not valid',
-                    validators: {
-                        notEmpty:{message:"方法不能为空."},
+                        notEmpty:{message:"请输入角色名称."},
                     }
                 },
             }

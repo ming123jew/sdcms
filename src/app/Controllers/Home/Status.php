@@ -9,6 +9,7 @@ namespace app\Controllers\Home;
 
 use Server\Memory\Cache;
 use app\Tasks\WsCache;
+use app\Tasks\WebCache;
 
 class Status extends Base
 {
@@ -35,6 +36,12 @@ class Status extends Base
     public function http_cache(){
         $cache = Cache::getCache('WsCache');
         $this->http_output->end($cache->getOneMap('get_log'));
+    }
+
+    public function http_test(){
+        $role_id = $this->http_input->get('id');
+        $cache = Cache::getCache('WebCache');
+        $this->http_output->end(unserialize($cache->getOneMap('__ROLE_ID__ADMIN__'.$role_id)));
     }
 
 

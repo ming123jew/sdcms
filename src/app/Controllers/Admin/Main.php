@@ -1,8 +1,10 @@
 <?php
 
 namespace app\Controllers\Admin;
+use app\Helpers\Tree;
 use app\Models\UserModel;
 use Server\Memory\Cache;
+use app\Tasks\WebCache;
 
 /**
  * Created by PhpStorm.
@@ -18,6 +20,8 @@ class Main extends Base
      */
     protected $UserModel;
     protected $CookieExpire=10;
+    protected $MenuModel;
+    protected $RolePrivModel;
 
     /**
      * @param string $controller_name
@@ -44,6 +48,30 @@ class Main extends Base
     }
 
     /**
+     * ajax获取角色菜单
+     */
+    public function http_ajaxgetmenu(){
+        $login_session = self::get_login_session();
+        $role_id = $login_session['roleid'];
+        $all = unserialize(parent::get_cache_role_menu_byid($role_id));
+        if(!$all){
+            $all = yield self::_getRoleMenu($role_id);
+            print_r('not cache.');
+        }
+
+        $end = [
+            'status' => 1,
+            'code'=>200,
+            'message'=>'login fail.',
+            'data'=>$all
+        ];
+        $this->http_output->setHeader('Content-Type','application/json');
+        $this->http_output->end(json_encode($end),false);
+        //print_r($all);
+    }
+
+
+    /**
      * 登录 | 兼容所有端
      * PC/WAP 使用到VIEW，其他端只在POST操作返回结果
      * @return view | json
@@ -54,23 +82,37 @@ class Main extends Base
 
             $this->UserModel = $this->loader->model('UserModel',$this);
             $result = yield $this->UserModel->getOneUserByUsernameAndPassword($this->http_input->post('username'),$this->http_input->post('password'));
-
+            print_r($result);
             //验证失败
-            if(empty($result['result'])){
+            if(empty($result)){
                 $end = [
                     'status' => 0,
                     'code'=>200,
                     'message'=>'info'
                 ];
             }else{
-                //print_r($result);
-                if($result['result'][0]){
-                    unset($result['result'][0]['password']);
-                    $session_data = $result['result'][0];
+
+                if($result){
+
+                    //储存到SESSION - memory
+                    unset($result['password']);
+                    $session_data = $result;
                     session($this->AdminSessionField,$session_data);//print_r($session_data);
                     $cookie_data = md5(implode('-',$session_data));
                     //echo $cookie_data;exit(0);
                     $this->http_output->setCookie($this->AdminSessionField,$cookie_data,$this->CookieExpire);
+
+                    //查询权限，并存到Cache
+                    $role_id = $session_data['roleid'];
+                    $this->RolePrivModel = $this->loader->model('RolePrivModel',$this);
+                    $d_model_rolepriv = yield  $this->RolePrivModel->getByRoleId($role_id);
+                    $cache = Cache::getCache('WebCache');
+                    $cache->addMap($this->AdminCacheRoleIdDataField.$role_id,serialize($d_model_rolepriv));
+
+                    //获取角色菜单，并存到cache
+                    $role_menu = yield self::_getRoleMenu($role_id);
+                    $cache->addMap($this->AdminCacheRoleIdMenuField.$role_id,serialize($role_menu));
+
                     $end = [
                         'token'=>$cookie_data,
                         'status' => 1,
@@ -102,21 +144,15 @@ class Main extends Base
 
     public function http_tis(){
 
-        $message = $this->http_input->get('message');
-        $r =  get_instance()->getMysql()->select('*')
-            ->from('sd_admin_role_priv')
-            ->limit(10)
-            ->pdoQuery();
 
-        print_r($r);
-        parent::httpOutputTis($message);
+//        $r =  get_instance()->getMysql()->select('*')
+//            ->from('sd_admin_role_priv')
+//            ->limit(10)
+//            ->pdoQuery();
+//
+//        print_r($r);
+        parent::httpOutputTis('你没有权限操作.',false);
     }
-
-    public function http_config(){
-
-
-    }
-
 
     public function http_login2(){
         $cache = Cache::getCache('TestCache');
@@ -130,7 +166,39 @@ class Main extends Base
         $this->http_output->end($end,false);
     }
 
+    /**
+     * 获取角色菜单
+     * @return mixed
+     */
+    private function _getRoleMenu($role_id){
 
+        $this->MenuModel  = $this->loader->model('MenuModel',$this);
+        $all = yield $this->MenuModel->getAll($role_id);
+
+        //处理数据添加url属性
+        foreach ($all as $key=>$value){
+
+            if($value['a']=='#'){
+                $all[$key]['url'] = 'javascript:;';
+            }else{
+                $all[$key]['url'] = url($value['m'],$value['c'],$value['a'],$value['url_param']);
+            }
+        }
+        //获取子级菜单
+        $tree = new Tree();
+        $tree->init($all);
+        $subset = [];
+        foreach ($all as $key2=>$value2){
+            $subset = $tree->get_child($value2['id']);
+            if($subset){
+                $all[$key2]['subset'] = array_values($subset);
+            }else{
+                $all[$key2]['subset'] = $subset;
+            }
+
+        }
+        return $all;
+    }
     /**
      * 销毁操作
      */

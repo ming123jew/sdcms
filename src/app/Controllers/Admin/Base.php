@@ -1,7 +1,8 @@
 <?php
 
 namespace app\Controllers\Admin;
-
+use Server\Memory\Cache;
+use app\Tasks\WebCache;
 /**
  * Created by PhpStorm.
  * User: ming123jew
@@ -15,11 +16,14 @@ class Base extends \app\Controllers\BaseController
      */
     public $HtmlUrl = '';
     protected $RolePrivModel='';
+    protected $MenuModel = '';
 
     /**
      * @var string
      */
-    protected $AdminSessionField = '__SESSION__ADMIN__';
+    protected $AdminSessionField = '__SESSION__ADMIN__';//session
+    protected $AdminCacheRoleIdDataField = '__ROLEID__DATA__ADMIN__';//角色数据
+    protected $AdminCacheRoleIdMenuField = '__ROLEID__MENU__ADMIN__';//角色菜单
     /**
      * @param string $controller_name
      * @param string $method_name
@@ -41,20 +45,20 @@ class Base extends \app\Controllers\BaseController
         parent::templateData('HTML_URL',$this->HtmlUrl);
 
         //测试 绕过登录
-        $session_data['username'] = 'ming';
-        $session_data['id'] = 1;
-        $session_data['roleid'] = 1;
-        session($this->AdminSessionField,$session_data);
+//        $session_data['username'] = 'ming';
+//        $session_data['id'] = 1;
+//        $session_data['roleid'] = 1;
+//        session($this->AdminSessionField,$session_data);
 
+        //如未登录  && 不是admin/main/login  admin/main/tis 则跳转到登录
         if( !in_array($method_name,['http_login','http_tis']) && !self::check_login() ){
             $this->redirectController('Admin/Main','login');
         }
 
         //检测权限
          self::check_priv();
+
     }
-
-
 
     /**
      * @desc 装置模板数据
@@ -80,7 +84,7 @@ class Base extends \app\Controllers\BaseController
      * 权限判断
      */
      public function check_priv() {
-         print_r("ok");
+
          if( strtolower($this->ModuleName) =='admin' && strtolower($this->ControllerName)  =='main' && in_array(strtolower($this->ActionName), array('login','tis'))) return true;
          //if($_SESSION['roleid'] == 1) return true;
          //if(preg_match('/^public_/',ROUTE_A)) return true;
@@ -89,15 +93,21 @@ class Base extends \app\Controllers\BaseController
          //}
          $login_session = self::get_login_session();
          $role_id = $login_session['roleid'];
-         //搞不清楚为啥无法使用协程
+         $user = $login_session['username'];
+         //1为超级管理员，直接跳过
+         if($role_id == 1) return true;
+         //搞不清楚为啥无法使用协程 无法放到initialization 使用
          //$this->RolePrivModel  = $this->loader->model('RolePrivModel',$this);
          //$r =$privdb->get_one(array('m'=>ROUTE_M,'c'=>ROUTE_C,'a'=>$action,'roleid'=>$_SESSION['roleid'],'siteid'=>$siteid));
          // $r =  yield $this->RolePrivModel->authRole($role_id,$this->ModuleName,$this->ControllerName,$this->ActionName);
          //var_dump($r);
+
+         //数据库方式
+         /********************* 可使用 ******************
          $this->RolePrivModel  = $this->loader->model('RolePrivModel',$this);
          $r =  get_instance()->getMysql()->select('*')//pdo注意服务器IP 127.0.0.1
              ->from($this->RolePrivModel->getTable())
-             ->limit(10)
+             ->limit(1)
              ->where('role_id',$role_id)
              ->where('m',$this->ModuleName)
              ->where('c',$this->ControllerName)
@@ -107,7 +117,30 @@ class Base extends \app\Controllers\BaseController
          if(!($r['result'])){
              parent::httpOutputTis('你没有权限操作，m：'.$this->ModuleName.'，c：'.$this->ControllerName.'，a：'.$this->ActionName.'。',false);
          }else{
-             print_r($r['result']);
+             //print_r($r['result']);
+         }
+          *************/
+
+         /**************使用内存模式******************/
+         // 获取当前用户组拥有的权限
+         //print_r("ok");
+         $role_arr = unserialize(self::get_cache_role_data_byid($role_id));
+         //print_r($role_arr);
+         $can = false;
+         if(is_array($role_arr)&&!empty($role_arr)){
+             foreach ($role_arr as $key=>$value){
+                 if($this->ModuleName==$value['m']&&$this->ControllerName==$value['c']&&$this->ActionName==$value['a']){
+                     $can = true;
+                 }else{
+                     continue;
+                 }
+             }
+         }
+
+         if(!$can){
+             //parent::httpOutputTis('你没有权限操作，m：'.$this->ModuleName.'，c：'.$this->ControllerName.'，a：'.$this->ActionName.'。',false);
+             print_r('你没有权限操作，m：'.$this->ModuleName.'，c：'.$this->ControllerName.'，a：'.$this->ActionName.'。',false);
+             $this->redirectController('Admin/Main','Tis');
          }
 
     }
@@ -136,6 +169,26 @@ class Base extends \app\Controllers\BaseController
         }else{
             return false;
         }
+    }
+
+    /**
+     * 根据role_id查找角色分配缓存 | 登录的时候创建此缓存  | 公用 暂时不考虑user_id
+     * @param $role_id
+     * @return mixed
+     */
+    protected function get_cache_role_data_byid($role_id){
+        $cache = Cache::getCache('WebCache');
+        return $cache->getOneMap($this->AdminCacheRoleIdDataField.$role_id);
+    }
+
+    /**
+     * 根据role_id查找角色菜单缓存 | 登录的时候创建此缓存  | 公用 暂时不考虑user_id
+     * @param $role_id
+     * @return mixed
+     */
+    protected function get_cache_role_menu_byid($role_id){
+        $cache = Cache::getCache('WebCache');
+        return $cache->getOneMap($this->AdminCacheRoleIdMenuField.$role_id);
     }
 
 }

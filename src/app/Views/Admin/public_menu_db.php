@@ -1,4 +1,4 @@
-<ul class="nav sidebar-menu">
+<ul class="nav sidebar-menu" id="menu">
     <!--Dashboard-->
     <li <?php if($data['__C__']=='Admin/Main'){?>class="active"<?php } ?>>
         <a href="<?php echo $data['__URL__'];?>">
@@ -79,365 +79,8 @@
         </ul>
     </li>
 
-    <!--UI Elements-->
-    <li>
-        <a href="#" class="menu-dropdown">
-            <i class="menu-icon fa fa-desktop"></i>
-            <span class="menu-text"> Elements </span>
-            <i class="menu-expand"></i>
-        </a>
 
-        <ul class="submenu">
-            <li>
-                <a href="elements.html">
-                    <span class="menu-text">Basic Elements</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-dropdown">
-                                    <span class="menu-text">
-                                        Icons
-                                    </span>
-                    <i class="menu-expand"></i>
-                </a>
 
-                <ul class="submenu">
-                    <li  class="active">
-                        <a href="font-awesome.html">
-                            <i class="menu-icon fa fa-rocket"></i>
-                            <span class="menu-text">Font Awesome</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="glyph-icons.html">
-                            <i class="menu-icon glyphicon glyphicon-stats"></i>
-                            <span class="menu-text">Glyph Icons</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="typicon.html">
-                            <i class="menu-icon typcn typcn-location-outline"></i>
-                            <span class="menu-text"> Typicons</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="weather-icons.html">
-                            <i class="menu-icon wi-day-snow"></i>
-                            <span class="menu-text">Weather Icons</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="tabs.html">
-                    <span class="menu-text">Tabs & Accordions</span>
-                </a>
-            </li>
-            <li>
-                <a href="alerts.html">
-                    <span class="menu-text">Alerts & Tooltips</span>
-                </a>
-            </li>
-            <li>
-                <a href="modals.html">
-                    <span class="menu-text">Modals & Wells</span>
-                </a>
-            </li>
-            <li>
-                <a href="buttons.html">
-                    <span class="menu-text">Buttons</span>
-                </a>
-            </li>
-            <li>
-                <a href="nestable-list.html">
-                    <span class="menu-text"> Nestable List</span>
-                </a>
-            </li>
-            <li>
-                <a href="treeview.html">
-                    <span class="menu-text">Treeview</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <!--Tables-->
-    <li>
-        <a href="#" class="menu-dropdown">
-            <i class="menu-icon fa fa-table"></i>
-            <span class="menu-text"> Tables </span>
-
-            <i class="menu-expand"></i>
-        </a>
-
-        <ul class="submenu">
-            <li>
-                <a href="tables-simple.html">
-                    <span class="menu-text">Simple & Responsive</span>
-                </a>
-            </li>
-            <li>
-                <a href="tables-data.html">
-                    <span class="menu-text">Data Tables</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <!--Forms-->
-    <li>
-        <a href="#" class="menu-dropdown">
-            <i class="menu-icon fa fa-pencil-square-o"></i>
-            <span class="menu-text"> Forms </span>
-
-            <i class="menu-expand"></i>
-        </a>
-
-        <ul class="submenu">
-            <li>
-                <a href="form-layouts.html">
-                    <span class="menu-text">Form Layouts</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="form-inputs.html">
-                    <span class="menu-text">Form Inputs</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="form-pickers.html">
-                    <span class="menu-text">Data Pickers</span>
-                </a>
-            </li>
-            <li>
-                <a href="form-wizard.html">
-                    <span class="menu-text">Wizard</span>
-                </a>
-            </li>
-            <li>
-                <a href="form-validation.html">
-                    <span class="menu-text">Validation</span>
-                </a>
-            </li>
-            <li>
-                <a href="form-editors.html">
-                    <span class="menu-text">Editors</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <!--Charts-->
-    <li>
-        <a href="#" class="menu-dropdown">
-            <i class="menu-icon fa fa-bar-chart-o"></i>
-            <span class="menu-text"> Charts </span>
-
-            <i class="menu-expand"></i>
-        </a>
-
-        <ul class="submenu">
-            <li>
-                <a href="flot.html">
-                    <span class="menu-text">Flot Charts</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="morris.html">
-                    <span class="menu-text"> Morris Charts</span>
-                </a>
-            </li>
-            <li>
-                <a href="sparkline.html">
-                    <span class="menu-text">Sparkline Charts</span>
-                </a>
-            </li>
-            <li>
-                <a href="easypiecharts.html">
-                    <span class="menu-text">Easy Pie Charts</span>
-                </a>
-            </li>
-            <li>
-                <a href="chartjs.html">
-                    <span class="menu-text"> ChartJS</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <!--Profile-->
-    <li>
-        <a href="profile.html">
-            <i class="menu-icon fa fa-picture-o"></i>
-            <span class="menu-text">Profile</span>
-        </a>
-    </li>
-    <!--Mail-->
-    <li>
-        <a href="#" class="menu-dropdown">
-            <i class="menu-icon fa fa-envelope-o"></i>
-            <span class="menu-text"> Mail </span>
-
-            <i class="menu-expand"></i>
-        </a>
-
-        <ul class="submenu">
-            <li>
-                <a href="inbox.html">
-                    <span class="menu-text">Inbox</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="message-view.html">
-                    <span class="menu-text">View Message</span>
-                </a>
-            </li>
-            <li>
-                <a href="message-compose.html">
-                    <span class="menu-text">Compose Message</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <!--Calendar-->
-    <li>
-        <a href="calendar.html">
-            <i class="menu-icon fa fa-calendar"></i>
-            <span class="menu-text">
-                                Calendar
-                            </span>
-        </a>
-    </li>
-    <!--Pages-->
-    <li>
-        <a href="#" class="menu-dropdown">
-            <i class="menu-icon glyphicon glyphicon-paperclip"></i>
-            <span class="menu-text"> Pages </span>
-
-            <i class="menu-expand"></i>
-        </a>
-        <ul class="submenu">
-            <li>
-                <a href="timeline.html">
-                    <span class="menu-text">Timeline</span>
-                </a>
-            </li>
-            <li>
-                <a href="pricing.html">
-                    <span class="menu-text">Pricing Tables</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="invoice.html">
-                    <span class="menu-text">Invoice</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="login.html">
-                    <span class="menu-text">Login</span>
-                </a>
-            </li>
-            <li>
-                <a href="register.html">
-                    <span class="menu-text">Register</span>
-                </a>
-            </li>
-            <li>
-                <a href="lock.html">
-                    <span class="menu-text">Lock Screen</span>
-                </a>
-            </li>
-            <li>
-                <a href="typography.html">
-                    <span class="menu-text"> Typography </span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <!--More Pages-->
-    <li>
-        <a href="#" class="menu-dropdown">
-            <i class="menu-icon glyphicon glyphicon-link"></i>
-
-            <span class="menu-text">
-                                More Pages
-                            </span>
-
-            <i class="menu-expand"></i>
-        </a>
-
-        <ul class="submenu">
-            <li>
-                <a href="error-404.html">
-                    <span class="menu-text">Error 404</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="error-500.html">
-                    <span class="menu-text"> Error 500</span>
-                </a>
-            </li>
-            <li>
-                <a href="blank.html">
-                    <span class="menu-text">Blank Page</span>
-                </a>
-            </li>
-            <li>
-                <a href="grid.html">
-                    <span class="menu-text"> Grid</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-dropdown">
-                                    <span class="menu-text">
-                                        Multi Level Menu
-                                    </span>
-                    <i class="menu-expand"></i>
-                </a>
-
-                <ul class="submenu">
-                    <li>
-                        <a href="#">
-                            <i class="menu-icon fa fa-camera"></i>
-                            <span class="menu-text">Level 3</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="menu-dropdown">
-                            <i class="menu-icon fa fa-asterisk"></i>
-
-                            <span class="menu-text">
-                                                Level 4
-                                            </span>
-                            <i class="menu-expand"></i>
-                        </a>
-
-                        <ul class="submenu">
-                            <li>
-                                <a href="#">
-                                    <i class="menu-icon fa fa-bolt"></i>
-                                    <span class="menu-text">Some Item</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#">
-                                    <i class="menu-icon fa fa-bug"></i>
-                                    <span class="menu-text">Another Item</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                </ul>
-            </li>
-
-        </ul>
-    </li>
     <!--Right to Left-->
     <li>
         <a href="#" class="menu-dropdown">
@@ -506,3 +149,101 @@
     </div> <!-- / .modal-dialog -->
 </div>
 <!--/Danger Modal Templates-->
+
+<script>
+    /**
+      * Array.prototype.[method name] allows you to define/overwrite an objects method
+      * needle is the item you are searching for
+      * this is a special variable that refers to "this" instance of an Array.
+      * returns true if needle is in the array, and false otherwise
+      */
+    Array.prototype.contains = function ( needle ) {
+        for (i in this) {
+            if (this[i] == needle) return true;
+        }
+        return false;
+    }
+    var Ajax={
+        get: function(url, fn) {
+            var obj = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
+            obj.open('GET', url, true);
+            obj.onreadystatechange = function() {
+                if (obj.readyState == 4 && obj.status == 200 || obj.status == 304) { // readyState == 4说明请求已完成
+                    fn.call(this, obj.responseText);  //从服务器获得数据
+                }
+            };
+            obj.send();
+        },
+        post: function (url, data, fn) {         // datat应为'a=a1&b=b1'这种字符串格式，在jq里如果data为对象会自动将对象转成这种字符串格式
+            var obj = new XMLHttpRequest();
+            obj.open("POST", url, true);
+            obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  // 添加http头，发送信息至服务器时内容编码类型
+            obj.onreadystatechange = function() {
+                if (obj.readyState == 4 && (obj.status == 200 || obj.status == 304)) {  // 304未修改
+                    fn.call(this, obj.responseText);
+                }
+            };
+            obj.send(data);
+        }
+    }
+    var html = '';
+    Ajax.post("<?php echo url('Admin','Main','ajaxgetmenu');?>",{},function (json) {
+        var json = eval('('+json+')');
+        if(json.status==1){
+            var jsonData = json.data;
+            var one_active = '';
+            var two_active = '';
+            for(var i = 0; i < jsonData.length; i++){
+                //一级目录
+
+                if(jsonData[i].a=='#'){
+                    var controller = '<?php echo ucwords($data['__C__']); ?>';
+                    var controller2 = '<?php echo strtolower($data['__C__']); ?>';//子菜单模糊查找，包含了其字样 则active
+                    var action = '<?php echo ($data['__A__']); ?>';
+                    //查看是否设置了菜单多控制器分类
+                    if(jsonData[i].cc!=null){
+
+                        if(jsonData[i].cc.split(',').contains(controller)){one_active='class = "active open"'; }else{one_active='';}
+                    }else{
+                        if([jsonData[i].c].contains(controller)){one_active='class = "active open"'; }else{one_active='';}
+                    }
+                    html +='<li '+one_active+'>';
+                    html += '<a href="'+jsonData[i].url+'" class="menu-dropdown">';
+                    html +='<i class="'+jsonData[i].icon+'"></i>';
+                    html +='<span class="menu-text"> '+jsonData[i].name+' </span>';
+                    html +='<i class="menu-expand"></i>';
+                    html +='</a>';
+                    //console.log(jsonData[i].subset)
+                    var subset = jsonData[i].subset;
+                    //console.log(subset.length);
+                    //判断是否有子菜单
+                    if(subset.length>0){
+                        html +='<ul class="submenu">';
+                        for (var n=0; n<subset.length;n++){
+                            if(action==subset[n].a){
+                                two_active='class = "active"';
+                            }else if( subset[n].a.indexOf(controller2)!=-1 ){
+                                two_active='class = "active"';
+                            }else{
+                                two_active='';
+                            }
+                            html +='<li '+two_active+'>';
+                            html +='<a href="'+subset[n].url+'">';
+                            html +='<span class="menu-text">'+subset[n].name+'</span>';
+                            html +='</a>';
+                        }
+                        html +='</ul>';
+                    }
+
+                    html +='</li>';
+                }
+
+            }
+            console.log(html);
+            document.getElementById('menu').innerHTML = html;
+        }else{
+            console.log(json.status)
+        }
+
+    });
+</script>

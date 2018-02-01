@@ -1,19 +1,16 @@
 <?php
 namespace app\Controllers\Admin;
 use app\Helpers\Tree;
-use app\Models\RolePrivModel;
 
 /**
  * Created by PhpStorm.
  * User: ming123jew
- * Date: 2018-1-5
+ * Date: 2018-2-1
  * Time: 12:02
  */
-class Role  extends Base{
+class User  extends Base{
 
-    protected $RoleModel;
-    protected $RolePrivModel;
-    protected $MenuModel;
+    protected $UserModel;
 
 
     /**
@@ -25,7 +22,7 @@ class Role  extends Base{
         parent::initialization($controller_name, $method_name);
     }
 
-    public function http_role_lists()
+    public function http_user_lists()
     {
         if($this->http_input->getRequestMethod()=='POST'){
             $end = [
@@ -35,53 +32,13 @@ class Role  extends Base{
             ];
             $this->http_output->end(json_encode($end),false);
         }else{
-            $this->RoleModel = $this->loader->model('RoleModel',$this);
-            $all = yield $this->RoleModel->getAll();
-            //增加管理操作
-            foreach ($all as $key=>$value){
-                $all[$key]['str_manage'] = check_role('Admin','Role','role_setting',["id" => $value['id']]) ?'<a href="'.url('Admin','Role','role_setting',["id" => $value['id']]).'">权限设置</a> |':'';
-                $all[$key]['str_manage'] .= check_role('Admin','Role','role_edit',["role_id" => $value['id']]) ?'<a href="'.url('Admin','Role','role_edit',["id" => $value['id']]).'">编辑</a> |':'';
-                $all[$key]['str_manage'] .= check_role('Admin','Role','role_delete',["id" => $value['id']]) ?'<a  onclick="role_delete('.$value['id'].')" href="javascript:;">删除</a>':'';
-            }
+            $this->UserModel = $this->loader->model('UserModel',$this);
+            $all = yield $this->UserModel->getAll();
+
             parent::templateData('allrole',$all);
             //web or app
             parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/role_lists');
-                $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
-            });
-        }
-    }
-
-    /**
-     * 添加角色
-     */
-    public function http_role_add(){
-        if($this->http_input->getRequestMethod()=='POST'){
-            $this->RoleModel =  $this->loader->model('RoleModel',$this);
-            $data = $this->http_input->post('info');
-            unset($data['id']);
-            $r_role_model = yield $this->RoleModel->insertMultiple(array_keys($data),array_values($data));
-            if(!$r_role_model ){
-                parent::httpOutputTis('RoleModel添加请求失败.');
-            }else{
-                parent::httpOutputEnd('角色添加成功.','角色添加失败.',$r_role_model );
-            }
-        }else{
-
-            //web or app
-            parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/role_add_and_edit');
-                $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
-            });
-        }
-    }
-
-    public function http_role_edit(){
-        if($this->http_input->getRequestMethod()=='POST'){
-
-        }else{ //web or app
-            parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/role_add_and_edit');
+                $template = $this->loader->view('app::Admin/user_lists');
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
             });
         }
@@ -97,7 +54,7 @@ class Role  extends Base{
             //menu_id model controllers method
             $arr_menu_id = $this->http_input->post('menu_id');
             if(!$role_id){
-                parent::httpOutputTis('非法请求.',false);
+                parent::httpOutputTis('非法请求.');
             }else{
                 //删除当前role_id的所有数据
                 $this->RolePrivModel = $this->loader->model('RolePrivModel',$this);
@@ -205,30 +162,4 @@ class Role  extends Base{
 
         }
     }
-
-    public function http_role_delete(){
-        $id =  intval($this->http_input->post('id'));//role_id
-        if($this->http_input->getRequestMethod()=='POST' && $id){
-            //查找是否存在角色分配
-            //这里由于关联到2个表，使用事务
-            $transaction_id = yield $this->mysql_pool->coroutineBegin($this);
-            //删除权限分配表中数据
-            $this->RolePrivModel = $this->loader->model('RolePrivModel',$this);
-            $delete_model_rolepriv = yield $this->mysql_pool->dbQueryBuilder->from($this->RolePrivModel->getTable())->where('role_id',$id)->delete()->coroutineSend($transaction_id);
-            //删除主表中数据
-            $this->RoleModel = $this->loader->model('RoleModel',$this);
-            $delete_model_role = yield $this->mysql_pool->dbQueryBuilder->from($this->RoleModel->getTable())->where('id',$id)->delete()->coroutineSend($transaction_id);
-            //print_r( $delete_model_rolepriv);
-            //print_r($delete_model_role);
-            //print_r($transaction_id);
-            if($delete_model_role['result']){
-                parent::httpOutputEnd('角色删除成功.','角色删除失败.',$delete_model_role);
-                yield $this->mysql_pool->coroutineCommit($transaction_id);
-            }else{
-                parent::httpOutputTis('删除请求失败.');
-                yield $this->mysql_pool->coroutineRollback($transaction_id);
-            }
-        }
-    }
-
 }

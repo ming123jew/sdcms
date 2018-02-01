@@ -55,7 +55,7 @@ Purchase: http://wrapbootstrap.com
             </div>
             <!-- /Page Sidebar Header -->
             <!-- Sidebar Menu -->
-            <?php $this->insert('app::Admin/public_menu',['data'=>$data]) ?>
+            <?php $this->insert('app::Admin/public_menu_db',['data'=>$data]) ?>
             <!-- /Sidebar Menu -->
         </div>
         <!-- /Page Sidebar -->

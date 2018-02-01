@@ -104,8 +104,9 @@ class System extends Base
                 $this->http_input->post('url_param'),
                 $this->http_input->post('status'),
                 $this->http_input->post('remark'),
+                $this->http_input->post('cc'),
             ];
-            $r_menu_model = yield $this->MenuModel->insertMultiple(['parent_id','name','icon','m','c','a','url_param','status','remark'],$data);
+            $r_menu_model = yield $this->MenuModel->insertMultiple(['parent_id','name','icon','m','c','a','url_param','status','remark','cc'],$data);
             if(!$r_menu_model){
                 parent::httpOutputTis('MenuModel添加请求失败.');
             }else{
@@ -158,6 +159,7 @@ class System extends Base
                 'url_param'=>$this->http_input->post('url_param'),
                 'status'=>$this->http_input->post('status'),
                 'remark'=>$this->http_input->post('remark'),
+                'cc'=>$this->http_input->post('cc'),
             ];
             $r_menu_model = yield $this->MenuModel->updateById($menu_id,$data);
             if(!$r_menu_model){

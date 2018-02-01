@@ -26,7 +26,7 @@ class BaseModel extends Model
 
     }
 
-    protected function table($tableName){
+    public function table($tableName){
         return $this->prefix.$tableName;
     }
 

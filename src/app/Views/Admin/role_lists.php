@@ -55,7 +55,7 @@ Purchase: http://wrapbootstrap.com
             </div>
             <!-- /Page Sidebar Header -->
             <!-- Sidebar Menu -->
-            <?php $this->insert('app::Admin/public_menu',['data'=>$data]) ?>
+            <?php $this->insert('app::Admin/public_menu_db',['data'=>$data]) ?>
             <!-- /Sidebar Menu -->
         </div>
         <!-- /Page Sidebar -->
@@ -121,7 +121,7 @@ Purchase: http://wrapbootstrap.com
                                         <td><?php echo $value['description'];?></td>
                                         <td><?php if($value['status']){echo '<span class="typcn typcn-tick"></span>';}else{echo  '<span class="typcn typcn-times"></span>';};?></td>
                                         <td>
-                                            <a href="<?php echo url('','','role_setting',['id'=>$value['id'],'name'=>$value['role_name']]);?>">权限设置</a>
+                                            <?php echo $value['str_manage']; ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -156,7 +156,34 @@ Purchase: http://wrapbootstrap.com
 <!--Beyond Scripts-->
 <script src="assets/js/beyond.min.js"></script>
 
+<!--Beyond Scripts-->
 
+<script src="assets/js/bootbox/bootbox.js"></script>
+<script>
+    function role_delete(id) {
+        var url = '<?php echo url('','',"role_delete");?>';
+        bootbox.confirm({
+            message: '您确认要删除该选项吗？(*其相关角色权限也将被删除。)',
+            buttons: {
+                confirm: {
+                    label: "确认"
+                },
+                cancel:{
+                    label:"取消"
+                }
+            },
+            callback: function(yes) {
+                if(yes) {
+                    $.post(url, {id:id}, function(result) {
+                        if(result.status==1){
+                            window.location.reload();
+                        }
+                    })
+                }
+            }
+        });
+    }
+</script>
 
 </body>
 <!--  /Body -->

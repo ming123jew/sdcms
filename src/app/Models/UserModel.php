@@ -65,7 +65,12 @@ class UserModel extends BaseModel
             ->where('password',$password)
             ->limit(1)
             ->coroutineSend();
-        return $val;
+        if(empty($val['result'])){
+            return false;
+        }else{
+            return $val['result'][0];
+        }
+
     }
 
 

@@ -22,12 +22,22 @@ class MenuModel extends BaseModel
      * 获取所有菜单
      * @return bool
      */
-    public function getAll(){
-        $val = yield $this->mysql_pool->dbQueryBuilder->select('*')
-            ->from($this->prefix.$this->table)
-            ->orderBy('list_order','asc')
-            ->orderBy('id','asc')
-            ->coroutineSend();
+    public function getAll($status=''){
+        if(is_numeric($status)){
+            $val = yield $this->mysql_pool->dbQueryBuilder->select('*')
+                ->from($this->prefix.$this->table)
+                ->where('status',$status)
+                ->orderBy('list_order','asc')
+                ->orderBy('id','asc')
+                ->coroutineSend();
+        }else{
+            $val = yield $this->mysql_pool->dbQueryBuilder->select('*')
+                ->from($this->prefix.$this->table)
+                ->orderBy('list_order','asc')
+                ->orderBy('id','asc')
+                ->coroutineSend();
+        }
+
         if(empty($val['result'])){
             return false;
         }else{
