@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-01-30 18:06:28
+Date: 2018-02-02 09:16:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -36,85 +36,32 @@ CREATE TABLE `sd_admin_menu` (
   `nav_id` int(11) DEFAULT '0' COMMENT 'nav ID ',
   `request` varchar(255) DEFAULT NULL COMMENT '请求方式（日志生成）',
   `log_rule` varchar(255) DEFAULT NULL COMMENT '日志规则',
+  `cc` char(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `status` (`status`) USING BTREE,
   KEY `model` (`c`) USING BTREE,
   KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
 -- Records of sd_admin_menu
 -- ----------------------------
-INSERT INTO `sd_admin_menu` VALUES ('1', '0', 'supervise', 'auth', 'default', '', '0', '1', '系统管理', '', '', '10', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('2', '1', 'supervise', 'auth', 'default', '', '0', '1', '权限管理', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('3', '2', 'supervise', 'auth', 'role', '', '1', '1', '角色管理', '', '1', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('4', '3', 'supervise', 'auth', 'roleAdd', '', '1', '0', '角色增加', '', '', '0', '', '0', '', '{id}');
-INSERT INTO `sd_admin_menu` VALUES ('5', '3', 'supervise', 'auth', 'roleEdit', '', '1', '0', '角色编辑', '', 'asdas', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('6', '3', 'supervise', 'auth', 'roleDelete', '', '1', '0', '角色删除', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('7', '3', 'supervise', 'auth', 'authorize', '', '1', '0', '角色授权', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('8', '1', 'supervise', 'auth', 'default', '', '0', '1', '菜单管理', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('9', '8', 'supervise', 'auth', 'menu', '', '1', '1', '菜单列表', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('10', '9', 'supervise', 'auth', 'menuAdd', '', '1', '0', '菜单增加', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('11', '9', 'supervise', 'auth', 'menuEdit', '', '1', '0', '菜单修改', '', '', '0', '', '0', 'POST', '我的ID是{id}  记入的目录{name}');
-INSERT INTO `sd_admin_menu` VALUES ('12', '9', 'supervise', 'auth', 'menuDelete', '', '1', '0', '菜单删除', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('13', '9', 'supervise', 'auth', 'menuOrder', '', '1', '0', '菜单排序', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('14', '2', 'supervise', 'admin', 'index', '', '1', '1', '用户管理', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('15', '0', 'mediaManage', 'index', 'index', '', '0', '1', '媒介库管理', 'fa-cc-mastercard', '', '20', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('16', '15', 'mediaManage', 'index', 'Index', '', '1', '1', '媒介库', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('19', '16', 'mediaManage', 'index', 'index', '', '1', '1', '所有列表', '', '', '2', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('20', '2', 'supervise', 'auth', 'log', '', '1', '1', '行为日志', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('21', '20', 'supervise', 'auth', 'viewLog', '', '1', '0', '查看日志', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('22', '20', 'supervise', 'auth', 'clear', '', '1', '0', '清空日志', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('23', '16', 'mediaManage', 'upload', 'index', '', '1', '1', '上传', '', '', '2', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('24', '15', 'mediaManage', 'category', 'index', '', '1', '1', '媒介库分类', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('25', '24', 'mediaManage', 'category', 'add', '', '1', '0', '分类增加', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('26', '24', 'mediaManage', 'category', 'edit', '', '1', '0', '分类修改', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('27', '24', 'mediaManage', 'category', 'delete', '', '1', '0', '分类删除', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('28', '24', 'mediaManage', 'category', 'index', '', '1', '1', '分类列表', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('29', '0', 'magazine', 'index', 'index', '', '1', '1', '期刊发布系统', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('30', '29', 'magazine', 'category', 'index', '', '1', '1', '分类管理', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('31', '30', 'magazine', 'category', 'add', '', '1', '0', '增加', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('32', '30', 'magazine', 'category', 'edit', '', '1', '0', '修改', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('33', '30', 'magazine', 'category', 'delete', '', '1', '0', '删除', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('34', '30', 'magazine', 'category', 'index', '', '1', '1', '列表', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('35', '29', 'magazine', 'content', 'index', '', '1', '1', '内容管理', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('36', '35', 'magazine', 'content', 'add', '', '1', '0', '增加', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('37', '35', 'magazine', 'content', 'edit', '', '1', '0', '修改', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('38', '35', 'magazine', 'content', 'delete', '', '1', '0', '删除', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('39', '35', 'magazine', 'content', 'index', '', '1', '1', '列表导航', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('40', '35', 'magazine', 'content', 'listsub', '', '1', '0', '期刊内容', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('41', '40', 'magazine', 'content', 'addsub', '', '1', '0', '添加期刊内容', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('42', '40', 'magazine', 'content', 'editsub', '', '1', '0', '修改期刊内容', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('43', '40', 'magazine', 'content', 'checksub', '', '1', '0', '审核期刊内容', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('44', '35', 'magazine', 'content', 'check', '', '1', '0', '审核期刊', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('45', '35', 'magazine', 'content', 'menu', '', '1', '0', '栏目菜单条', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('46', '35', 'magazine', 'content', 'lists', '', '1', '0', '列表内容', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('48', '29', 'magazine', 'setting', 'index', '', '1', '1', '基本设置', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('49', '48', 'magazine', 'setting', 'index', '', '1', '1', '设置', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('50', '29', 'magazine', 'ueditor', 'index', '', '1', '0', 'ueditor', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('51', '40', 'magazine', 'content', 'deletesub', '', '1', '0', '删除期刊内容', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('52', '35', 'magazine', 'content', 'uploadthumb', '', '1', '0', '上传缩略图', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('53', '16', 'mediaManage', 'upload', 'manage', '', '1', '1', '文档管理', '', '', '2', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('54', '0', 'vote', 'admin', 'index', '', '1', '1', '投票系统', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('55', '54', 'vote', 'category', 'index', '', '1', '1', '投票分类', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('56', '54', 'vote', 'manager', 'index', '', '1', '1', '投票管理', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('57', '55', 'vote', 'category', 'add', '', '1', '1', '添加分类', '', '', '1', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('58', '55', 'vote', 'category', 'edit', '', '1', '0', '修改', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('59', '55', 'vote', 'category', 'delete', '', '1', '0', '删除', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('60', '56', 'vote', 'content', 'add', '', '1', '1', '添加投票', '', '', '1', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('61', '56', 'vote', 'content', 'edit', '', '1', '0', '修改', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('62', '56', 'vote', 'content', 'delete', '', '1', '0', '删除', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('63', '55', 'vote', 'category', 'index', '', '1', '1', '分类列表', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('64', '56', 'vote', 'content', 'index', '', '1', '1', '投票列表', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('65', '16', 'mediamanage', 'upload', 'ajaxupload', '', '1', '0', '异步上传-webupload', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('66', '16', 'mediamanage', 'upload', 'dealfiles', '', '1', '0', '处理excel文件(导入数据)', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('67', '16', 'mediamanage', 'index', 'clearrepeat', '', '1', '0', '清理分类重复数据', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('68', '16', 'mediaManage', 'index', 'myindex', '', '1', '1', '我的列表', '', '', '1', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('69', '16', 'mediamanage', 'index', 'editinfo', '', '1', '0', '修改单条数据', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('70', '16', 'mediamanage', 'index', 'deleteinfo', '', '1', '0', '删除单条数据', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('71', '15', 'mediaManage', 'analy', 'index', '', '1', '1', '数据分析', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('72', '71', 'mediaManage', 'analy', 'myproject', '', '1', '1', '我的项目', '', '', '0', '', '0', '', '');
-INSERT INTO `sd_admin_menu` VALUES ('74', '29', 'mm', 'cc', 'aa', 'fh', '0', '1', '九个头条', null, '', '0', null, '0', null, null);
+INSERT INTO `sd_admin_menu` VALUES ('1', '0', 'Admin', 'System', '#', '', '0', '1', '系统设置', 'menu-icon glyphicon glyphicon-tasks', '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('2', '1', 'Admin', 'System', 'config', '', '0', '1', '基本设置', null, '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('3', '1', 'Admin', 'System', 'menu', '', '0', '1', '后台菜单', null, '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('4', '0', 'Admin', 'User', '#', '', '0', '1', '用户管理', 'menu-icon fa fa-user', '', '0', null, '0', null, null, 'User,Role');
+INSERT INTO `sd_admin_menu` VALUES ('5', '4', 'Admin', 'Role', 'role_lists', '', '0', '1', '角色权限', '', '', '0', null, '0', null, null, 'User,Role');
+INSERT INTO `sd_admin_menu` VALUES ('6', '5', 'Admin', 'Role', 'role_add', '', '0', '0', '添加角色', null, '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('8', '4', 'Admin', 'User', 'user_lists', '', '0', '1', '用户列表', '', '', '0', null, '0', null, null, 'User,Role');
+INSERT INTO `sd_admin_menu` VALUES ('9', '3', 'Admin', 'System', 'menu_add', '', '0', '0', '添加菜单', null, '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('10', '3', 'Admin', 'System', 'menu_delete', '', '0', '0', '删除菜单', null, '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('11', '5', 'Admin', 'Role', 'role_delete', '', '0', '0', '删除角色', null, '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('12', '8', 'Admin', 'User', 'user_add', '', '0', '0', '添加用户', null, '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('13', '8', 'Admin', 'User', 'user_delete', '', '0', '0', '删除用户', null, '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('14', '0', 'Admin', 'Main', 'index', '', '0', '1', '系统主页', '', '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('15', '5', 'Admin', 'Role', 'role_setting', '', '0', '0', '角色权限设置', '', '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('17', '14', 'Admin', 'Main', 'ajaxgetmenu', '', '0', '0', 'ajax获取菜单', '', '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('18', '3', 'Admin', 'System', 'menu_edit', '', '0', '0', '编辑菜单', '', '', '0', null, '0', null, null, null);
 
 -- ----------------------------
 -- Table structure for `sd_admin_role`
@@ -129,16 +76,18 @@ CREATE TABLE `sd_admin_role` (
   PRIMARY KEY (`id`),
   KEY `listorder` (`list_order`) USING BTREE,
   KEY `disabled` (`status`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_admin_role
 -- ----------------------------
+INSERT INTO `sd_admin_role` VALUES ('1', '超级管理员', '超级管理员', '0', '0');
 INSERT INTO `sd_admin_role` VALUES ('2', '站点管理员', '站点管理员', '0', '0');
 INSERT INTO `sd_admin_role` VALUES ('3', '运营总监', '运营总监', '1', '0');
 INSERT INTO `sd_admin_role` VALUES ('4', '总编', '总编', '5', '0');
 INSERT INTO `sd_admin_role` VALUES ('5', '编辑', '编辑', '1', '0');
 INSERT INTO `sd_admin_role` VALUES ('7', '发布人员', '发布人员', '0', '0');
+INSERT INTO `sd_admin_role` VALUES ('9', 'test', '12aas', '0', '1');
 
 -- ----------------------------
 -- Table structure for `sd_admin_role_priv`
@@ -157,75 +106,22 @@ CREATE TABLE `sd_admin_role_priv` (
 -- ----------------------------
 -- Records of sd_admin_role_priv
 -- ----------------------------
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '29', 'magazine', 'index', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '30', 'magazine', 'category', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '31', 'magazine', 'category', 'add', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '32', 'magazine', 'category', 'edit', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '33', 'magazine', 'category', 'delete', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '34', 'magazine', 'category', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '35', 'magazine', 'content', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '36', 'magazine', 'content', 'add', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '37', 'magazine', 'content', 'edit', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '38', 'magazine', 'content', 'delete', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '39', 'magazine', 'content', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '40', 'magazine', 'content', 'listsub', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '41', 'magazine', 'content', 'addsub', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '42', 'magazine', 'content', 'editsub', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '43', 'magazine', 'content', 'checksub', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '51', 'magazine', 'content', 'deletesub', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '44', 'magazine', 'content', 'check', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '45', 'magazine', 'content', 'menu', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '46', 'magazine', 'content', 'lists', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '52', 'magazine', 'content', 'uploadthumb', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '48', 'magazine', 'setting', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '49', 'magazine', 'setting', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '50', 'magazine', 'ueditor', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '54', 'vote', 'admin', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '55', 'vote', 'category', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '58', 'vote', 'category', 'edit', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '59', 'vote', 'category', 'delete', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '63', 'vote', 'category', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '57', 'vote', 'category', 'add', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '56', 'vote', 'manager', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '61', 'vote', 'content', 'edit', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '62', 'vote', 'content', 'delete', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '64', 'vote', 'content', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '60', 'vote', 'content', 'add', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '1', 'supervise', 'auth', 'default', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '2', 'supervise', 'auth', 'default', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '3', 'supervise', 'auth', 'role', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '4', 'supervise', 'auth', 'roleAdd', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '5', 'supervise', 'auth', 'roleEdit', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '6', 'supervise', 'auth', 'roleDelete', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '7', 'supervise', 'auth', 'authorize', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '14', 'supervise', 'admin', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '20', 'supervise', 'auth', 'log', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '21', 'supervise', 'auth', 'viewLog', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '22', 'supervise', 'auth', 'clear', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '8', 'supervise', 'auth', 'default', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '9', 'supervise', 'auth', 'menu', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '10', 'supervise', 'auth', 'menuAdd', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '11', 'supervise', 'auth', 'menuEdit', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '12', 'supervise', 'auth', 'menuDelete', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '13', 'supervise', 'auth', 'menuOrder', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '15', 'mediaManage', 'index', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '16', 'mediaManage', 'index', 'Index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '65', 'mediamanage', 'upload', 'ajaxupload', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '66', 'mediamanage', 'upload', 'dealfiles', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '67', 'mediamanage', 'index', 'clearrepeat', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '69', 'mediamanage', 'index', 'editinfo', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '70', 'mediamanage', 'index', 'deleteinfo', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '68', 'mediaManage', 'index', 'myindex', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '19', 'mediaManage', 'index', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '23', 'mediaManage', 'upload', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '53', 'mediaManage', 'upload', 'manage', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '24', 'mediaManage', 'category', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '25', 'mediaManage', 'category', 'add', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '26', 'mediaManage', 'category', 'edit', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '27', 'mediaManage', 'category', 'delete', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '28', 'mediaManage', 'category', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '71', 'mediaManage', 'analy', 'index', '');
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '72', 'mediaManage', 'analy', 'myproject', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '1', 'Admin', 'System', '#', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '2', 'Admin', 'System', 'config', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '3', 'Admin', 'System', 'menu', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '9', 'Admin', 'System', 'menu_add', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '10', 'Admin', 'System', 'menu_delete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '18', 'Admin', 'System', 'menu_edit', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '4', 'Admin', 'User', '#', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '5', 'Admin', 'Role', 'role_lists', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '6', 'Admin', 'Role', 'role_add', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '11', 'Admin', 'Role', 'role_delete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '15', 'Admin', 'Role', 'role_setting', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '8', 'Admin', 'User', 'user_lists', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '12', 'Admin', 'User', 'user_add', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '13', 'Admin', 'User', 'user_delete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '14', 'Admin', 'Main', 'index', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '17', 'Admin', 'Main', 'ajaxgetmenu', '');
 
 -- ----------------------------
 -- Table structure for `sd_category`

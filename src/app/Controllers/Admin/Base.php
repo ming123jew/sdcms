@@ -24,6 +24,7 @@ class Base extends \app\Controllers\BaseController
     protected $AdminSessionField = '__SESSION__ADMIN__';//session
     protected $AdminCacheRoleIdDataField = '__ROLEID__DATA__ADMIN__';//角色数据
     protected $AdminCacheRoleIdMenuField = '__ROLEID__MENU__ADMIN__';//角色菜单
+    protected $AdminNotAuthAction = ['login','tis'];
     /**
      * @param string $controller_name
      * @param string $method_name
@@ -51,7 +52,7 @@ class Base extends \app\Controllers\BaseController
 //        session($this->AdminSessionField,$session_data);
 
         //如未登录  && 不是admin/main/login  admin/main/tis 则跳转到登录
-        if( !in_array($method_name,['http_login','http_tis']) && !self::check_login() ){
+        if( !in_array(strtolower($this->ActionName),$this->AdminNotAuthAction) && !self::check_login() ){
             $this->redirectController('Admin/Main','login');
         }
 
@@ -85,7 +86,7 @@ class Base extends \app\Controllers\BaseController
      */
      public function check_priv() {
 
-         if( strtolower($this->ModuleName) =='admin' && strtolower($this->ControllerName)  =='main' && in_array(strtolower($this->ActionName), array('login','tis'))) return true;
+         if( strtolower($this->ModuleName) =='admin' && strtolower($this->ControllerName)  =='main' && in_array(strtolower($this->ActionName), $this->AdminNotAuthAction)) return true;
          //if($_SESSION['roleid'] == 1) return true;
          //if(preg_match('/^public_/',ROUTE_A)) return true;
          //if(preg_match('/^ajax_([a-z]+)_/',ROUTE_A,$_match)) {

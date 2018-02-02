@@ -85,3 +85,29 @@ class System  extends Base{
     ["affected_rows"]=>
     int(0)
   }
+
+
+  前端
+
+  bootbox.dialog({
+      message: "保存成功.",
+      title: "提示信息",
+      className: "my-success-modal",
+      buttons:{
+          OK:{
+              callback:function () {
+                  $('#vid').val(result.insert_id);
+                  //alert('yes');
+                  $('#li_wiredstep1').removeClass('active');
+                  $('#li_wiredstep1').addClass('complete');
+                  $('#wiredstep1').removeClass('active');
+                  $('#li_wiredstep2').addClass('active');
+                  $('#wiredstep2').addClass('active');
+
+                  $('#options_list').show(500);
+                  //编辑选项比较完善，直接跳到编辑
+                  window.location.href = result.data.edit_voted_url;
+              }
+          }
+      }
+  });
