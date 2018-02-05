@@ -108,6 +108,9 @@ class RolePrivModel extends BaseModel
     public function authRole(int $role_id,string $m,string $c,string $a,string $fields='*'){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
             ->where('role_id',$role_id)
+            ->where('m',$m)
+            ->where('c',$c)
+            ->where('a',$a)
             ->select($fields)
             ->coroutineSend();
         if(empty($r['result'])){

@@ -7,6 +7,7 @@
  */
 use app\Helpers\Sessions\Session;
 use app\Controllers;
+use  Server\Memory\Cache;
 function Test(){
     return 'test_123';
 }
@@ -83,14 +84,85 @@ function url($module='',$controller='',$action='', $params=''){
 
 
 /**
- * 检查路由权限 | 预留
+ * 检查路由权限 | 预留  首先读取缓存，如不存在则读数据库
  * @param $m
  * @param $c
  * @param $a
+ * @param $context
  * @param array $param
  */
-function check_role($m,$c,$a,$param=[]){
-    return true;
+function check_role($m,$c,$a,$context,$param=[]){
+    $login_info = session('__SESSION__ADMIN__');
+    //print_r($login_info);
+
+    $role_id = $login_info['roleid'];
+    $cache = Cache::getCache('WebCache');
+    $role_id_priv =  unserialize($cache->getOneMap('__ROLEID__DATA__ADMIN__'.$role_id));
+    if(!$role_id_priv){
+        //数据库查找
+        $model = get_instance()->loader->model(\app\Models\RolePrivModel::class,$context);
+        $r =  yield $model->authRole($role_id,$m,$c,$a);
+        print_r('check_role from db \n;');
+        if(!($r)){
+            return false;
+        }else{
+           return true;
+        }
+    }else{
+        print_r('check_role from cache \n;');
+        //从缓存种查找
+        $find = false;
+        if(is_array($role_id_priv)&&!empty($role_id_priv)){
+            foreach ($role_id_priv as $key=>$value){
+                if($m==$value['m']&&$c==$value['c']&&$a==$value['a']){
+                    $find = true;
+                }else{
+                    continue;
+                }
+            }
+        }
+        return $find;
+    }
+    //print_r($role_id_priv);
+    return false;
+}
+
+/**
+ * 获取权限组对应名称
+ * @param $roleid
+ * @param $context  传入上下文
+ * @param string $flag
+ * @return bool
+ */
+function get_role_byid($roleid,$context,$flag='__CACHE_ROLE__'){
+    if($roleid&&$flag){
+
+        $cache = Cache::getCache('WebCache');
+        $d = $cache->getOneMap($flag);
+        if($d){
+            $all_role =  unserialize($d);
+            print_r('role from cache.');
+        }else{
+            $m = get_instance()->loader->model(\app\Models\RoleModel::class,$context);
+            $d = yield $m->getAll();
+            $all_role = $d;
+            //存入缓存
+            $cache->addMap($flag,serialize($d));
+            print_r('role from db.');
+
+        }
+        $find = [];
+        foreach ($all_role as $key=>$value){
+            if($roleid==$value['id']){
+                $find = $value;
+            }else{
+                continue;
+            }
+        }
+
+        return $find;
+    }
+    return false;
 }
 
 /**

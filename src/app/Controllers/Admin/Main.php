@@ -54,6 +54,7 @@ class Main extends Base
         $login_session = self::get_login_session();
         $role_id = $login_session['roleid'];
         $all = unserialize(parent::get_cache_role_menu_byid($role_id));
+        //缓存不存在，则进行数据库读取
         if(!$all){
             $all = yield self::_getRoleMenu($role_id);
             print_r('not cache.');
@@ -139,6 +140,16 @@ class Main extends Base
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
             });
         }
+
+    }
+
+    public function http_logout(){
+        //销毁session
+        session($this->AdminSessionField,null);
+        $this->http_output->setCookie($this->AdminSessionField,null);
+
+        // 清除缓存数据
+
 
     }
 

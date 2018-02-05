@@ -51,6 +51,7 @@ class Base extends \app\Controllers\BaseController
 //        $session_data['roleid'] = 1;
 //        session($this->AdminSessionField,$session_data);
 
+
         //如未登录  && 不是admin/main/login  admin/main/tis 则跳转到登录
         if( !in_array(strtolower($this->ActionName),$this->AdminNotAuthAction) && !self::check_login() ){
             $this->redirectController('Admin/Main','login');

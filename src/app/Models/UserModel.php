@@ -19,6 +19,26 @@ class UserModel extends BaseModel
     private $table = 'user';
 
     /**
+     * 获取所有
+     * @return bool
+     */
+    public function getAll(){
+        $val = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
+            ->orderBy('list_order','asc')
+            ->orderBy('id','asc')
+            ->select('*')
+            ->coroutineSend();
+        if(empty($val['result'])){
+            return false;
+        }else{
+            return $val['result'] ;
+        }
+    }
+
+
+
+
+    /**
      * @param $data
      * @return bool | array
      */

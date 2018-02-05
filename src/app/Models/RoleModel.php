@@ -38,6 +38,26 @@ class RoleModel extends BaseModel
         }
     }
 
+
+    /**
+     * 根据ID查找一条
+     * @param int $id
+     * @param string $fields
+     * @return bool
+     */
+    public function getOneById(int $id,$fields='*'){
+        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
+            ->where('id',$id)
+            ->select($fields)
+            ->coroutineSend();
+        if(empty($r['result'])){
+            return false;
+        }else{
+            //返回一条
+            return $r['result'][0] ;
+        }
+    }
+
     /**
      * 批量插入
      * @param array $intoColumns

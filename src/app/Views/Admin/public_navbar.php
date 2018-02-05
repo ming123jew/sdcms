@@ -306,7 +306,7 @@
                                 </li>
                                 <!--/Theme Selector Area-->
                                 <li class="dropdown-footer">
-                                    <a href="<?php  url($data['__C__'],'logout',['time'=>time()]);?>">
+                                    <a href="<?php  echo url('Admin','Main','logout',['time'=>time()]);?>">
                                         Sign out
                                     </a>
                                 </li>

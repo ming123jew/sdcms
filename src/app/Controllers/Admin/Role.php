@@ -25,6 +25,9 @@ class Role  extends Base{
         parent::initialization($controller_name, $method_name);
     }
 
+    /**
+     * 角色列表
+     */
     public function http_role_lists()
     {
         if($this->http_input->getRequestMethod()=='POST'){
@@ -39,9 +42,9 @@ class Role  extends Base{
             $all = yield $this->RoleModel->getAll();
             //增加管理操作
             foreach ($all as $key=>$value){
-                $all[$key]['str_manage'] = check_role('Admin','Role','role_setting',["id" => $value['id']]) ?'<a href="'.url('Admin','Role','role_setting',["id" => $value['id']]).'">权限设置</a> |':'';
-                $all[$key]['str_manage'] .= check_role('Admin','Role','role_edit',["role_id" => $value['id']]) ?'<a href="'.url('Admin','Role','role_edit',["id" => $value['id']]).'">编辑</a> |':'';
-                $all[$key]['str_manage'] .= check_role('Admin','Role','role_delete',["id" => $value['id']]) ?'<a  onclick="role_delete('.$value['id'].')" href="javascript:;">删除</a>':'';
+                $all[$key]['str_manage'] = (yield check_role('Admin','Role','role_setting',$this)) ?'<a href="'.url('Admin','Role','role_setting',["id" => $value['id']]).'">权限设置</a> |':'';
+                $all[$key]['str_manage'] .= (yield check_role('Admin','Role','role_edit',$this)) ?'<a href="'.url('Admin','Role','role_edit',["id" => $value['id']]).'">编辑</a> |':'';
+                $all[$key]['str_manage'] .= (yield check_role('Admin','Role','role_delete',$this)) ?'<a  onclick="role_delete('.$value['id'].')" href="javascript:;">删除</a>':'';
             }
             parent::templateData('allrole',$all);
             //web or app
@@ -76,14 +79,35 @@ class Role  extends Base{
         }
     }
 
+    /**
+     * 修改角色
+     */
     public function http_role_edit(){
         if($this->http_input->getRequestMethod()=='POST'){
-
+            $data = $this->http_input->post('info');
+            $id = $data['id'];
+            unset($data['id']);
+            $this->RoleModel =  $this->loader->model('RoleModel',$this);
+            $r_role_model = yield $this->RoleModel->updateById($id,$data);
+            if(!$r_role_model){
+                parent::httpOutputTis('RoleModel编辑请求失败.');
+            }else{
+                parent::httpOutputEnd('权限更新成功.','权限更新失败.',$r_role_model);
+            }
         }else{ //web or app
-            parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/role_add_and_edit');
-                $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
-            });
+            $id = $this->http_input->get('id');
+            $this->RoleModel =  $this->loader->model('RoleModel',$this);
+            $d = yield $this->RoleModel->getOneById($id);
+            if($id && $d){
+                parent::templateData('d_role_model',$d);
+                parent::webOrApp(function (){
+                    $template = $this->loader->view('app::Admin/role_add_and_edit');
+                    $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+                });
+            }else{
+
+            }
+
         }
     }
 
@@ -206,6 +230,10 @@ class Role  extends Base{
         }
     }
 
+    /**
+     * 删除角色权限，连同对应分配删除
+     * @return \Generator
+     */
     public function http_role_delete(){
         $id =  intval($this->http_input->post('id'));//role_id
         if($this->http_input->getRequestMethod()=='POST' && $id){

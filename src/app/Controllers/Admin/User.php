@@ -33,9 +33,19 @@ class User  extends Base{
             $this->http_output->end(json_encode($end),false);
         }else{
             $this->UserModel = $this->loader->model('UserModel',$this);
-            $all = yield $this->UserModel->getAll();
+            $d_user_model = yield $this->UserModel->getAll();
 
-            parent::templateData('allrole',$all);
+            //增加管理操作
+            foreach ($d_user_model as $key=>$value){
+
+                $d_user_model[$key]['str_manage'] = (yield check_role('Admin','User','user_edit',$this)) ?'<a href="'.url('Admin','User','role_edit',["id" => $value['id']]).'">编辑</a> |':'';
+                $d_user_model[$key]['str_manage'] .= (yield check_role('Admin','User','user_delete',$this)) ?'<a  onclick="role_delete('.$value['id'].')" href="javascript:;">删除</a>':'';
+                $d_user_model[$key]['role'] = yield get_role_byid($value['roleid'],$this);//角色权限表所有数据 缓存标识
+
+            }
+
+
+            parent::templateData('allrole',$d_user_model);
             //web or app
             parent::webOrApp(function (){
                 $template = $this->loader->view('app::Admin/user_lists');

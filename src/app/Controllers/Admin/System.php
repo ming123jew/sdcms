@@ -55,8 +55,8 @@ class System extends Base
 
                     $all[$n]['parent_id_node'] = isset($r['parent_id']) ? ' class="child-of-node-' . $r['parent_id'] . '"' : '';
                     //$all[$n]['str_manage'] = checkRole('auth/menuAdd',["parent_id" => $r['id']]) ? '<a href="'.url("auth/menuAdd",["parent_id" => $r['id']]).'">添加子菜单</a> |':'';
-                    $all[$n]['str_manage'] = check_role('Admin','System','menu_edit',["menu_id" => $r['id']]) ?'<a href="'.url('','','menu_edit',["menu_id" => $r['id']]).'">编辑</a> |':'';
-                    $all[$n]['str_manage'] .= check_role('Admin','System','menu_delete',["menu_id" => $r['id']]) ?'<a  onclick="menu_delete('.$r['id'].')" href="javascript:;">删除</a>':'';
+                    $all[$n]['str_manage'] = (yield check_role('Admin','System','menu_edit',$this)) ?'<a href="'.url('','','menu_edit',["menu_id" => $r['id']]).'">编辑</a> |':'';
+                    $all[$n]['str_manage'] .= (yield check_role('Admin','System','menu_delete',$this)) ?'<a  onclick="menu_delete('.$r['id'].')" href="javascript:;">删除</a>':'';
                     $all[$n]['status'] = $r['status'] ? '开启' : '隐藏';
                 }
                 $str = "<tr id='node-\$id' \$parent_id_node>
