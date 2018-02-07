@@ -24,7 +24,7 @@ Purchase: http://wrapbootstrap.com
     <link href="assets/css/weather-icons.min.css" rel="stylesheet" />
 
     <!--Fonts-->
-<!--    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">-->
+    <!--    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">-->
 
     <!--Beyond styles-->
     <link id="beyond-link" href="assets/css/beyond.min.css" rel="stylesheet" type="text/css" />
@@ -78,15 +78,15 @@ Purchase: http://wrapbootstrap.com
             <!-- Page Body -->
             <div class="page-body">
 
-                <!-- 菜单列表 -->
+                <!-- 栏目列表 -->
                 <div class="row">
 
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','content_category_list');?>"><i class="typcn typcn-lightbulb"></i>栏目列表</a></h5>
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','content_category_add');?>"><i class="typcn typcn-lightbulb"></i>添加栏目</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','category_list');?>"><i class="typcn typcn-lightbulb"></i>栏目列表</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','category_add');?>"><i class="typcn typcn-lightbulb"></i>添加栏目</a></h5>
                     <div class="col-xs-12">
                         <div class="well with-header  with-footer">
                             <div class="header bg-blue">
-                                菜单列表
+                                栏目列表
                             </div>
                             <table class="table table-hover">
                                 <thead class="bordered-darkorange">
@@ -95,7 +95,7 @@ Purchase: http://wrapbootstrap.com
                                         排序
                                     </th>
                                     <th>
-                                        id
+                                        ID
                                     </th>
                                     <th>
                                         栏目名称
@@ -110,7 +110,10 @@ Purchase: http://wrapbootstrap.com
                                         数据量
                                     </th>
                                     <th>
-                                        访问
+                                        菜单
+                                    </th>
+                                    <th>
+                                        状态
                                     </th>
                                     <th>
                                         操作
@@ -118,7 +121,7 @@ Purchase: http://wrapbootstrap.com
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php //echo $data['allmenu'];?>
+                                <?php echo $data['allcategory'];?>
                                 </tbody>
                             </table>
 
@@ -129,7 +132,7 @@ Purchase: http://wrapbootstrap.com
 
                     </div>
                 </div>
-                <!-- //菜单列表end -->
+                <!-- //栏目列表end -->
 
 
             </div>
@@ -149,8 +152,32 @@ Purchase: http://wrapbootstrap.com
 
 <!--Beyond Scripts-->
 <script src="assets/js/beyond.min.js"></script>
-
-
+<script src="assets/js/bootbox/bootbox.js"></script>
+<script>
+    function category_delete(category_id) {
+        var url = '<?php echo url('','',"category_delete");?>';
+        bootbox.confirm({
+            message: '您确认要删除该选项吗？(*其子栏目也将被删除)',
+            buttons: {
+                confirm: {
+                    label: "确认"
+                },
+                cancel:{
+                    label:"取消"
+                }
+            },
+            callback: function(yes) {
+                if(yes) {
+                    $.post(url, {id:category_id}, function(result) {
+                        if(result.status==1){
+                            window.location.reload();
+                        }
+                    })
+                }
+            }
+        });
+    }
+</script>
 
 </body>
 <!--  /Body -->

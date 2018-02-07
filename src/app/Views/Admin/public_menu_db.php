@@ -193,19 +193,21 @@
             var jsonData = json.data;
             var one_active = '';
             var two_active = '';
+            var controller = '<?php echo ucwords($data['__C__']); ?>';
+            var controller2 = '<?php echo strtolower($data['__C__']); ?>';//子菜单模糊查找，包含了其字样 则active
+            var action = '<?php echo ($data['__A__']); ?>';
             for(var i = 0; i < jsonData.length; i++){
                 //一级目录
 
                 if(jsonData[i].a=='#'){
-                    var controller = '<?php echo ucwords($data['__C__']); ?>';
-                    var controller2 = '<?php echo strtolower($data['__C__']); ?>';//子菜单模糊查找，包含了其字样 则active
-                    var action = '<?php echo ($data['__A__']); ?>';
+
                     //查看是否设置了菜单多控制器分类
-                    if(jsonData[i].cc!=null){
+                    if(jsonData[i].cc){
 
                         if(jsonData[i].cc.split(',').contains(controller)){one_active='class = "active open"'; }else{one_active='';}
                     }else{
-                        if([jsonData[i].c].contains(controller)){one_active='class = "active open"'; }else{one_active='';}
+
+                        if(jsonData[i].c==controller){one_active='class = "active open"'; }else{one_active='';}
                     }
                     html +='<li '+one_active+'>';
                     html += '<a href="'+jsonData[i].url+'" class="menu-dropdown">';

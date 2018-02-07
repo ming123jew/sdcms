@@ -123,7 +123,7 @@ Purchase: http://wrapbootstrap.com
                                         <td><?php echo $value['username'];?></td>
                                         <td><?php echo $value['email'];?></td>
                                         <td>
-                                            <?php echo $value['role']['role_name'];?>
+                                            <?php echo $value['role']['role_name']??'未设置';?>
                                         </td>
                                         <td><?php if($value['status']){echo '<span class="typcn typcn-tick"></span>';}else{echo  '<span class="typcn typcn-times"></span>';};?></td>
                                         <td>
