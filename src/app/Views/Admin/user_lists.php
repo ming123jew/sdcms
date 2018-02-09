@@ -91,9 +91,7 @@ Purchase: http://wrapbootstrap.com
                             <table class="table table-hover">
                                 <thead class="bordered-darkorange">
                                 <tr>
-                                    <th>
-                                        排序
-                                    </th>
+
                                     <th>
                                         ID
                                     </th>
@@ -118,7 +116,7 @@ Purchase: http://wrapbootstrap.com
                                 <?php //print_r($data['allrole']);?>
                                 <?php foreach($data['allrole'] as $key=>$value){?>
                                     <tr>
-                                        <td><?php echo $value['list_order'];?></td>
+
                                         <td><?php echo $value['id'];?></td>
                                         <td><?php echo $value['username'];?></td>
                                         <td><?php echo $value['email'];?></td>

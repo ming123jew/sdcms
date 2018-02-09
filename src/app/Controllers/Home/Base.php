@@ -14,6 +14,7 @@ class Base extends \app\Controllers\BaseController
      */
     public $HtmlUrl = '';
 
+
     /**
      * @param string $controller_name
      * @param string $method_name

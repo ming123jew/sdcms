@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>服务器日志检测</title>
-<!--    <base href="--><?php //echo ($data['HTML_URL']);?><!--"/>-->
-    <base href="http://123.207.0.104:8082/home/"/>
+     <base href="<?php echo ($data['HTML_URL']);?>"/>
+
 
     <script src="js/jquery-2.0.3.min.js"></script>
     <script src="js/jquery.json.js"></script>
@@ -28,7 +28,7 @@
     }
 
     var webim = {
-        'server' : 'ws://123.207.0.104:8083'
+        'server' : 'ws://<?php echo ($data['HOST_IP']);?>:8083'
     }
     var ws = {};
     var client_id = 0;

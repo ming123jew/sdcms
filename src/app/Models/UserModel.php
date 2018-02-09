@@ -24,8 +24,7 @@ class UserModel extends BaseModel
      */
     public function getAll(){
         $val = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->orderBy('list_order','asc')
-            ->orderBy('id','asc')
+            ->orderBy('id','desc')
             ->select('*')
             ->coroutineSend();
         if(empty($val['result'])){

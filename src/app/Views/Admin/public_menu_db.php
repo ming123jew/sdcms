@@ -203,10 +203,8 @@
 
                     //查看是否设置了菜单多控制器分类
                     if(jsonData[i].cc){
-
                         if(jsonData[i].cc.split(',').contains(controller)){one_active='class = "active open"'; }else{one_active='';}
                     }else{
-
                         if(jsonData[i].c==controller){one_active='class = "active open"'; }else{one_active='';}
                     }
                     html +='<li '+one_active+'>';

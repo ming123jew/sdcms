@@ -74,6 +74,13 @@ class BaseController extends Controller
             parent::initialization($controller_name, $method_name);
             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
             $host =  $http_type .( $this->http_input->header('host') ).'/';
+            if(strpos($host,':')!==false){
+                $host_domain_arr = explode(':',$this->http_input->header('host'));
+                $host_domain = $host_domain_arr[0];
+            }else{
+                $host_domain = $host;
+            }
+
             //print_r($this->context);
             self::$Host2 = $this->Host = $host;
             $this->Url = str_replace(':http_','/',$method_name);
@@ -91,6 +98,7 @@ class BaseController extends Controller
             self::templateData('__URI__',$this->Uri);
             self::templateData('__URL__',$this->Url);
             self::templateData('__HOST__',$this->Host);
+            self::templateData('HOST_IP', $host_domain);
             self::templateData('__M__',$this->ModuleName);
             self::templateData('__C__',$this->ControllerName);
             self::templateData('__A__',$this->ActionName);
