@@ -121,7 +121,7 @@ Purchase: http://wrapbootstrap.com
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php echo $data['allcategory'];?>
+                                <?php echo ( $data['allcategory']);?>
                                 </tbody>
                             </table>
 

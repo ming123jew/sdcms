@@ -84,9 +84,8 @@ Purchase: http://wrapbootstrap.com
                 <!-- 菜单列表 -->
                 <div class="row">
 
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','menu');?>"><i class="typcn typcn-lightbulb"></i>菜单列表</a></h5>
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','menu_add');?>"><i class="typcn typcn-lightbulb"></i>添加菜单</a></h5>
-
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','category_list');?>"><i class="typcn typcn-lightbulb"></i>栏目列表</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','category_add');?>"><i class="typcn typcn-lightbulb"></i>添加栏目</a></h5>
 
                     <div class="col-xs-12">
                         <div class="widget flat radius-bordered">
@@ -124,7 +123,7 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">请选择模型：</label>
                                                                 <div class="col-lg-4">
-                                                                    <select class="form-control" name="info[modelid]" style="">
+                                                                    <select class="form-control" name="info[model_id]" style="">
                                                                         <option value="">请选择</option>
                                                                         <option value="1">文章模型</option>
                                                                     </select>
@@ -133,9 +132,9 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">上级栏目：</label>
                                                                 <div class="col-lg-4">
-                                                                    <select class="form-control" name="info[parentid]" style="">
+                                                                    <select class="form-control" name="info[parent_id]" style="">
                                                                         <option value="0">≡ 作为一级栏目 ≡</option>
-                                                                        <?php echo '';?>
+                                                                        <?php echo $data['selectCategorys'];?>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -175,10 +174,17 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">是否在导航显示：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input style="position: initial;opacity: inherit;" type="radio" name="info[ismenu]" checked="" value="1">显示
-                                                                    <input style="position: initial;opacity: inherit;" type="radio" name="info[ismenu]" checked="" value="0">隐藏
+                                                                    <input style="position: initial;opacity: inherit;" type="radio" name="info[is_menu]" checked="" value="1">显示
+                                                                    <input style="position: initial;opacity: inherit;" type="radio" name="info[is_menu]" checked="" value="0">隐藏
                                                                 </div>
                                                             </div>
+                                                        <div class="form-group">
+                                                            <label class="col-lg-4 control-label">状态：</label>
+                                                            <div class="col-lg-8">
+                                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" checked="checked" value="1">开启
+                                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" checked="" value="0">禁用
+                                                            </div>
+                                                        </div>
                                                             <div class="form-group">
                                                                 <div class="col-lg-offset-4 col-lg-8">
                                                                     <button class="btn btn-palegreen" type="submit">Validate</button>
@@ -226,16 +232,10 @@ Purchase: http://wrapbootstrap.com
                                                         <div class="form-group">
                                                             <label class="col-lg-4 control-label">备注：</label>
                                                             <div class="col-lg-8">
-                                                                <textarea name="info[description]" class="form-control" rows="3"></textarea>
+                                                                <textarea name="setting[description]" class="form-control" rows="3"></textarea>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label class="col-lg-4 control-label">是否在导航显示：</label>
-                                                            <div class="col-lg-8">
-                                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[ismenu]" checked="" value="1">显示
-                                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[ismenu]" checked="" value="0">隐藏
-                                                            </div>
-                                                        </div>
+
                                                         <div class="form-group">
                                                             <div class="col-lg-offset-4 col-lg-8">
                                                                 <button class="btn btn-palegreen" type="submit">Validate</button>
@@ -361,10 +361,15 @@ Purchase: http://wrapbootstrap.com
                 //alert('here.')
 
                 // 实用ajax提交表单
-                $.post('<?php echo url('','menu_add');?>', form.serialize(), function(result) {
+                $.post('<?php echo  url('','','category_add');?>', form.serialize(), function(result) {
                     // .自定义回调逻辑
                     if(result.status==1){
-                        window.location.href = '<?php echo url('','menu');?>';
+                        $("#modal-success").find(".modal-body").html(result.message);
+                        $("#modal-success").modal("show");
+                        //window.location.href = '<?php echo url('','','category_list');?>';
+                    }else{
+                        $("#modal-warning").find(".modal-body").html(result.message);
+                        $("#modal-warning").modal("show");
                     }
                 }, 'json');
             },

@@ -126,7 +126,7 @@ class System extends Base
                     $array[] = $r;
                     $str = "<option value='\$id' \$selected>\$spacer \$name</option>";
                     $tree->init($array);
-                    $parentid = isset($where['parentid'])?$where['parentid']:0;
+                    $parentid = isset($parent_id)?intval($parent_id):0;
                     $info = $tree->get_tree($parentid, $str);
                 }
             }

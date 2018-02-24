@@ -143,10 +143,21 @@ class Main extends Base
 
     }
 
+    /**
+     * 退出登录
+     */
     public function http_logout(){
         //销毁session
         session($this->AdminSessionField,null);
-        $this->http_output->setCookie($this->AdminSessionField,null);
+
+        $this->http_output->setCookie($this->AdminSessionField,'');
+        parent::templateData('title','成功退出登录.');
+        parent::templateData('message','成功退出登录.');
+        parent::templateData('gourl',url('Admin','Main','index'));
+        parent::webOrApp(function (){
+            $template = $this->loader->view('app::Admin/logout');
+            $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+        });
 
         // 清除缓存数据
 
@@ -154,8 +165,6 @@ class Main extends Base
     }
 
     public function http_tis(){
-
-
 //        $r =  get_instance()->getMysql()->select('*')
 //            ->from('sd_admin_role_priv')
 //            ->limit(10)

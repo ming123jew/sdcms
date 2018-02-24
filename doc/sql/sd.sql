@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 赠送服务器
-Source Server Version : 50717
-Source Host           : 123.207.0.104:3306
+Source Server         : ming123jew
+Source Server Version : 50635
+Source Host           : 118.89.26.188:3306
 Source Database       : sd
 
 Target Server Type    : MYSQL
-Target Server Version : 50717
+Target Server Version : 50635
 File Encoding         : 65001
 
-Date: 2018-02-02 09:16:41
+Date: 2018-02-09 17:40:06
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -53,7 +53,7 @@ INSERT INTO `sd_admin_menu` VALUES ('4', '0', 'Admin', 'User', '#', '', '0', '1'
 INSERT INTO `sd_admin_menu` VALUES ('5', '4', 'Admin', 'Role', 'role_lists', '', '0', '1', '角色权限', '', '', '0', null, '0', null, null, 'User,Role');
 INSERT INTO `sd_admin_menu` VALUES ('6', '5', 'Admin', 'Role', 'role_add', '', '0', '0', '添加角色', null, '', '0', null, '0', null, null, null);
 INSERT INTO `sd_admin_menu` VALUES ('8', '4', 'Admin', 'User', 'user_lists', '', '0', '1', '用户列表', '', '', '0', null, '0', null, null, 'User,Role');
-INSERT INTO `sd_admin_menu` VALUES ('9', '3', 'Admin', 'System', 'menu_add', '', '0', '0', '添加菜单', null, '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('9', '3', 'Admin', 'System', 'menu_add', '', '0', '0', '添加菜单', '', 'a', '0', null, '0', null, null, '');
 INSERT INTO `sd_admin_menu` VALUES ('10', '3', 'Admin', 'System', 'menu_delete', '', '0', '0', '删除菜单', null, '', '0', null, '0', null, null, null);
 INSERT INTO `sd_admin_menu` VALUES ('11', '5', 'Admin', 'Role', 'role_delete', '', '0', '0', '删除角色', null, '', '0', null, '0', null, null, null);
 INSERT INTO `sd_admin_menu` VALUES ('12', '8', 'Admin', 'User', 'user_add', '', '0', '0', '添加用户', null, '', '0', null, '0', null, null, null);
@@ -128,60 +128,22 @@ INSERT INTO `sd_admin_role_priv` VALUES ('1', '17', 'Admin', 'Main', 'ajaxgetmen
 -- ----------------------------
 DROP TABLE IF EXISTS `sd_category`;
 CREATE TABLE `sd_category` (
-  `catid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `module` varchar(15) NOT NULL,
-  `type` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `modelid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `parentid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `arrparentid` varchar(255) DEFAULT NULL,
-  `child` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `arrchildid` mediumtext,
-  `catname` varchar(30) NOT NULL,
-  `style` varchar(5) DEFAULT NULL,
-  `image` varchar(100) NOT NULL,
-  `description` mediumtext NOT NULL,
-  `parentdir` varchar(100) DEFAULT NULL,
-  `catdir` varchar(30) NOT NULL,
-  `url` varchar(100) NOT NULL,
-  `items` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `hits` int(10) unsigned NOT NULL DEFAULT '0',
-  `setting` mediumtext NOT NULL,
-  `listorder` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `ismenu` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `sethtml` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `letter` varchar(30) NOT NULL,
-  `usable_type` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`catid`),
-  KEY `module` (`module`,`parentid`,`listorder`,`catid`) USING BTREE,
-  KEY `siteid` (`siteid`,`type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `model_id` smallint(5) NOT NULL DEFAULT '1' COMMENT '模型ID',
+  `catname` varchar(40) NOT NULL,
+  `parent_id` int(11) NOT NULL,
+  `description` varchar(200) DEFAULT NULL,
+  `arc_count` int(11) NOT NULL DEFAULT '0' COMMENT '文章数',
+  `setting` text COMMENT 'seo json',
+  `list_order` smallint(5) NOT NULL DEFAULT '0',
+  `is_menu` tinyint(2) NOT NULL DEFAULT '0',
+  `status` tinyint(2) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_category
 -- ----------------------------
-INSERT INTO `sd_category` VALUES ('1', '1', 'content', '0', '1', '0', '0', '0', '1', '头条', '', '', '', '', 'exclusive', 'http://www.shz100.com/exclusive/', '632', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '1', '1', '0', 'toutiao', '');
-INSERT INTO `sd_category` VALUES ('2', '1', 'content', '0', '1', '0', '0', '0', '2', '揭秘', '', '', '', '', 'demystify', 'http://www.shz100.com/demystify/', '379', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '2', '0', '0', 'jiemi', '');
-INSERT INTO `sd_category` VALUES ('3', '1', 'content', '0', '1', '0', '0', '1', '3,6,7,8,9', '天下', '', '', '', '', 'characters', 'http://www.shz100.com/characters/', '0', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '3', '1', '0', 'tianxia', '');
-INSERT INTO `sd_category` VALUES ('4', '1', 'content', '0', '1', '0', '0', '0', '4', '老照片', '', '', '', '', 'OldPhotos', 'http://www.shz100.com/OldPhotos/', '1807', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list_img\",\"show_template\":\"show_img\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '4', '1', '0', 'laozhaopian', '');
-INSERT INTO `sd_category` VALUES ('5', '1', 'content', '0', '1', '0', '0', '0', '5', '口述史', '', '', '', '', 'OralHistory', 'http://www.shz100.com/OralHistory/', '1189', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '5', '1', '0', 'koushushi', '');
-INSERT INTO `sd_category` VALUES ('6', '1', 'content', '0', '1', '3', '0,3', '0', '6', '政治', '', '', '', 'characters/', 'politics', 'http://www.shz100.com/characters/politics/', '3833', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '6', '1', '0', 'zhengzhi', '');
-INSERT INTO `sd_category` VALUES ('7', '1', 'content', '0', '1', '3', '0,3', '0', '7', '军事', '', '', '', 'characters/', 'military', 'http://www.shz100.com/characters/military/', '696', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '7', '0', '0', 'junshi', '');
-INSERT INTO `sd_category` VALUES ('8', '1', 'content', '0', '1', '3', '0,3', '0', '8', '社会', '', '', '', 'characters/', 'diplomacy', 'http://www.shz100.com/characters/diplomacy/', '1000', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '8', '0', '0', 'shehui', '');
-INSERT INTO `sd_category` VALUES ('9', '1', 'content', '0', '1', '3', '0,3', '0', '9', '文化', '', '', '', 'characters/', 'culture', 'http://www.shz100.com/characters/culture/', '2446', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '9', '0', '0', 'wenhua', '');
-INSERT INTO `sd_category` VALUES ('10', '1', 'content', '0', '1', '0', '0', '0', '10', '自由谈', '', '', '', '', 'FromReaders', 'http://www.shz100.com/FromReaders/', '2765', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '10', '1', '0', 'ziyoutan', '');
-INSERT INTO `sd_category` VALUES ('11', '1', 'content', '0', '1', '0', '0', '1', '11,14,15,16,17,22', '名家', '', '', '', '', 'mingjia', 'http://www.shz100.com/mingjia/', '0', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '11', '1', '0', 'mingjia', '');
-INSERT INTO `sd_category` VALUES ('12', '1', 'content', '0', '1', '0', '0', '0', '12', '关于我们', '', '', '', '', 'about', 'http://www.shz100.com/about/', '7', '0', '{\"workflowid\":\"\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"16\"}', '12', '0', '0', 'guanyuwomen', '');
-INSERT INTO `sd_category` VALUES ('13', '1', 'content', '0', '1', '0', '0', '0', '13', '乡土', '', '', '', '', 'historytoday', 'http://www.shz100.com/historytoday/', '1036', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '13', '1', '0', 'xiangtu', '');
-INSERT INTO `sd_category` VALUES ('14', '1', 'content', '0', '1', '11', '0,11', '0', '14', '雷颐', '', '', '', 'mingjia/', 'leiyi', 'http://www.shz100.com/mingjia/leiyi/', '29', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '14', '0', '0', 'leiyi', '');
-INSERT INTO `sd_category` VALUES ('15', '1', 'content', '0', '1', '11', '0,11', '0', '15', '沈志华', '', '', '', 'mingjia/', 'shenzhihua', 'http://www.shz100.com/mingjia/shenzhihua/', '35', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '15', '0', '0', 'shenzhihua', '');
-INSERT INTO `sd_category` VALUES ('16', '1', 'content', '0', '1', '11', '0,11', '0', '16', '马勇', '', '', '', 'mingjia/', 'mayong', 'http://www.shz100.com/mingjia/mayong/', '43', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '16', '0', '0', 'mayong', '');
-INSERT INTO `sd_category` VALUES ('17', '1', 'content', '0', '1', '11', '0,11', '0', '17', '张鸣', '', '', '', 'mingjia/', 'zhangming', 'http://www.shz100.com/mingjia/zhangming/', '42', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '17', '0', '0', 'zhangming', '');
-INSERT INTO `sd_category` VALUES ('18', '1', 'content', '0', '1', '0', '0', '0', '18', '专题', '', '', '', '', 'spec', '', '5', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '18', '0', '0', '', '');
-INSERT INTO `sd_category` VALUES ('19', '1', 'content', '0', '1', '0', '0', '0', '19', '养生', '', '', '', '', 'Yangsheng', 'http://www.shz100.com/Yangsheng/', '261', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '19', '1', '0', 'yangsheng', '');
-INSERT INTO `sd_category` VALUES ('20', '1', 'content', '0', '1', '0', '0', '0', '20', '徐霞客', '', '', '', '', 'xuxiake', 'http://www.shz100.com/xuxiake/', '147', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '20', '1', '0', 'xuxiake', '');
-INSERT INTO `sd_category` VALUES ('21', '1', 'content', '0', '1', '0', '0', '0', '21', '众筹', '', '', '', '', 'zhongchou', 'http://www.shz100.com/zhongchou/', '1', '0', '{\"workflowid\":\"\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"16\"}', '21', '0', '0', 'zhongchou', '');
-INSERT INTO `sd_category` VALUES ('22', '1', 'content', '0', '1', '11', '0,11', '0', '22', '其他', null, '', '', 'mingjia/', 'other', 'http://www.shz100.com/mingjia/other/', '1785', '0', '{\"workflowid\":\"1\",\"ishtml\":\"0\",\"content_ishtml\":\"0\",\"create_to_html_root\":\"0\",\"template_list\":\"shz100\",\"category_template\":\"category\",\"list_template\":\"list\",\"show_template\":\"show\",\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"presentpoint\":\"1\",\"defaultchargepoint\":\"0\",\"paytype\":\"0\",\"repeatchargedays\":\"1\",\"category_ruleid\":\"30\",\"show_ruleid\":\"32\"}', '22', '1', '0', 'qita', null);
 
 -- ----------------------------
 -- Table structure for `sd_category_priv`

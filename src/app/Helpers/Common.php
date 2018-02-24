@@ -191,3 +191,14 @@ function http_post_url($remote_server, array $params){
     curl_close($ch);
     return $data;
 }
+
+function get_modelname_bymodelid($model_id){
+    $return = '';
+    switch ($model_id){
+        case 1:
+            $return = "文章模型";break;
+        case 2:
+            $return = "";break;
+    }
+    return $return;
+}
