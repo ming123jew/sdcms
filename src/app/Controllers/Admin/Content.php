@@ -26,7 +26,10 @@ class Content extends Base
         parent::initialization($controller_name, $method_name);
     }
 
-    public function http_content_article_list()
+    /**
+     * 内容列表
+     */
+    public function http_content_list()
     {
         if($this->http_input->getRequestMethod()=='POST'){
             $end = [
@@ -39,13 +42,16 @@ class Content extends Base
             parent::templateData('test',1);
             //web or app
             parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/content_article_list');
+                $template = $this->loader->view('app::Admin/content_list');
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
             });
         }
     }
 
-    public function http_content_article_add()
+    /**
+     * 添加内容
+     */
+    public function http_content_add()
     {
         if($this->http_input->getRequestMethod()=='POST'){
             $end = [
@@ -58,45 +64,7 @@ class Content extends Base
             parent::templateData('test',1);
             //web or app
             parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/content_article_add');
-                $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
-            });
-        }
-    }
-
-    public function http_content_category_list()
-    {
-        if($this->http_input->getRequestMethod()=='POST'){
-            $end = [
-                'status' => 0,
-                'code'=>200,
-                'message'=>'message.'
-            ];
-            $this->http_output->end(json_encode($end),false);
-        }else{
-            parent::templateData('test',1);
-            //web or app
-            parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/content_category_list');
-                $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
-            });
-        }
-    }
-    public function http_content_category_add()
-    {
-        if($this->http_input->getRequestMethod()=='POST'){
-            var_dump($this->http_input->postGet());
-            $end = [
-                'status' => 0,
-                'code'=>200,
-                'message'=>'message.'
-            ];
-            $this->http_output->end(json_encode($end),false);
-        }else{
-            parent::templateData('test',1);
-            //web or app
-            parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/content_category_add');
+                $template = $this->loader->view('app::Admin/content_add');
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
             });
         }

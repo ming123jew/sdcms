@@ -202,3 +202,14 @@ function get_modelname_bymodelid($model_id){
     }
     return $return;
 }
+
+function get_cattype_bymodelid($model_id){
+    $return = '';
+    switch ($model_id){
+        case 1:
+            $return = "内部栏目";break;
+        default :
+            $return = "单页";break;
+    }
+    return $return;
+}
