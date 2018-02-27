@@ -81,8 +81,8 @@ Purchase: http://wrapbootstrap.com
                 <!-- 内容列表 -->
                 <div class="row">
 
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','category_list');?>"><i class="typcn typcn-lightbulb"></i>内容列表</a></h5>
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','category_add');?>"><i class="typcn typcn-lightbulb"></i>添加内容</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','content_list');?>"><i class="typcn typcn-lightbulb"></i>内容列表</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','content_add');?>"><i class="typcn typcn-lightbulb"></i>添加内容</a></h5>
                     <div class="col-xs-12">
                         <div class="well with-header  with-footer">
                             <div class="header bg-blue">
@@ -148,10 +148,10 @@ Purchase: http://wrapbootstrap.com
 <script src="assets/js/beyond.min.js"></script>
 <script src="assets/js/bootbox/bootbox.js"></script>
 <script>
-    function category_delete(category_id) {
-        var url = '<?php echo url('','',"category_delete");?>';
+    function content_delete(content_id) {
+        var url = '<?php echo url('','',"content_delete");?>';
         bootbox.confirm({
-            message: '您确认要删除该选项吗？(*其子内容也将被删除)',
+            message: '您确认要删除该文章吗？',
             buttons: {
                 confirm: {
                     label: "确认"
@@ -162,7 +162,7 @@ Purchase: http://wrapbootstrap.com
             },
             callback: function(yes) {
                 if(yes) {
-                    $.post(url, {id:category_id}, function(result) {
+                    $.post(url, {id:content_id}, function(result) {
                         if(result.status==1){
                             window.location.reload();
                         }

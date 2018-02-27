@@ -64,10 +64,12 @@ class Content extends Base
             parent::templateData('test',1);
             //web or app
             parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/content_add');
+                $template = $this->loader->view('app::Admin/content_add_and_edit');
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
             });
         }
     }
+
+
 
 }
