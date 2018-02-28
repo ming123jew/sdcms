@@ -82,6 +82,23 @@ function url($module='',$controller='',$action='', $params=''){
 
 }
 
+/**
+ * 生成请求令牌
+ * @access public
+ * @param string $name 令牌名称
+ * @param mixed  $type 令牌生成方法
+ * @return string
+ */
+function token($name = '__token__', $type = 'md5', $is_ajax=false)
+{
+    $type  = is_callable($type) ? $type : 'md5';
+    $token = call_user_func($type, $_SERVER['REQUEST_TIME_FLOAT']);
+    if ($is_ajax) {
+        header($name . ': ' . $token);
+    }
+    Session::set($name, $token);
+    return $token;
+}
 
 /**
  * 检查路由权限 | 预留  首先读取缓存，如不存在则读数据库
@@ -213,3 +230,4 @@ function get_cattype_bymodelid($model_id){
     }
     return $return;
 }
+

@@ -25,6 +25,7 @@ class Base extends \app\Controllers\BaseController
     protected $AdminCacheRoleIdDataField = '__ROLEID__DATA__ADMIN__';//角色数据
     protected $AdminCacheRoleIdMenuField = '__ROLEID__MENU__ADMIN__';//角色菜单
     protected $AdminNotAuthAction = ['login','tis'];
+    protected $AdminUploadsConfig = '';
     /**
      * @param string $controller_name
      * @param string $method_name
@@ -40,6 +41,7 @@ class Base extends \app\Controllers\BaseController
         //print_r($this->MethodName);
         if(  strtolower($this->ModuleName) ==  'admin' ){
             $this->HtmlUrl = $configs_config[$configs_config['active']]['admin']['static_url'];
+            $this->AdminUploadsConfig =  $configs_config[$configs_config['active']]['uploads'];
         }else{
             $this->HtmlUrl = $configs_config[$configs_config['active']]['home']['static_url'];
         }

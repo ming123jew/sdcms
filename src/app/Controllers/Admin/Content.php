@@ -62,6 +62,7 @@ class Content extends Base
             $this->http_output->end(json_encode($end),false);
         }else{
             parent::templateData('test',1);
+            parent::templateData('token',token('__CONTENT_ADD__'));
             //web or app
             parent::webOrApp(function (){
                 $template = $this->loader->view('app::Admin/content_add_and_edit');
