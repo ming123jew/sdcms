@@ -61,6 +61,25 @@ class Content extends Base
             ];
             $this->http_output->end(json_encode($end),false);
         }else{
+            $parent_id  =  $this->http_input->postGet('parent_id') ?? 0;
+            $this->CategoryModel =  $this->loader->model('CategoryModel',$this);
+            $all = yield $this->CategoryModel->getAll();
+            $info='';
+
+            if($all) {
+                $selected = $parent_id;
+                $tree = new Tree();
+                foreach ($all as $r) {
+                    $r['selected'] = $r['id'] == $selected ? 'selected' : '';
+                    $array[] = $r;
+                    $str = "<option value='\$id' \$selected>\$spacer \$catname</option>";
+                    $tree->init($array);
+                    $parentid = isset($parent_id)?intval($parent_id):0;
+                    $info = $tree->get_tree($parentid, $str);
+                }
+            }
+
+            parent::templateData('selectCategorys',$info);
             parent::templateData('test',1);
             parent::templateData('token',token('__CONTENT_ADD__'));
             //web or app

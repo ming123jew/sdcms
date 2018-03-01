@@ -51,6 +51,7 @@ class Ueditor extends Base{
                 /* 上传文件 */
             case 'uploadfile':
                 //$result = include("action_upload.php");
+                $CONFIG['AdminUploadsConfig'] = $this->AdminUploadsConfig;
                 $result = self::_Upload($CONFIG);
                 break;
 
@@ -79,13 +80,14 @@ class Ueditor extends Base{
         }
 
         /* 输出结果 */
-        if (isset($_GET["callback"])) {
-            if (preg_match("/^[\w_]+$/", $_GET["callback"])) {
-                echo htmlspecialchars($_GET["callback"]) . '(' . $result . ')';
+        $callback = $this->http_input->get('callback');
+        if ($callback) {
+            if (preg_match("/^[\w_]+$/", $callback)) {
+                $this->http_output->end( htmlspecialchars($_GET["callback"]) . '(' . $result . ')' ) ;
             } else {
-                echo json_encode(array(
+                $this->http_output->end( json_encode(array(
                     'state'=> 'callback参数不合法'
-                ));
+                )) );
             }
         } else {
             $this->http_output->end($result) ;
@@ -105,7 +107,8 @@ class Ueditor extends Base{
                 $config = array(
                     "pathFormat" => $CONFIG['imagePathFormat'],
                     "maxSize" => $CONFIG['imageMaxSize'],
-                    "allowFiles" => $CONFIG['imageAllowFiles']
+                    "allowFiles" => $CONFIG['imageAllowFiles'],
+                    "AdminUploadsConfig"=>$CONFIG['AdminUploadsConfig']
                 );
                 $fieldName = $CONFIG['imageFieldName'];
                 break;
@@ -114,6 +117,7 @@ class Ueditor extends Base{
                     "pathFormat" => $CONFIG['scrawlPathFormat'],
                     "maxSize" => $CONFIG['scrawlMaxSize'],
                     "allowFiles" => $CONFIG['scrawlAllowFiles'],
+                    "AdminUploadsConfig"=>$CONFIG['AdminUploadsConfig'],
                     "oriName" => "scrawl.png"
                 );
                 $fieldName = $CONFIG['scrawlFieldName'];
@@ -123,7 +127,8 @@ class Ueditor extends Base{
                 $config = array(
                     "pathFormat" => $CONFIG['videoPathFormat'],
                     "maxSize" => $CONFIG['videoMaxSize'],
-                    "allowFiles" => $CONFIG['videoAllowFiles']
+                    "allowFiles" => $CONFIG['videoAllowFiles'],
+                    "AdminUploadsConfig"=>$CONFIG['AdminUploadsConfig']
                 );
                 $fieldName = $CONFIG['videoFieldName'];
                 break;
@@ -132,14 +137,16 @@ class Ueditor extends Base{
                 $config = array(
                     "pathFormat" => $CONFIG['filePathFormat'],
                     "maxSize" => $CONFIG['fileMaxSize'],
-                    "allowFiles" => $CONFIG['fileAllowFiles']
+                    "allowFiles" => $CONFIG['fileAllowFiles'],
+                    "AdminUploadsConfig"=>$CONFIG['AdminUploadsConfig']
                 );
                 $fieldName = $CONFIG['fileFieldName'];
                 break;
         }
 
+        $thumb = $this->http_input->get('thumb');
         /* 生成上传实例对象并完成上传 */
-        $up = new Uploader($this->http_input->getFiles(),$fieldName, $config, $base64);
+        $up = new Uploader($this->http_input->getFiles(),$fieldName, $config, $base64, $thumb);
 
         /**
          * 得到上传文件所对应的各个参数,数组结构
@@ -153,7 +160,7 @@ class Ueditor extends Base{
          * )
          */
         $info = $up->getFileInfo();
-print_r($info);
+        //print_r($info);
         //插入数据库
 //        $model_MagazineUeditor = new MagazineUeditor();
 //        $token = $this->request->param('token');
@@ -190,8 +197,10 @@ print_r($info);
         $allowFiles = substr(str_replace(".", "|", join("", $allowFiles)), 1);
 
         /* 获取参数 */
-        $size = isset($_GET['size']) ? htmlspecialchars($_GET['size']) : $listSize;
-        $start = isset($_GET['start']) ? htmlspecialchars($_GET['start']) : 0;
+        $size = $this->http_input->get('size');
+        $start =  $this->http_input->get('start');
+        $size = ($size) ? htmlspecialchars($size) : $listSize;
+        $start = ($start) ? htmlspecialchars($start) : 0;
         $end = $start + $size;
 
         /* 获取文件列表 */
@@ -199,7 +208,7 @@ print_r($info);
         //sd框架读取到路径为/ 因此需要作修改
         $rootPath = $this->AdminUploadsConfig['rootpath'];
         //print_r($_SERVER);
-        echo $path = $rootPath . (substr($path, 0, 1) == "/" ? "":"/") . $path;
+        $path = $rootPath . (substr($path, 0, 1) == "/" ? "":"/") . $path;
         $files = self::_getfiles($path, $allowFiles);
         if (!count($files)) {
             return json_encode(array(
@@ -283,10 +292,11 @@ print_r($info);
 
         /* 抓取远程图片 */
         $list = array();
-        if (isset($_POST[$fieldName])) {
-            $source = $_POST[$fieldName];
+
+        if ( $this->http_input->post($fieldName) ) {
+            $source = $this->http_input->post($fieldName);
         } else {
-            $source = $_GET[$fieldName];
+            $source = $this->http_input->get($fieldName);
         }
         foreach ($source as $imgUrl) {
             $item = new UeditorUploader($imgUrl, $config, "remote");

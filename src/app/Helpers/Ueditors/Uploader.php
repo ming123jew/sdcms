@@ -44,19 +44,30 @@ class Uploader
         "INVALID_IP" => "非法 IP"
     );
     protected $_files = '';
+    protected $thumb = '';
+    protected $oldfile = '';
+    protected $AdminUploadsConfig = '';
 
     /**
      * 构造函数
+     * @$_files sd无法识别$_FILES
      * @param string $fileField 表单名称
      * @param array $config 配置项
      * @param bool $base64 是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
      */
-    public function __construct($_files, $fileField, $config, $type = "upload")
+    public function __construct($_files, $fileField, $config, $type = "upload",$thumb='')
     {
         $this->_files = $_files;
         $this->fileField = $fileField;
         $this->config = $config;
         $this->type = $type;
+        if($thumb){
+            $this->thumb = 'thumb_';
+        }
+        if( isset( $this->_files['oldfile']) ){
+            $this->oldfile =  $this->_files['oldfile'];
+        }
+        $this->AdminUploadsConfig = $config['AdminUploadsConfig'];
         if ($type == "remote") {
             $this->saveRemote();
         } else if($type == "base64") {
@@ -123,6 +134,11 @@ class Uploader
         if (!(move_uploaded_file($file["tmp_name"], $this->filePath) && file_exists($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
         } else { //移动成功
+
+            //如检测到有旧图片，则对旧图片进行删除操作
+            if($this->oldfile){
+                $this->delOldFile();
+            }
             $this->stateInfo = $this->stateMap[0];
         }
     }
@@ -296,7 +312,7 @@ class Uploader
         $format = str_replace("{hh}", $d[4], $format);
         $format = str_replace("{ii}", $d[5], $format);
         $format = str_replace("{ss}", $d[6], $format);
-        $format = str_replace("{time}", $t, $format);
+        $format = str_replace("{time}", $this->thumb.$t, $format);
 
         //过滤文件名的非法自负,并替换文件名
         $oriName = substr($this->oriName, 0, strrpos($this->oriName, '.'));
@@ -333,9 +349,20 @@ class Uploader
 //            $fullname = '/' . $fullname;
 //        }
         //sd框架读取到路径为/ 因此需要作修改
-        $dir = __DIR__.'/../../../www/sdcms';
-        $rootPath = __DIR__.'/../../../www/sdcms';
+        $rootPath = $this->AdminUploadsConfig['rootpath'];
         return $rootPath . $fullname;
+    }
+
+    /**
+     * 删除旧文件
+     */
+    private function delOldFile(){
+        //sd框架读取到路径为/ 因此需要作修改 读取配置中设置的路径
+        $rootPath = $this->AdminUploadsConfig['rootpath'];
+        if(is_file($rootPath.$this->oldfile)){
+            echo $rootPath.$this->oldfile;
+        }
+
     }
 
     /**

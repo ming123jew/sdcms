@@ -123,8 +123,9 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">请选择栏目：</label>
                                                                 <div class="col-lg-4">
-                                                                    <select class="form-control" name="info[model_id]" style="">
+                                                                    <select class="form-control" name="info[catid]" style="">
                                                                         <option value="">≡ 请选择 ≡</option>
+                                                                        <?php echo $data['selectCategorys'];?>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -151,11 +152,15 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">缩略图：</label>
                                                                 <div class="col-lg-8">
-                                                                    <div class="layui-upload-drag" id="test10">
+                                                                    <div class="layui-upload-drag" id="test10" style="float: left;">
                                                                         <i class="layui-icon">&#xe67c;</i>
                                                                         <p>点击上传，或将文件拖拽到此处</p>
                                                                     </div>
-                                                                    <input class="form-control" name="info[thumb]" type="text" value=""/>
+                                                                    <div style="float: left;">
+                                                                        <img src="" id="show_img" width="200" style="width: 200px;margin: 0 18px;"/>
+                                                                    </div>
+                                                                    <div style="clear: both;padding-top: 6px;"></div>
+                                                                    <input class="form-control" id="thumb" name="info[thumb]" type="text" value=""/>
                                                                 </div>
                                                             </div>
 
@@ -170,7 +175,7 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">跳转：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input style="position: initial;opacity: inherit;" name="info[islink]" type="checkbox" id="islink" onclick="ruselinkurl();">
+                                                                    <input style="position: initial;opacity: inherit;" name="info[isgourl]" type="checkbox" id="isgourl" onclick="rusegourl();">
                                                                     <input class="form-control" id="gourl" name="info[gourl]" type="text" value="" disabled="disabled"/> * 多个使用空格分开
                                                                 </div>
                                                             </div>
@@ -272,8 +277,8 @@ Purchase: http://wrapbootstrap.com
 <script type="text/javascript" charset="utf-8" src="<?php echo $data['__HOST__'];?>ueditor1_4_3_3/utf8/lang/zh-cn/zh-cn.js"></script>
 
 <script>
-    function ruselinkurl() {
-        var test = document.getElementById("islink").checked;
+    function rusegourl() {
+        var test = document.getElementById("isgourl").checked;
         if(test) {
             $('#gourl').attr('disabled',false);
             //var oEditor = CKEDITOR.instances.content;
@@ -509,11 +514,25 @@ Purchase: http://wrapbootstrap.com
         //拖拽上传
         upload.render({
             elem: '#test10'
-            ,url: '/upload/'
-            ,size: 60 //限制文件大小，单位 KB
-            ,done: function(res){
-                console.log(res)
+            ,field:'upfile'
+            ,url: ueditor_server_url+'&action=uploadimage&thumb=1'
+            ,size: 1024 //限制文件大小，单位 KB
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+                this.data={oldfile:$('input[name="info[thumb]"]').val()};
             }
+            ,done: function(res, index, upload){
+                //console.log(res)
+                if(res.state=='SUCCESS'){
+                    $('input[name="info[thumb]"]').val(res.url);
+                    $('#show_img').attr('src',res.url);
+                }
+                layer.closeAll('loading'); //关闭loading
+            }
+            ,error: function(index, upload){
+                layer.closeAll('loading'); //关闭loading
+            }
+
         });
     })
 </script>
