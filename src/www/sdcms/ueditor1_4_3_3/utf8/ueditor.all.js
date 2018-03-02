@@ -802,6 +802,7 @@ var utils = UE.utils = {
      * ```
      */
     html:function (str) {
+
         return str ? str.replace(/&((g|l|quo)t|amp|#39|nbsp);/g, function (m) {
             return {
                 '&lt;':'<',
@@ -7084,6 +7085,8 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
 
             !options.isShow && me.setHide();
             options.readonly && me.setDisabled();
+
+
         },
 
         /**

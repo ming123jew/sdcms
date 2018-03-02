@@ -58,17 +58,20 @@ class Ueditor extends Base{
             /* 列出图片 */
             case 'listimage':
                 //$result = include("action_list.php");
+                $CONFIG['AdminUploadsConfig'] = $this->AdminUploadsConfig;
                 $result = self::_list($CONFIG);
                 break;
             /* 列出文件 */
             case 'listfile':
                 //$result = include("action_list.php");
+                $CONFIG['AdminUploadsConfig'] = $this->AdminUploadsConfig;
                 $result = self::_list($CONFIG);
                 break;
 
             /* 抓取远程文件 */
             case 'catchimage':
                 //$result = include("action_crawler.php");
+                $CONFIG['AdminUploadsConfig'] = $this->AdminUploadsConfig;
                 $result = self::_crawler($CONFIG);
                 break;
 
@@ -286,7 +289,9 @@ class Ueditor extends Base{
             "pathFormat" => $CONFIG['catcherPathFormat'],
             "maxSize" => $CONFIG['catcherMaxSize'],
             "allowFiles" => $CONFIG['catcherAllowFiles'],
-            "oriName" => "remote.png"
+            "AdminUploadsConfig"=>$CONFIG['AdminUploadsConfig'],
+            "oriName" => "remote.png",
+
         );
         $fieldName = $CONFIG['catcherFieldName'];
 
@@ -299,7 +304,7 @@ class Ueditor extends Base{
             $source = $this->http_input->get($fieldName);
         }
         foreach ($source as $imgUrl) {
-            $item = new UeditorUploader($imgUrl, $config, "remote");
+            $item = new Uploader($this->http_input->getFiles(),$imgUrl, $config, "remote");
             $info = $item->getFileInfo();
             array_push($list, array(
                 "state" => $info["state"],
@@ -311,18 +316,18 @@ class Ueditor extends Base{
             ));
 
             //插入数据库
-            $model_MagazineUeditor = new MagazineUeditor();
-            $token = $this->request->param('token');
-            if( $token  ){
-                $info['token'] = $token;
-            }
-            $info['islocal'] = htmlspecialchars($imgUrl);
-            $res = $model_MagazineUeditor->Add($info);
-            if(!$res){
-                return ['code'=>0,'msg'=>$model_MagazineUeditor->getError()];
-            }
-
+//            $model_MagazineUeditor = new MagazineUeditor();
+//            $token = $this->request->param('token');
+//            if( $token  ){
+//                $info['token'] = $token;
+//            }
+//            $info['islocal'] = htmlspecialchars($imgUrl);
+//            $res = $model_MagazineUeditor->Add($info);
+//            if(!$res){
+//                return ['code'=>0,'msg'=>$model_MagazineUeditor->getError()];
+//            }
         }
+        print_r($list);
 
         /* 返回抓取数据 */
         return json_encode(array(

@@ -270,8 +270,8 @@ Purchase: http://wrapbootstrap.com
     var ueditor_server_url = '<?php echo url("Admin","Ueditor","index",['token'=>$data['token']]);?>';
     //-->
 </script>
-<script type="text/javascript" charset="utf-8" src="<?php echo $data['__HOST__'];?>ueditor1_4_3_3/utf8/ueditor.config.js?v=1.1"></script>
-<script type="text/javascript" charset="utf-8" src="<?php echo $data['__HOST__'];?>ueditor1_4_3_3/utf8/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $data['__HOST__'];?>ueditor1_4_3_3/utf8/ueditor.config.js?v=1.3"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $data['__HOST__'];?>ueditor1_4_3_3/utf8/ueditor.all.min.js?v=1.7"> </script>
 <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
 <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
 <script type="text/javascript" charset="utf-8" src="<?php echo $data['__HOST__'];?>ueditor1_4_3_3/utf8/lang/zh-cn/zh-cn.js"></script>
