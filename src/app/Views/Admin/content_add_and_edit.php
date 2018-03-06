@@ -410,7 +410,7 @@ Purchase: http://wrapbootstrap.com
              */
             fields: {
                 //多个重复
-                'info[modelid]': {
+                'info[catid]': {
                     //隐藏或显示 该字段的验证
                     enabled: true,
                     //错误提示信息
@@ -453,16 +453,16 @@ Purchase: http://wrapbootstrap.com
                          data-bv-different-message="The username and password cannot be the same as each other"-->
                          */
                         //<validatorName>: <validatorOptions>
-                        notEmpty:{message:"请选择模型."},
+                        notEmpty:{message:"请选择分类."},
                     }
                 },
-                'info[parentid]': {
+                'info[title]': {
                     //隐藏或显示 该字段的验证
                     enabled: true,
                     //错误提示信息
                     message: 'This value is not valid',
                     validators: {
-                        notEmpty:{message:"请选择上级内容."},
+                        notEmpty:{message:"标题不能为空."},
                     }
                 },
                 'info[catname]': {
@@ -473,25 +473,7 @@ Purchase: http://wrapbootstrap.com
                     validators: {
                         notEmpty:{message:"内容名称不能为空."},
                     }
-                },
-                'info[catdir]': {
-                    //隐藏或显示 该字段的验证
-                    enabled: true,
-                    //错误提示信息
-                    message: 'This value is not valid',
-                    validators: {
-                        notEmpty:{message:"英文目录不能为空."},
-                    }
-                },
-//                'setting[meta_title]': {
-//                    //隐藏或显示 该字段的验证
-//                    enabled: true,
-//                    //错误提示信息
-//                    message: 'This value is not valid',
-//                    validators: {
-//                        notEmpty:{message:"方法不能为空."},
-//                    }
-//                },
+                }
             }
         });
 
