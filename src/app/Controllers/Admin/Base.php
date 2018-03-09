@@ -26,6 +26,7 @@ class Base extends \app\Controllers\BaseController
     protected $AdminCacheRoleIdMenuField = '__ROLEID__MENU__ADMIN__';//角色菜单
     protected $AdminNotAuthAction = ['login','tis'];
     protected $AdminUploadsConfig = '';
+
     /**
      * @param string $controller_name
      * @param string $method_name

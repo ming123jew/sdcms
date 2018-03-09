@@ -119,14 +119,14 @@ function check_role($m,$c,$a,$context,$param=[]){
         //数据库查找
         $model = get_instance()->loader->model(\app\Models\RolePrivModel::class,$context);
         $r =  yield $model->authRole($role_id,$m,$c,$a);
-        print_r('check_role from db \n;');
+        //print_r('check_role from db \n;');
         if(!($r)){
             return false;
         }else{
            return true;
         }
     }else{
-        print_r('check_role from cache \n;');
+        //print_r('check_role from cache \n;');
         //从缓存种查找
         $find = false;
         if(is_array($role_id_priv)&&!empty($role_id_priv)){

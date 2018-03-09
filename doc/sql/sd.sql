@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50635
 File Encoding         : 65001
 
-Date: 2018-02-09 17:40:06
+Date: 2018-03-09 16:51:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,7 +41,7 @@ CREATE TABLE `sd_admin_menu` (
   KEY `status` (`status`) USING BTREE,
   KEY `model` (`c`) USING BTREE,
   KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
 -- Records of sd_admin_menu
@@ -62,6 +62,16 @@ INSERT INTO `sd_admin_menu` VALUES ('14', '0', 'Admin', 'Main', 'index', '', '0'
 INSERT INTO `sd_admin_menu` VALUES ('15', '5', 'Admin', 'Role', 'role_setting', '', '0', '0', '角色权限设置', '', '', '0', null, '0', null, null, null);
 INSERT INTO `sd_admin_menu` VALUES ('17', '14', 'Admin', 'Main', 'ajaxgetmenu', '', '0', '0', 'ajax获取菜单', '', '', '0', null, '0', null, null, null);
 INSERT INTO `sd_admin_menu` VALUES ('18', '3', 'Admin', 'System', 'menu_edit', '', '0', '0', '编辑菜单', '', '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('19', '0', 'Admin', 'Category', '#', '', '0', '1', '栏目管理', 'menu-icon glyphicon glyphicon-th-list', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('20', '19', 'Admin', 'Category', 'category_list', '', '0', '1', '栏目列表', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('21', '19', 'Admin', 'Category', 'category_add', '', '0', '0', '添加栏目', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('22', '19', 'Admin', 'Category', 'category_edit', '', '0', '0', '编辑栏目', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('23', '19', 'Admin', 'Category', 'category_delete', '', '0', '0', '删除栏目', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('24', '0', 'Admin', 'Content', '#', '', '0', '1', '内容管理', 'menu-icon glyphicon glyphicon-file', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('25', '24', 'Admin', 'Content', 'content_list', '', '0', '1', '内容列表', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('26', '24', 'Admin', 'Content', 'content_add', '', '0', '0', '添加内容', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('27', '24', 'Admin', 'Content', 'content_edit', '', '0', '0', '编辑内容', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('28', '24', 'Admin', 'Content', 'content_delete', '', '0', '0', '删除内容', '', '', '0', null, '0', null, null, '');
 
 -- ----------------------------
 -- Table structure for `sd_admin_role`
@@ -122,6 +132,11 @@ INSERT INTO `sd_admin_role_priv` VALUES ('1', '12', 'Admin', 'User', 'user_add',
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '13', 'Admin', 'User', 'user_delete', '');
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '14', 'Admin', 'Main', 'index', '');
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '17', 'Admin', 'Main', 'ajaxgetmenu', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '19', 'Admin', 'Category', '#', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '20', 'Admin', 'Category', 'category_list', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '21', 'Admin', 'Category', 'category_add', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '22', 'Admin', 'Category', 'category_edit', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '23', 'Admin', 'Category', 'category_delete', '');
 
 -- ----------------------------
 -- Table structure for `sd_category`
@@ -130,20 +145,23 @@ DROP TABLE IF EXISTS `sd_category`;
 CREATE TABLE `sd_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `model_id` smallint(5) NOT NULL DEFAULT '1' COMMENT '模型ID',
-  `catname` varchar(40) NOT NULL,
   `parent_id` int(11) NOT NULL,
+  `catname` varchar(40) NOT NULL,
+  `catdir` varchar(20) NOT NULL,
+  `image` varchar(200) DEFAULT NULL,
   `description` varchar(200) DEFAULT NULL,
-  `arc_count` int(11) NOT NULL DEFAULT '0' COMMENT '文章数',
-  `setting` text COMMENT 'seo json',
-  `list_order` smallint(5) NOT NULL DEFAULT '0',
   `is_menu` tinyint(2) NOT NULL DEFAULT '0',
   `status` tinyint(2) NOT NULL DEFAULT '0',
+  `setting` text COMMENT 'seo json',
+  `arc_count` int(11) NOT NULL DEFAULT '0' COMMENT '文章数',
+  `list_order` smallint(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_category
 -- ----------------------------
+INSERT INTO `sd_category` VALUES ('1', '1', '0', '诗意人生', 'poetic_life', '', ' ', '1', '1', '{\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"description\":\"\"}', '3', '0');
 
 -- ----------------------------
 -- Table structure for `sd_category_priv`
@@ -432,6 +450,56 @@ CREATE TABLE `sd_config` (
 -- Records of sd_config
 -- ----------------------------
 INSERT INTO `sd_config` VALUES ('1', '{\"info\":{\"email\":\"zhangxiaoqiang@qq.com\",\"site_name\":\"\\u9ad8\\u6027\\u80fd\\u5185\\u5bb9\\u7ba1\\u7406\\u7cfb\\u7edf\",\"keywords\":\"\\u9ad8\\u6027\\u80fd \\u7ba1\\u7406\\u7cfb\\u7edf\",\"description\":\"\",\"status\":\"1\",\"down_description\":\"2\\u6708\\u5c06\\u5f00\\u653e..\"},\"attachment\":{\"size\":\"1024\",\"upload_allowext\":\"jpg|jpeg|gif|bmp|png|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|rar|zip|swf\",\"watermark_enable\":\"0\",\"image\":\"\"},\"params\":{\"gzip\":\"1\",\"admin_log\":\"1\",\"static\":\"\",\"upload_url\":\"\"}}');
+
+-- ----------------------------
+-- Table structure for `sd_content`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_content`;
+CREATE TABLE `sd_content` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `catid` int(10) NOT NULL,
+  `title` varchar(150) NOT NULL,
+  `thumb` varchar(150) NOT NULL,
+  `keywords` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `username` varchar(60) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `update_time` int(11) NOT NULL,
+  `status` tinyint(2) NOT NULL DEFAULT '0',
+  `gourl` varchar(150) NOT NULL COMMENT '跳转链接',
+  `body` text NOT NULL,
+  `copyfrom` varchar(40) NOT NULL DEFAULT '本站' COMMENT '来源',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_content
+-- ----------------------------
+INSERT INTO `sd_content` VALUES ('1', '1', '诗意人生', '', '诗意 人生', '测试题1331', 'ming', '1520585025', '1520585025', '0', 'https://baidu.com', '', '本站');
+INSERT INTO `sd_content` VALUES ('2', '1', '诗意人生', '', '诗意 人生', '测试题13317', 'ming', '1520585093', '1520585093', '0', 'https://baidu.com', '', '本站');
+INSERT INTO `sd_content` VALUES ('3', '1', '诗意人生', '', '诗意 人生', '测试题1331733', 'ming', '1520585238', '1520585238', '0', 'https://baidu.com', '', '本站');
+
+-- ----------------------------
+-- Table structure for `sd_content_hits`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_content_hits`;
+CREATE TABLE `sd_content_hits` (
+  `content_id` int(11) NOT NULL,
+  `catid` int(11) NOT NULL,
+  `views` int(10) NOT NULL DEFAULT '0',
+  `yesterdayviews` int(10) NOT NULL DEFAULT '0',
+  `dayviews` int(10) NOT NULL DEFAULT '0',
+  `weekviews` int(10) NOT NULL DEFAULT '0',
+  `monthviews` int(10) NOT NULL DEFAULT '0',
+  `updatetime` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_content_hits
+-- ----------------------------
+INSERT INTO `sd_content_hits` VALUES ('1', '1', '0', '0', '0', '0', '0', '1520585025');
+INSERT INTO `sd_content_hits` VALUES ('2', '1', '0', '0', '0', '0', '0', '1520585093');
+INSERT INTO `sd_content_hits` VALUES ('3', '1', '0', '0', '0', '0', '0', '1520585238');
 
 -- ----------------------------
 -- Table structure for `sd_log`
@@ -5428,6 +5496,28 @@ INSERT INTO `sd_stats` VALUES ('114', '20170911', '2048112', '0', '81949', '0', 
 INSERT INTO `sd_stats` VALUES ('115', '20170912', '410325', '0', '0', '0', '0', '0', '0', '0');
 INSERT INTO `sd_stats` VALUES ('116', '20170913', '1', '0', '0', '0', '0', '0', '0', '0');
 INSERT INTO `sd_stats` VALUES ('117', '20170914', '17', '0', '0', '0', '0', '0', '0', '0');
+
+-- ----------------------------
+-- Table structure for `sd_tags`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_tags`;
+CREATE TABLE `sd_tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(60) NOT NULL,
+  `content_id` int(11) NOT NULL,
+  `ucwords` char(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_tags
+-- ----------------------------
+INSERT INTO `sd_tags` VALUES ('1', '诗意', '1', 'S');
+INSERT INTO `sd_tags` VALUES ('2', '人生', '1', 'R');
+INSERT INTO `sd_tags` VALUES ('3', '诗意', '2', 'S');
+INSERT INTO `sd_tags` VALUES ('4', '人生', '2', 'R');
+INSERT INTO `sd_tags` VALUES ('5', '诗意', '3', 'S');
+INSERT INTO `sd_tags` VALUES ('6', '人生', '3', 'R');
 
 -- ----------------------------
 -- Table structure for `sd_task_log`

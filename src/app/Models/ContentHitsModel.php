@@ -9,14 +9,14 @@
 namespace app\Models;
 
 
-class ContentModel extends BaseModel
+class ContentHitsModel extends BaseModel
 {
 
     /**
      * 数据库表名称，不包含前缀
      * @var string
      */
-    private $table = 'content';
+    private $table = 'content_hits';
 
 
     public function getTable(){
@@ -29,7 +29,7 @@ class ContentModel extends BaseModel
      */
     public function getAll(){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->orderBy('id','asc')
+            ->orderBy('content_id','asc')
             ->select('*')
             ->coroutineSend();
         if(empty($r['result'])){
@@ -43,9 +43,9 @@ class ContentModel extends BaseModel
      * @param int $role_id
      * @return bool
      */
-    public function getById(int $role_id,$fields='*'){
+    public function getById(int $content_id,$fields='*'){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('id',$role_id)
+            ->where('content_id',$content_id)
             ->select($fields)
             ->coroutineSend();
         if(empty($r['result'])){
@@ -59,9 +59,9 @@ class ContentModel extends BaseModel
      * @param $id
      * @return bool
      */
-    public function deleteById(int $id){
+    public function deleteById(int $content_id){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('id',$id)->delete()->coroutineSend();
+            ->where('content_id',$content_id)->delete()->coroutineSend();
         //print_r($r);
         if(empty($r['result'])){
             return false;
@@ -91,7 +91,7 @@ class ContentModel extends BaseModel
         if(empty($r['result'])){
             return false;
         }else{
-            return $r ;
+            return $r['result'] ;
         }
     }
 

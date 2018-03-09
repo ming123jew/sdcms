@@ -120,4 +120,19 @@ class CategoryModel extends BaseModel
         }
     }
 
+    /**
+     * 自增
+     * @return bool
+     */
+    public function setInc(int $catid, string $field, int $num=1){
+        $sql = 'update '.$this->prefix.$this->table.' set '.$field.'='.$field.'+'.$num.' where id='.$catid;
+        $r = yield $this->mysql_pool->dbQueryBuilder->coroutineSend(null,$sql);
+
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return ($r['result']);
+        }
+    }
+
 }

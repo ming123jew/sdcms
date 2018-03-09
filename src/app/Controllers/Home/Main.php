@@ -26,7 +26,6 @@ class Main extends Base
 
     public function http_hello(){
 
-
         $return = [
             '0'=>'hi.'
         ];

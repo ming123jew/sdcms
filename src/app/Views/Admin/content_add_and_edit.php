@@ -133,13 +133,13 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">标题：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input type="text" class="form-control" name="info[title]" value=""/>
+                                                                    <input type="text" class="form-control" name="info[title]" />
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">来源：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input class="form-control" name="info[copyfrom]" type="text" value=""/>
+                                                                    <input class="form-control" name="info[copyfrom]" type="text" />
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
