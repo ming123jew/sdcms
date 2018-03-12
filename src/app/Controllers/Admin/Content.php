@@ -44,6 +44,21 @@ class Content extends Base
             ];
             $this->http_output->end(json_encode($end),false);
         }else{
+            $this->ContentModel =  $this->loader->model('ContentModel',$this);
+            $p = intval( $this->http_input->postGet('p') );
+            if($p == 0){
+                $p = 1;
+            }
+            $end = 10;
+            $start = ($p-1)*$end;
+            $r = yield $this->ContentModel->getAllByPage($start,$end);
+            if($r){
+                foreach ($r as $n=> $v) {
+                    $r[$n]['str_manage'] = (yield check_role('Admin', 'Content', 'content_edit', $this)) ? '<a href="' . url('Admin', 'Content', 'content_edit', ["id" => $v['id']]) . '">编辑</a> |' : '';
+                    $r[$n]['str_manage'] .= (yield check_role('Admin', 'Content', 'content_delete', $this)) ? '<a  onclick="content_delete(' . $v['id'] . ')" href="javascript:;">删除</a>' : '';
+                }
+            }
+            parent::templateData('list',$r);
 
             parent::templateData('test',1);
             //web or app
@@ -60,8 +75,10 @@ class Content extends Base
     public function http_content_add()
     {
         if($this->http_input->getRequestMethod()=='POST'){
+            //数据处理
             $data['info'] = $this->http_input->postGet('info');
             $data['info']['body'] = $this->http_input->postGet('editorValue');
+            //获取登录信息
             $login_session = self::get_login_session();
             $data['info']['username'] = $login_session['username'];
             $data['info']['create_time'] = time();
@@ -70,6 +87,9 @@ class Content extends Base
                 unset($data['info']['isgourl']);
             }else{
                 $data['info']['gourl'] = '';
+            }
+            if(empty($data['info']['copyfrom'])){
+                $data['info']['copyfrom'] = '本站';
             }
 
             //插入主表
@@ -114,25 +134,13 @@ class Content extends Base
             }
 
         }else{
+
+            //显示添加内容页面
             $parent_id  =  $this->http_input->postGet('parent_id') ?? 0;
-            $this->CategoryModel =  $this->loader->model('CategoryModel',$this);
-            $all = yield $this->CategoryModel->getAll();
-            $info='';
+            //显示分类
+            $selectCategorys= yield self::_get_category_info(intval($parent_id));
 
-            if($all) {
-                $selected = $parent_id;
-                $tree = new Tree();
-                foreach ($all as $r) {
-                    $r['selected'] = $r['id'] == $selected ? 'selected' : '';
-                    $array[] = $r;
-                    $str = "<option value='\$id' \$selected>\$spacer \$catname</option>";
-                    $tree->init($array);
-                    $parentid = isset($parent_id)?intval($parent_id):0;
-                    $info = $tree->get_tree($parentid, $str);
-                }
-            }
-
-            parent::templateData('selectCategorys',$info);
+            parent::templateData('selectCategorys',$selectCategorys);
             parent::templateData('test',1);
             parent::templateData('token',token('__CONTENT_ADD__'));
             //web or app
@@ -141,6 +149,75 @@ class Content extends Base
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
             });
         }
+    }
+
+    /**
+     * 编辑内容
+     */
+    public function http_content_edit()
+    {
+        if($this->http_input->getRequestMethod()=='POST'){
+            $data = $this->http_input->post('info');
+            $id = $data['id'];
+            unset($data['id']);
+            $this->ContentModel =  $this->loader->model('ContentModel',$this);
+            $r_content_model = yield $this->ContentModel->updateById($id,$data);
+            if(!$r_content_model){
+                parent::httpOutputTis('ContentModel编辑请求失败.');
+            }else{
+                parent::httpOutputEnd('权限更新成功.','权限更新失败.',$r_content_model);
+            }
+        }else{
+            $id = $this->http_input->get('id');
+            $this->ContentModel =  $this->loader->model('ContentModel',$this);
+            $d = yield $this->ContentModel->getById($id);
+            if($id && $d){
+                //自动选择分类
+                $selectCategorys= yield self::_get_category_info(intval($d['catid']));
+                parent::templateData('d_content_model',$d);
+                parent::templateData('selectCategorys',$selectCategorys);
+                parent::webOrApp(function (){
+                    $template = $this->loader->view('app::Admin/content_add_and_edit');
+                    $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+                });
+            }else{
+                $this->http_output->setHeader('Content-type','text/html;charset=utf-8');
+                $this->http_output->end('参数错误');
+            }
+        }
+    }
+
+    /**
+     * 删除内容
+     */
+    public function http_content_delete()
+    {
+
+    }
+
+    /**
+     * 获取分类内容
+     * @param int $parent_id
+     * @return string
+     */
+    private function _get_category_info(int $parent_id)
+    {
+        //显示分类
+        $this->CategoryModel =  $this->loader->model('CategoryModel',$this);
+        $all = yield $this->CategoryModel->getAll();
+        $info='';
+        if($all) {
+            $selected = $parent_id;
+            $tree = new Tree();
+            foreach ($all as $r) {
+                $r['selected'] = $r['id'] == $selected ? 'selected' : '';
+                $array[] = $r;
+                $str = "<option value='\$id' \$selected>\$spacer \$catname</option>";
+                $tree->init($array);
+                $info = $tree->get_tree(0, $str);
+            }
+        }
+        return $info;
     }
 
     private function _check_title(){

@@ -65,7 +65,5 @@ class ChinesePinyin{
 			$ucwords = implode($delimiter,str_split($ucwords));
 		}
 		return $ucwords;
-		
-		
 	}
 }

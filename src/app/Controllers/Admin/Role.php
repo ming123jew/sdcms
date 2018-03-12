@@ -105,7 +105,7 @@ class Role  extends Base{
                     $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
                 });
             }else{
-
+                $this->http_output->end('参数错误');
             }
 
         }

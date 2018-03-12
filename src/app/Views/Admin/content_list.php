@@ -114,9 +114,21 @@ Purchase: http://wrapbootstrap.com
                                     </th>
                                 </tr>
                                 </thead>
+                                <?php foreach($data['list'] as $key=>$value){?>
                                 <tbody>
-
+                                    <tr>
+                                        <td><?php echo $value['id'];?></td>
+                                        <td><?php echo $value['title'];?></td>
+                                        <td><?php echo $value['views'];?></td>
+                                        <td><?php echo $value['username'];?></td>
+                                        <td><?php if($value['status']){echo '<span class="typcn typcn-tick"></span>';}else{echo  '<span class="typcn typcn-times"></span>';};?></td>
+                                        <td><?php echo date('Y-m-d H:i',$value['update_time']);?></td>
+                                        <td>
+                                            <?php echo $value['str_manage']; ?>
+                                        </td>
+                                    </tr>
                                 </tbody>
+                                <?php } ?>
                             </table>
 
                             <div class="footer">

@@ -95,6 +95,7 @@ Purchase: http://wrapbootstrap.com
 
                             <div class="widget-body">
                                 <form id="form" method="post" class="form-horizontal">
+                                    <input name="info[id]" id="id" value="<?php echo $data['d_content_model']['id'];?>"/>
                                     <div class="widget-main ">
                                         <div class="tabbable">
                                             <ul class="nav nav-tabs tabs-flat" id="myTab11">
@@ -133,7 +134,7 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">标题：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input type="text" class="form-control" name="info[title]" />
+                                                                    <input type="text" class="form-control" name="info[title]" value="<?php echo $data['d_content_model']['id'];?>" />
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
@@ -381,7 +382,7 @@ Purchase: http://wrapbootstrap.com
             submitHandler: function (validator, form, submitButton) {
                 // Do nothing
                 //alert('here.')
-
+                var id=$('').val();
                 // 实用ajax提交表单
                 $.post('<?php echo  url('','','content_add');?>', form.serialize(), function(result) {
                     // .自定义回调逻辑

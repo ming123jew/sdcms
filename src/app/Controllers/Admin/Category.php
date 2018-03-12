@@ -130,4 +130,13 @@ class Category extends Base
         }
     }
 
+    public function http_category_edit()
+    {
+
+    }
+
+    public function http_category_delete()
+    {
+
+    }
 }

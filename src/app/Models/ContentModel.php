@@ -8,7 +8,6 @@
 
 namespace app\Models;
 
-
 class ContentModel extends BaseModel
 {
 
@@ -24,13 +23,35 @@ class ContentModel extends BaseModel
     }
 
     /**
-     * 获取所有菜单
+     * 获取所有数据
      * @return bool
      */
     public function getAll(){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
             ->orderBy('id','asc')
             ->select('*')
+            ->coroutineSend();
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r['result'] ;
+        }
+    }
+
+    /**
+     * 后台列表
+     * @param int $start
+     * @param int $end
+     * @return bool
+     */
+    public function getAllByPage(int $start,int $end=10){
+
+        $m = $this->loader->model('ContentHitsModel',$this);
+        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
+            ->join($m->getTable(),'a.id=b.content_id','left join','b')
+            ->orderBy('a.id','desc')
+            ->select('a.*,b.*')
+            ->limit("{$start},{$end}")
             ->coroutineSend();
         if(empty($r['result'])){
             return false;
@@ -51,7 +72,7 @@ class ContentModel extends BaseModel
         if(empty($r['result'])){
             return false;
         }else{
-            return $r['result'] ;
+            return $r['result'][0] ;
         }
     }
 
@@ -91,7 +112,7 @@ class ContentModel extends BaseModel
         if(empty($r['result'])){
             return false;
         }else{
-            return $r ;
+            return $r ;//插入返回所有结果集
         }
     }
 

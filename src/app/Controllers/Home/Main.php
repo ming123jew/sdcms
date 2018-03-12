@@ -32,6 +32,17 @@ class Main extends Base
         $this->http_output->end($return,false);
     }
 
+    public function http_redis_set(){
+        $r = yield $this->redis_pool->getCoroutine()->set('aa','aa');
+        print_r($r);
+        $this->http_output->end($r);
+    }
+
+    public function http_redis_get(){
+        $r = yield $this->redis_pool->getCoroutine()->get('aa');
+        $this->http_output->end($r);
+    }
+
     /**
      * http测试
      */
