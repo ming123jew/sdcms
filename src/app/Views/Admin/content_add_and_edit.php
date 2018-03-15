@@ -134,7 +134,7 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">标题：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input type="text" class="form-control" name="info[title]" value="<?php echo $data['d_content_model']['id'];?>" />
+                                                                    <input type="text" class="form-control" name="info[title]" value="<?php echo $data['d_content_model']['title'];?>" />
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
@@ -146,7 +146,7 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">关键词：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input class="form-control" name="info[keywords]" type="text"/> * 多个使用空格分开
+                                                                    <input class="form-control" name="info[keywords]" type="text" value="<?php echo $data['d_content_model']['keywords'];?>"/> * 多个使用空格分开
                                                                 </div>
                                                             </div>
 
@@ -161,7 +161,7 @@ Purchase: http://wrapbootstrap.com
                                                                         <img src="" id="show_img" width="200" style="width: 200px;margin: 0 18px;"/>
                                                                     </div>
                                                                     <div style="clear: both;padding-top: 6px;"></div>
-                                                                    <input class="form-control" id="thumb" name="info[thumb]" type="text" value=""/>
+                                                                    <input class="form-control" id="thumb" name="info[thumb]" type="text" value="<?php echo $data['d_content_model']['thumb'];?>"/>
                                                                 </div>
                                                             </div>
 
@@ -169,14 +169,14 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">简要：</label>
                                                                 <div class="col-lg-8">
-                                                                    <textarea name="info[description]" class="form-control" rows="3"></textarea>
+                                                                    <textarea name="info[description]" class="form-control" rows="3"><?php echo $data['d_content_model']['description'];?></textarea>
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">跳转：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input style="position: initial;opacity: inherit;" name="info[isgourl]" type="checkbox" id="isgourl" onclick="rusegourl();">
+                                                                    <input style="position: initial;opacity: inherit;" name="info[isgourl]" type="checkbox" id="isgourl" onclick="rusegourl();" <?php if($data['d_content_model']['gourl']){?><?php } ?>>
                                                                     <input class="form-control" id="gourl" name="info[gourl]" type="text" value="" disabled="disabled"/> * 多个使用空格分开
                                                                 </div>
                                                             </div>
