@@ -157,25 +157,54 @@ class Content extends Base
     public function http_content_edit()
     {
         if($this->http_input->getRequestMethod()=='POST'){
-            $data = $this->http_input->post('info');
-            $id = $data['id'];
-            unset($data['id']);
+            //数据处理
+            $data['info'] = $this->http_input->postGet('info');
+            $data['info']['body'] = $this->http_input->postGet('editorValue');
+            //获取登录信息
+            $login_session = self::get_login_session();
+            $data['info']['username'] = $login_session['username'];
+            $data['info']['create_time'] = time();
+            $data['info']['update_time'] = time();
+            if($data['info']['isgourl']=='on'&&$data['info']['gourl']){
+                unset($data['info']['isgourl']);
+            }else{
+                $data['info']['gourl'] = '';
+            }
+            if(empty($data['info']['copyfrom'])){
+                $data['info']['copyfrom'] = '本站';
+            }
+            $id = $data['info']['id'];
+            unset($data['info']['id']);
+
             $this->ContentModel =  $this->loader->model('ContentModel',$this);
             $r_content_model = yield $this->ContentModel->updateById($id,$data);
             if(!$r_content_model){
                 parent::httpOutputTis('ContentModel编辑请求失败.');
             }else{
+                //待续start...
+                //更新统计表
+                $this->ContentHitsModel =  $this->loader->model('ContentHitsModel',$this);
+                //更新栏目数据arc_count
+                $this->CategoryModel =  $this->loader->model('CategoryModel',$this);
+                //更新标签表
+                $this->TagsModel =  $this->loader->model('TagsModel',$this);
+                //待续end...
+
                 parent::httpOutputEnd('权限更新成功.','权限更新失败.',$r_content_model);
             }
         }else{
             $id = $this->http_input->get('id');
             $this->ContentModel =  $this->loader->model('ContentModel',$this);
             $d = yield $this->ContentModel->getById($id);
+
             if($id && $d){
                 //自动选择分类
+
                 $selectCategorys= yield self::_get_category_info(intval($d['catid']));
+
                 parent::templateData('d_content_model',$d);
                 parent::templateData('selectCategorys',$selectCategorys);
+                parent::templateData('token',token('__CONTENT_EDIT__'));
                 parent::webOrApp(function (){
                     $template = $this->loader->view('app::Admin/content_add_and_edit');
                     $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));

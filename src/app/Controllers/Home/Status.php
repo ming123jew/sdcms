@@ -10,6 +10,7 @@ namespace app\Controllers\Home;
 use Server\Memory\Cache;
 use app\Tasks\WsCache;
 use app\Tasks\WebCache;
+use Server\Pack\LenJsonPack;
 
 class Status extends Base
 {
@@ -102,14 +103,37 @@ class Status extends Base
             ]
         );
     }
+
+
     public function onClose()
     {
-        $this->destroy();
+        var_dump('close');
+       // $this->destroy();
     }
     public function onConnect()
     {
-        $this->destroy();
+        var_dump('connect');
+        //var_dump($this->client_data);
+
+       // $p = new LenJsonPack();
+        //$this->send($p->pack('tcp connect'));
+        //$this->send('avc');
+        //$this->destroy();
     }
+
+
+
+    public function onReceive(){
+        var_dump($this->client_data);
+        $this->send('avc2');
+    }
+
+    public function onPacket(){
+        var_dump($this->client_data);
+        $this->send('avc3');
+    }
+
+
 
     /**
      * 给[]加粗
@@ -160,6 +184,26 @@ class Status extends Base
         }
         fclose($fp);
         return $lines;
+    }
+
+
+    public function sendAll($data)
+    {
+        $this->sendToAll($data);
+    }
+    public function pub($sub, $data)
+    {
+        $this->sendPub($sub, $data);
+    }
+    public function sub($sub)
+    {
+        $this->bindUid($this->fd);
+        $this->addSub($sub);
+        $this->send("ok.$this->fd");
+    }
+
+    public function testTcp(){
+        $this->send("yes");
     }
 
 }

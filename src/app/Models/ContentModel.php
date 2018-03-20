@@ -64,15 +64,15 @@ class ContentModel extends BaseModel
      * @param int $role_id
      * @return bool
      */
-    public function getById(int $role_id,$fields='*'){
+    public function getById(int $id,$fields='*'){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('id',$role_id)
+            ->where('id',$id)
             ->select($fields)
             ->coroutineSend();
         if(empty($r['result'])){
             return false;
         }else{
-            return $r['result'][0] ;
+            return $r['result'][0];
         }
     }
 
@@ -113,6 +113,25 @@ class ContentModel extends BaseModel
             return false;
         }else{
             return $r ;//插入返回所有结果集
+        }
+    }
+
+    /**
+     * 根据ID更新单条
+     * @param array $intoColumns
+     * @param array $intoValues
+     * @return bool
+     */
+    public function updateById(int $id,array $columns_values){
+        $r = yield $this->mysql_pool->dbQueryBuilder->update($this->prefix.$this->table)
+            ->set($columns_values)
+            ->where('id',$id)
+            ->coroutineSend();
+        //print_r($r);
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r['result'] ;
         }
     }
 

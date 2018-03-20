@@ -95,7 +95,7 @@ Purchase: http://wrapbootstrap.com
 
                             <div class="widget-body">
                                 <form id="form" method="post" class="form-horizontal">
-                                    <input name="info[id]" id="id" value="<?php echo $data['d_content_model']['id'];?>"/>
+                                    <input name="info[id]" id="id" type="hidden" value="<?php echo $data['d_content_model']['id'];?>"/>
                                     <div class="widget-main ">
                                         <div class="tabbable">
                                             <ul class="nav nav-tabs tabs-flat" id="myTab11">
@@ -140,7 +140,7 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">来源：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input class="form-control" name="info[copyfrom]" type="text" />
+                                                                    <input class="form-control" name="info[copyfrom]" type="text" value="<?php echo $data['d_content_model']['copyfrom'];?>" />
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
@@ -158,7 +158,7 @@ Purchase: http://wrapbootstrap.com
                                                                         <p>点击上传，或将文件拖拽到此处</p>
                                                                     </div>
                                                                     <div style="float: left;">
-                                                                        <img src="" id="show_img" width="200" style="width: 200px;margin: 0 18px;"/>
+                                                                        <img src="<?php echo $data['d_content_model']['thumb'];?>" id="show_img" width="200" style="width: 200px;margin: 0 18px;"/>
                                                                     </div>
                                                                     <div style="clear: both;padding-top: 6px;"></div>
                                                                     <input class="form-control" id="thumb" name="info[thumb]" type="text" value="<?php echo $data['d_content_model']['thumb'];?>"/>
@@ -176,8 +176,8 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">跳转：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input style="position: initial;opacity: inherit;" name="info[isgourl]" type="checkbox" id="isgourl" onclick="rusegourl();" <?php if($data['d_content_model']['gourl']){?><?php } ?>>
-                                                                    <input class="form-control" id="gourl" name="info[gourl]" type="text" value="" disabled="disabled"/> * 多个使用空格分开
+                                                                    <input style="position: initial;opacity: inherit;" name="info[isgourl]" type="checkbox" id="isgourl" onclick="rusegourl();" <?php if($data['d_content_model']['gourl']){?>checked="checked"<?php } ?>>
+                                                                    <input class="form-control" id="gourl" name="info[gourl]" type="text" value=""  <?php if(empty($data['d_content_model']['gourl'])){?>disabled="disabled"<?php } ?>/>
                                                                 </div>
                                                             </div>
 
@@ -213,7 +213,7 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
 
                                                                 <div class="editor">
-                                                                    <script id="editor" type="text/plain"><?php //htmlspecialchars_decode?></script>
+                                                                    <script id="editor" type="text/plain"><?php echo htmlspecialchars_decode($data['d_content_model']['body']);?></script>
                                                                     <button type="button" onclick="getLocalData()" >获取草稿箱内容</button>
                                                                     <button type="button" onclick="clearLocalData()" >清空草稿箱</button>
                                                                 </div>
@@ -382,9 +382,14 @@ Purchase: http://wrapbootstrap.com
             submitHandler: function (validator, form, submitButton) {
                 // Do nothing
                 //alert('here.')
-                var id=$('').val();
+                var id=parseInt($('#id').val());
                 // 实用ajax提交表单
-                $.post('<?php echo  url('','','content_add');?>', form.serialize(), function(result) {
+                if(id==0){
+                    var post_url = '<?php echo  url('','','content_add');?>';
+                }else{
+                    var post_url = '<?php echo  url('','','content_edit');?>';
+                }
+                $.post(post_url, form.serialize(), function(result) {
                     // .自定义回调逻辑
                     if(result.status==1){
                         $("#modal-success").find(".modal-body").html(result.message);
