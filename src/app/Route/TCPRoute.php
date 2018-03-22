@@ -26,8 +26,9 @@ class TCPRoute implements IRoute
      */
     public function handleClientData($data)
     {
-        $this->client_data = $data['data'];
-        var_dump($this->client_data);
+
+        $this->client_data = $data;
+        print_r($this->client_data);
         if (isset($this->client_data->controller_name) && isset($this->client_data->method_name)) {
             return $this->client_data;
         } else {
@@ -43,7 +44,7 @@ class TCPRoute implements IRoute
      */
     public function handleClientRequest($request)
     {
-        print_r("aaaaaaaaaaaa");
+
         $this->client_data->path = $request->server['path_info'];
         $route = explode('/', $request->server['path_info']);
         $count = count($route);

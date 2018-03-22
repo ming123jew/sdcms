@@ -6,7 +6,7 @@
  * Time: 下午1:44
  */
 
-namespace app\Models;
+namespace app\Models\Data;
 
 
 class RoleModel extends BaseModel

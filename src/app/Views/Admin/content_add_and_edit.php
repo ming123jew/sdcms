@@ -95,7 +95,7 @@ Purchase: http://wrapbootstrap.com
 
                             <div class="widget-body">
                                 <form id="form" method="post" class="form-horizontal">
-                                    <input name="info[id]" id="id" type="hidden" value="<?php echo $data['d_content_model']['id'];?>"/>
+                                    <input name="info[id]" id="id" type="hidden" value="<?php echo $data['d_content_model']['id']??0;?>"/>
                                     <div class="widget-main ">
                                         <div class="tabbable">
                                             <ul class="nav nav-tabs tabs-flat" id="myTab11">
@@ -124,6 +124,7 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">请选择栏目：</label>
                                                                 <div class="col-lg-4">
+                                                                    <input type="hidden" name="info[oldcatid]" value="<?php echo $data['d_content_model']['catid']??'';?>"/>
                                                                     <select class="form-control" name="info[catid]" style="">
                                                                         <option value="">≡ 请选择 ≡</option>
                                                                         <?php echo $data['selectCategorys'];?>
@@ -134,19 +135,19 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">标题：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input type="text" class="form-control" name="info[title]" value="<?php echo $data['d_content_model']['title'];?>" />
+                                                                    <input type="text" class="form-control" name="info[title]" value="<?php echo $data['d_content_model']['title']??'';?>" />
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">来源：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input class="form-control" name="info[copyfrom]" type="text" value="<?php echo $data['d_content_model']['copyfrom'];?>" />
+                                                                    <input class="form-control" name="info[copyfrom]" type="text" value="<?php echo $data['d_content_model']['copyfrom']??'';?>" />
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">关键词：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input class="form-control" name="info[keywords]" type="text" value="<?php echo $data['d_content_model']['keywords'];?>"/> * 多个使用空格分开
+                                                                    <input class="form-control" name="info[keywords]" type="text" value="<?php echo $data['d_content_model']['keywords']??'';?>"/> * 多个使用空格分开
                                                                 </div>
                                                             </div>
 
@@ -158,10 +159,10 @@ Purchase: http://wrapbootstrap.com
                                                                         <p>点击上传，或将文件拖拽到此处</p>
                                                                     </div>
                                                                     <div style="float: left;">
-                                                                        <img src="<?php echo $data['d_content_model']['thumb'];?>" id="show_img" width="200" style="width: 200px;margin: 0 18px;"/>
+                                                                        <img src="<?php echo $data['d_content_model']['thumb']??'';?>" id="show_img" width="200" style="width: 200px;margin: 0 18px;"/>
                                                                     </div>
                                                                     <div style="clear: both;padding-top: 6px;"></div>
-                                                                    <input class="form-control" id="thumb" name="info[thumb]" type="text" value="<?php echo $data['d_content_model']['thumb'];?>"/>
+                                                                    <input class="form-control" id="thumb" name="info[thumb]" type="text" value="<?php echo $data['d_content_model']['thumb']??'';?>"/>
                                                                 </div>
                                                             </div>
 
@@ -169,7 +170,7 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">简要：</label>
                                                                 <div class="col-lg-8">
-                                                                    <textarea name="info[description]" class="form-control" rows="3"><?php echo $data['d_content_model']['description'];?></textarea>
+                                                                    <textarea name="info[description]" class="form-control" rows="3"><?php echo $data['d_content_model']['description']??'';?></textarea>
                                                                 </div>
                                                             </div>
 
@@ -213,7 +214,12 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
 
                                                                 <div class="editor">
-                                                                    <script id="editor" type="text/plain"><?php echo htmlspecialchars_decode($data['d_content_model']['body']);?></script>
+                                                                    <script id="editor" type="text/plain">
+                                                                        <?php
+                                                                        if(isset($data['d_content_model']['body'])){
+                                                                            echo  htmlspecialchars_decode($data['d_content_model']['body']);
+                                                                        }
+                                                                        ?></script>
                                                                     <button type="button" onclick="getLocalData()" >获取草稿箱内容</button>
                                                                     <button type="button" onclick="clearLocalData()" >清空草稿箱</button>
                                                                 </div>

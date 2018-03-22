@@ -1,6 +1,7 @@
 <?php
 namespace app\Controllers\Admin;
 use app\Helpers\Tree;
+use app\Models\Data\UserModel;
 
 /**
  * Created by PhpStorm.
@@ -35,7 +36,7 @@ class User  extends Base{
             ];
             $this->http_output->end(json_encode($end),false);
         }else{
-            $this->UserModel = $this->loader->model('UserModel',$this);
+            $this->UserModel = $this->loader->model(UserModel::class,$this);
             $d_user_model = yield $this->UserModel->getAll();
 
             //增加管理操作

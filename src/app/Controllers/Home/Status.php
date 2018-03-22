@@ -7,6 +7,10 @@
  */
 namespace app\Controllers\Home;
 
+use app\Process\MyProcess;
+use Server\Components\Consul\ConsulHelp;
+use Server\Components\Process\ProcessManager;
+use Server\Components\SDHelp\SDHelpProcess;
 use Server\Memory\Cache;
 use app\Tasks\WsCache;
 use app\Tasks\WebCache;
@@ -125,12 +129,12 @@ class Status extends Base
 
     public function onReceive(){
         var_dump($this->client_data);
-        $this->send('avc2');
+        //$this->send('avc2');
     }
 
     public function onPacket(){
         var_dump($this->client_data);
-        $this->send('avc3');
+        //$this->send('avc3');
     }
 
 
@@ -203,7 +207,51 @@ class Status extends Base
     }
 
     public function testTcp(){
-        $this->send("yes");
+        //$this->send("yes");
+    }
+
+    public function http_test2(){
+        $version    = 1;
+        $result     = 0;
+        $command_id = 1001;
+        $username   = "陈一回";
+        $password   = md5("123456");
+        // 构造包体
+        $bin_body   = pack("a30a32", $username, $password);
+        // 包体长度
+        $body_len   = strlen($bin_body);
+        $bin_head   = pack("nCns", $body_len, $version, $command_id, $result);
+        $bin_data   = $bin_head . $bin_body;
+
+        //echo $bin_data;
+
+
+        file_put_contents( '/home/a.txt', $this->pack("6578616d706c65206865782064617461"));
+
+        $data = yield ProcessManager::getInstance()->getRpcCall(MyProcess::class)->getData();
+        $result = yield ProcessManager::getInstance()->getRpcCallWorker(0)->getPoolStatus();
+        print_r(get_instance()->getWorkerId());
+        //var_dump($result);
+        $this->http_output->end($data);
+    }
+
+    public function encode($buffer)
+    {
+        //|版本|设备|指令|数据|
+        //| 0 |1 ~ 7|8|9~9+n|
+        //获取长度
+        $length = strlen($buffer) - 9;
+        //制作校验码
+        $check = '';
+        //|起始|长度|版本|设备|指令|数据|校验
+        //| 0 | 1 | 2 |3 ~ 9|10|11~11+n|11+n+1~11+n+3|
+        return hex2bin('f0') . pack('c', $length).$buffer . $check;
+    }
+
+// 封装协议体
+    public function pack($data, $topic = null)
+    {
+        return   $this->encode(hex2bin($data));
     }
 
 }

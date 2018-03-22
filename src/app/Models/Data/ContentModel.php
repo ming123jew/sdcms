@@ -6,25 +6,23 @@
  * Time: 下午1:44
  */
 
-namespace app\Models;
+namespace app\Models\Data;
 
-
-class CategoryModel extends BaseModel
+class ContentModel extends BaseModel
 {
 
     /**
      * 数据库表名称，不包含前缀
      * @var string
      */
-    private $table = 'category';
-
+    private $table = 'content';
 
     public function getTable(){
         return $this->prefix.$this->table;
     }
 
     /**
-     * 获取所有菜单
+     * 获取所有数据
      * @return bool
      */
     public function getAll(){
@@ -40,18 +38,40 @@ class CategoryModel extends BaseModel
     }
 
     /**
-     * @param int $role_id
+     * 后台列表
+     * @param int $start
+     * @param int $end
      * @return bool
      */
-    public function getByRoleId(int $role_id,$fields='*'){
-        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('role_id',$role_id)
-            ->select($fields)
+    public function getAllByPage(int $start,int $end=10){
+
+        $m = $this->loader->model('ContentHitsModel',$this);
+        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
+            ->join($m->getTable(),'a.id=b.content_id','left join','b')
+            ->orderBy('a.id','desc')
+            ->select('a.*,b.*')
+            ->limit("{$start},{$end}")
             ->coroutineSend();
         if(empty($r['result'])){
             return false;
         }else{
             return $r['result'] ;
+        }
+    }
+
+    /**
+     * @param int $role_id
+     * @return bool
+     */
+    public function getById(int $id,$fields='*'){
+        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
+            ->where('id',$id)
+            ->select($fields)
+            ->coroutineSend();
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r['result'][0];
         }
     }
 
@@ -75,7 +95,7 @@ class CategoryModel extends BaseModel
      * @param array $arr
      * @return bool
      */
-    public function insertMultiple( array $intoColumns,array $intoValues ){
+    public function insertMultiple( array $intoColumns,array $intoValues ,$transaction_id=null){
         //原生sql执行
 //        $sql = 'INSERT INTO '.$this->prefix.$this->table.'(role_id,m,c,a,menu_id) VALUES';
 //        foreach ($arr as $key=>$value){
@@ -86,7 +106,26 @@ class CategoryModel extends BaseModel
         $r = yield $this->mysql_pool->dbQueryBuilder->insertInto($this->prefix.$this->table)
             ->intoColumns($intoColumns)
             ->intoValues($intoValues)
-            ->coroutineSend();
+            ->coroutineSend($transaction_id);
+        //print_r($r);
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r ;//插入返回所有结果集
+        }
+    }
+
+    /**
+     * 根据ID更新单条
+     * @param array $intoColumns
+     * @param array $intoValues
+     * @return bool
+     */
+    public function updateById(int $id,array $columns_values,$transaction_id=null){
+        $r = yield $this->mysql_pool->dbQueryBuilder->update($this->prefix.$this->table)
+            ->set($columns_values)
+            ->where('id',$id)
+            ->coroutineSend($transaction_id);
         //print_r($r);
         if(empty($r['result'])){
             return false;
@@ -95,44 +134,5 @@ class CategoryModel extends BaseModel
         }
     }
 
-
-    /**
-     * 用于验证权限
-     * @param int $role_id
-     * @param string $m
-     * @param string $c
-     * @param string $a
-     * @param string $fields
-     * @return bool
-     */
-    public function authRole(int $role_id,string $m,string $c,string $a,string $fields='*'){
-        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('role_id',$role_id)
-            ->where('m',$m)
-            ->where('c',$c)
-            ->where('a',$a)
-            ->select($fields)
-            ->coroutineSend();
-        if(empty($r['result'])){
-            return false;
-        }else{
-            return $r['result'][0] ;
-        }
-    }
-
-    /**
-     * 自增
-     * @return bool
-     */
-    public function setInc(int $catid, string $field, int $num=1){
-        $sql = 'update '.$this->prefix.$this->table.' set '.$field.'='.$field.'+'.$num.' where id='.$catid;
-        $r = yield $this->mysql_pool->dbQueryBuilder->coroutineSend(null,$sql);
-
-        if(empty($r['result'])){
-            return false;
-        }else{
-            return ($r['result']);
-        }
-    }
 
 }

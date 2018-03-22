@@ -6,16 +6,17 @@
  * Time: 下午1:44
  */
 
-namespace app\Models;
+namespace app\Models\Data;
 
-class ContentModel extends BaseModel
+
+class TagsModel extends BaseModel
 {
 
     /**
      * 数据库表名称，不包含前缀
      * @var string
      */
-    private $table = 'content';
+    private $table = 'tags';
 
 
     public function getTable(){
@@ -23,35 +24,13 @@ class ContentModel extends BaseModel
     }
 
     /**
-     * 获取所有数据
+     * 获取所有菜单
      * @return bool
      */
     public function getAll(){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->orderBy('id','asc')
+            ->orderBy('content_id','asc')
             ->select('*')
-            ->coroutineSend();
-        if(empty($r['result'])){
-            return false;
-        }else{
-            return $r['result'] ;
-        }
-    }
-
-    /**
-     * 后台列表
-     * @param int $start
-     * @param int $end
-     * @return bool
-     */
-    public function getAllByPage(int $start,int $end=10){
-
-        $m = $this->loader->model('ContentHitsModel',$this);
-        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
-            ->join($m->getTable(),'a.id=b.content_id','left join','b')
-            ->orderBy('a.id','desc')
-            ->select('a.*,b.*')
-            ->limit("{$start},{$end}")
             ->coroutineSend();
         if(empty($r['result'])){
             return false;
@@ -64,15 +43,15 @@ class ContentModel extends BaseModel
      * @param int $role_id
      * @return bool
      */
-    public function getById(int $id,$fields='*'){
+    public function getById(int $content_id,$fields='*'){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('id',$id)
+            ->where('content_id',$content_id)
             ->select($fields)
             ->coroutineSend();
         if(empty($r['result'])){
             return false;
         }else{
-            return $r['result'][0];
+            return $r['result'] ;
         }
     }
 
@@ -80,9 +59,9 @@ class ContentModel extends BaseModel
      * @param $id
      * @return bool
      */
-    public function deleteById(int $id){
+    public function deleteByContentId(int $content_id,$transaction_id=null){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('id',$id)->delete()->coroutineSend();
+            ->where('content_id',$content_id)->delete()->coroutineSend($transaction_id);
         //print_r($r);
         if(empty($r['result'])){
             return false;
@@ -93,10 +72,12 @@ class ContentModel extends BaseModel
 
     /**
      * 插入多条数据
-     * @param array $arr
+     * @param array $intoColumns
+     * @param array $intoValues
+     * @param null $transaction_id
      * @return bool
      */
-    public function insertMultiple( array $intoColumns,array $intoValues ){
+    public function insertMultiple( array $intoColumns,array $intoValues ,$transaction_id=null){
         //原生sql执行
 //        $sql = 'INSERT INTO '.$this->prefix.$this->table.'(role_id,m,c,a,menu_id) VALUES';
 //        foreach ($arr as $key=>$value){
@@ -107,26 +88,7 @@ class ContentModel extends BaseModel
         $r = yield $this->mysql_pool->dbQueryBuilder->insertInto($this->prefix.$this->table)
             ->intoColumns($intoColumns)
             ->intoValues($intoValues)
-            ->coroutineSend();
-        //print_r($r);
-        if(empty($r['result'])){
-            return false;
-        }else{
-            return $r ;//插入返回所有结果集
-        }
-    }
-
-    /**
-     * 根据ID更新单条
-     * @param array $intoColumns
-     * @param array $intoValues
-     * @return bool
-     */
-    public function updateById(int $id,array $columns_values){
-        $r = yield $this->mysql_pool->dbQueryBuilder->update($this->prefix.$this->table)
-            ->set($columns_values)
-            ->where('id',$id)
-            ->coroutineSend();
+            ->coroutineSend($transaction_id);
         //print_r($r);
         if(empty($r['result'])){
             return false;

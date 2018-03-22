@@ -6,7 +6,7 @@
  * Time: 下午1:44
  */
 
-namespace app\Models;
+namespace app\Models\Data;
 
 
 class ContentHitsModel extends BaseModel
@@ -75,7 +75,7 @@ class ContentHitsModel extends BaseModel
      * @param array $arr
      * @return bool
      */
-    public function insertMultiple( array $intoColumns,array $intoValues ){
+    public function insertMultiple( array $intoColumns,array $intoValues,$transaction_id=null ){
         //原生sql执行
 //        $sql = 'INSERT INTO '.$this->prefix.$this->table.'(role_id,m,c,a,menu_id) VALUES';
 //        foreach ($arr as $key=>$value){
@@ -86,7 +86,7 @@ class ContentHitsModel extends BaseModel
         $r = yield $this->mysql_pool->dbQueryBuilder->insertInto($this->prefix.$this->table)
             ->intoColumns($intoColumns)
             ->intoValues($intoValues)
-            ->coroutineSend();
+            ->coroutineSend($transaction_id);
         //print_r($r);
         if(empty($r['result'])){
             return false;
@@ -94,6 +94,27 @@ class ContentHitsModel extends BaseModel
             return $r['result'] ;
         }
     }
+
+
+    /**
+     * 根据ID更新单条
+     * @param int $content_id
+     * @param array $columns_values
+     * @return bool
+     */
+    public function updateByContentId(int $content_id,array $columns_values,$transaction_id=null){
+        $r = yield $this->mysql_pool->dbQueryBuilder->update($this->prefix.$this->table)
+            ->set($columns_values)
+            ->where('content_id',$content_id)
+            ->coroutineSend($transaction_id);
+        //print_r($r);
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r['result'] ;
+        }
+    }
+
 
 
 }

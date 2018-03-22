@@ -66,7 +66,7 @@ class Base extends \app\Controllers\BaseController
     }
 
     /**
-     * @desc 装置模板数据
+     * 装置模板数据
      * @param $key
      * @param $value
      * @return array

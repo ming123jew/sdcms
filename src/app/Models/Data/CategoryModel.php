@@ -6,17 +6,17 @@
  * Time: 下午1:44
  */
 
-namespace app\Models;
+namespace app\Models\Data;
 
 
-class RolePrivModel extends BaseModel
+class CategoryModel extends BaseModel
 {
 
     /**
      * 数据库表名称，不包含前缀
      * @var string
      */
-    private $table = 'admin_role_priv';
+    private $table = 'category';
 
 
     public function getTable(){
@@ -29,7 +29,7 @@ class RolePrivModel extends BaseModel
      */
     public function getAll(){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->orderBy('role_id','asc')
+            ->orderBy('id','asc')
             ->select('*')
             ->coroutineSend();
         if(empty($r['result'])){
@@ -59,9 +59,9 @@ class RolePrivModel extends BaseModel
      * @param $id
      * @return bool
      */
-    public function deleteByRoleId(int $id){
+    public function deleteById(int $id,$transaction_id=null){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('role_id',$id)->delete()->coroutineSend();
+            ->where('id',$id)->delete()->coroutineSend($transaction_id);
         //print_r($r);
         if(empty($r['result'])){
             return false;
@@ -75,7 +75,7 @@ class RolePrivModel extends BaseModel
      * @param array $arr
      * @return bool
      */
-    public function insertMultiple( array $intoColumns,array $intoValues ){
+    public function insertMultiple( array $intoColumns,array $intoValues,$transaction_id=null){
         //原生sql执行
 //        $sql = 'INSERT INTO '.$this->prefix.$this->table.'(role_id,m,c,a,menu_id) VALUES';
 //        foreach ($arr as $key=>$value){
@@ -86,7 +86,7 @@ class RolePrivModel extends BaseModel
         $r = yield $this->mysql_pool->dbQueryBuilder->insertInto($this->prefix.$this->table)
             ->intoColumns($intoColumns)
             ->intoValues($intoValues)
-            ->coroutineSend();
+            ->coroutineSend($transaction_id);
         //print_r($r);
         if(empty($r['result'])){
             return false;
@@ -117,6 +117,36 @@ class RolePrivModel extends BaseModel
             return false;
         }else{
             return $r['result'][0] ;
+        }
+    }
+
+    /**
+     * 自增
+     * @return bool
+     */
+    public function setInc(int $catid, string $field, int $num=1,$transaction_id=null){
+        $sql = 'update '.$this->prefix.$this->table.' set '.$field.'='.$field.'+'.$num.' where id='.$catid;
+        $r = yield $this->mysql_pool->dbQueryBuilder->coroutineSend($transaction_id,$sql);
+
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return ($r['result']);
+        }
+    }
+
+    /**
+     * 自减
+     * @return bool
+     */
+    public function setDec(int $catid, string $field, int $num=1,$transaction_id=null){
+        $sql = 'update '.$this->prefix.$this->table.' set '.$field.'='.$field.'-'.$num.' where id='.$catid;
+        $r = yield $this->mysql_pool->dbQueryBuilder->coroutineSend($transaction_id,$sql);
+
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return ($r['result']);
         }
     }
 

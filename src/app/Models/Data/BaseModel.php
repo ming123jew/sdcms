@@ -6,10 +6,11 @@
  * Time: 下午1:44
  */
 
-namespace app\Models;
+namespace app\Models\Data;
 
 
 use Server\CoreBase\Model;
+
 
 class BaseModel extends Model
 {

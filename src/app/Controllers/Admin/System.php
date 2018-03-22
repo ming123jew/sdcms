@@ -6,8 +6,8 @@
  * Time: 11:04
  */
 namespace app\Controllers\Admin;
-use app\Models\MenuModel;
-use app\Models\ConfigModel;
+use app\Models\Data\MenuModel;
+use app\Models\Data\ConfigModel;
 use app\Helpers\Tree;
 
 /**
@@ -43,7 +43,7 @@ class System extends Base
             $this->http_output->end(json_encode($end),false);
         }else{
 
-            $this->MenuModel =  $this->loader->model('MenuModel',$this);
+            $this->MenuModel =  $this->loader->model(MenuModel::class,$this);
             $all = yield $this->MenuModel->getAll();
             $info = '';
 
@@ -93,7 +93,7 @@ class System extends Base
      */
     public function http_menu_add(){
         if($this->http_input->getRequestMethod()=='POST'){
-            $this->MenuModel =  $this->loader->model('MenuModel',$this);
+            $this->MenuModel =  $this->loader->model(MenuModel::class,$this);
             $data = [
                 $this->http_input->post('parent_id'),
                 $this->http_input->post('name'),
@@ -115,7 +115,7 @@ class System extends Base
 
         }else{
             $parent_id  =  $this->http_input->postGet('parent_id') ?? 0;
-            $this->MenuModel =  $this->loader->model('MenuModel',$this);
+            $this->MenuModel =  $this->loader->model(MenuModel::class,$this);
             $all = yield $this->MenuModel->getAll();
             $info='';
             if($all) {
@@ -148,7 +148,7 @@ class System extends Base
     public function http_menu_edit(){
         $menu_id =  intval($this->http_input->post('menu_id'));
         if($this->http_input->getRequestMethod()=='POST' && $menu_id){
-            $this->MenuModel =  $this->loader->model('MenuModel',$this);
+            $this->MenuModel =  $this->loader->model(MenuModel::class,$this);
             $data = [
                 'parent_id'=> $this->http_input->post('parent_id'),
                 'name'=>$this->http_input->post('name'),
@@ -173,7 +173,7 @@ class System extends Base
             if(!$menu_id){
                 parent::httpOutputTis('参数错误.');
             }else{
-                $this->MenuModel =  $this->loader->model('MenuModel',$this);
+                $this->MenuModel =  $this->loader->model(MenuModel::class,$this);
                 // 查找单条记录
                 $d_menu_model = yield $this->MenuModel->getOneById($menu_id);
                 $parent_id  =  $d_menu_model['parent_id'];
@@ -210,7 +210,7 @@ class System extends Base
         $menu_id =  intval($this->http_input->post('menu_id'));
         if($this->http_input->getRequestMethod()=='POST' && $menu_id){
             //查找是否存在子菜单
-            $this->MenuModel =  $this->loader->model('MenuModel',$this);
+            $this->MenuModel =  $this->loader->model(MenuModel::class,$this);
             $all = yield $this->MenuModel->getAll();
             if($all){
                 $tree       = new Tree();
@@ -238,7 +238,7 @@ class System extends Base
      */
     public function http_config()
     {
-        $this->ConfigModel = $this->loader->model('ConfigModel',$this);
+        $this->ConfigModel = $this->loader->model(ConfigModel::class,$this);
 
         if($this->http_input->getRequestMethod()=='POST'){
 

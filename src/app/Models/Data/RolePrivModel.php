@@ -6,17 +6,17 @@
  * Time: 下午1:44
  */
 
-namespace app\Models;
+namespace app\Models\Data;
 
 
-class TagsModel extends BaseModel
+class RolePrivModel extends BaseModel
 {
 
     /**
      * 数据库表名称，不包含前缀
      * @var string
      */
-    private $table = 'tags';
+    private $table = 'admin_role_priv';
 
 
     public function getTable(){
@@ -29,7 +29,7 @@ class TagsModel extends BaseModel
      */
     public function getAll(){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->orderBy('content_id','asc')
+            ->orderBy('role_id','asc')
             ->select('*')
             ->coroutineSend();
         if(empty($r['result'])){
@@ -43,9 +43,9 @@ class TagsModel extends BaseModel
      * @param int $role_id
      * @return bool
      */
-    public function getById(int $content_id,$fields='*'){
+    public function getByRoleId(int $role_id,$fields='*'){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('content_id',$content_id)
+            ->where('role_id',$role_id)
             ->select($fields)
             ->coroutineSend();
         if(empty($r['result'])){
@@ -59,9 +59,9 @@ class TagsModel extends BaseModel
      * @param $id
      * @return bool
      */
-    public function deleteById(int $content_id){
+    public function deleteByRoleId(int $id){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('content_id',$content_id)->delete()->coroutineSend();
+            ->where('role_id',$id)->delete()->coroutineSend();
         //print_r($r);
         if(empty($r['result'])){
             return false;
@@ -95,5 +95,29 @@ class TagsModel extends BaseModel
         }
     }
 
+
+    /**
+     * 用于验证权限
+     * @param int $role_id
+     * @param string $m
+     * @param string $c
+     * @param string $a
+     * @param string $fields
+     * @return bool
+     */
+    public function authRole(int $role_id,string $m,string $c,string $a,string $fields='*'){
+        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
+            ->where('role_id',$role_id)
+            ->where('m',$m)
+            ->where('c',$c)
+            ->where('a',$a)
+            ->select($fields)
+            ->coroutineSend();
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r['result'][0] ;
+        }
+    }
 
 }

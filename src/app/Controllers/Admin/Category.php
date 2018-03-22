@@ -6,7 +6,7 @@
  * Time: 15:17
  */
 namespace app\Controllers\Admin;
-use app\Models\CategoryModel;
+use app\Models\Data\CategoryModel;
 use app\Helpers\Tree;
 
 /**
@@ -40,7 +40,7 @@ class Category extends Base
             ];
             $this->http_output->end(json_encode($end),false);
         }else{
-            $this->CategoryModel =  $this->loader->model('CategoryModel',$this);
+            $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
             $all = yield $this->CategoryModel->getAll();
             $all_menu = '';
             if($all){
@@ -95,7 +95,7 @@ class Category extends Base
             //print_r(array_keys($data['info']));
             //print_r(array_values($data['info']));
             //print_r(array_values($data['info']));
-            $this->CategoryModel =  $this->loader->model('CategoryModel',$this);
+            $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
             $r_category_model = yield $this->CategoryModel->insertMultiple(array_keys($data['info']),array_values($data['info']));
             if(!$r_category_model){
                 parent::httpOutputTis('CategoryModel添加请求失败.');
@@ -104,7 +104,7 @@ class Category extends Base
             }
         }else{
             $parent_id  =  $this->http_input->postGet('parent_id') ?? 0;
-            $this->CategoryModel =  $this->loader->model('CategoryModel',$this);
+            $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
             $all = yield $this->CategoryModel->getAll();
             $info='';
 

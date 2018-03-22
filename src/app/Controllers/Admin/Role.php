@@ -1,7 +1,9 @@
 <?php
 namespace app\Controllers\Admin;
 use app\Helpers\Tree;
-use app\Models\RolePrivModel;
+use app\Models\Data\RolePrivModel;
+use app\Models\Data\RoleModel;
+use app\Models\Data\MenuModel;
 
 /**
  * Created by PhpStorm.
@@ -38,7 +40,7 @@ class Role  extends Base{
             ];
             $this->http_output->end(json_encode($end),false);
         }else{
-            $this->RoleModel = $this->loader->model('RoleModel',$this);
+            $this->RoleModel = $this->loader->model(RoleModel::class,$this);
             $all = yield $this->RoleModel->getAll();
             //增加管理操作
             foreach ($all as $key=>$value){
@@ -60,7 +62,7 @@ class Role  extends Base{
      */
     public function http_role_add(){
         if($this->http_input->getRequestMethod()=='POST'){
-            $this->RoleModel =  $this->loader->model('RoleModel',$this);
+            $this->RoleModel =  $this->loader->model(RoleModel::class,$this);
             $data = $this->http_input->post('info');
             unset($data['id']);
             $r_role_model = yield $this->RoleModel->insertMultiple(array_keys($data),array_values($data));
@@ -87,7 +89,7 @@ class Role  extends Base{
             $data = $this->http_input->post('info');
             $id = $data['id'];
             unset($data['id']);
-            $this->RoleModel =  $this->loader->model('RoleModel',$this);
+            $this->RoleModel =  $this->loader->model(RoleModel::class,$this);
             $r_role_model = yield $this->RoleModel->updateById($id,$data);
             if(!$r_role_model){
                 parent::httpOutputTis('RoleModel编辑请求失败.');
@@ -96,7 +98,7 @@ class Role  extends Base{
             }
         }else{ //web or app
             $id = $this->http_input->get('id');
-            $this->RoleModel =  $this->loader->model('RoleModel',$this);
+            $this->RoleModel =  $this->loader->model(RoleModel::class,$this);
             $d = yield $this->RoleModel->getOneById($id);
             if($id && $d){
                 parent::templateData('d_role_model',$d);
@@ -124,7 +126,7 @@ class Role  extends Base{
                 parent::httpOutputTis('非法请求.',false);
             }else{
                 //删除当前role_id的所有数据
-                $this->RolePrivModel = $this->loader->model('RolePrivModel',$this);
+                $this->RolePrivModel = $this->loader->model(RolePrivModel::class,$this);
                 $d_rolepriv_model = yield $this->RolePrivModel->deleteByRoleId($role_id);
 
                 if(!$d_rolepriv_model){
@@ -157,7 +159,7 @@ class Role  extends Base{
                 parent::httpOutputTis('参数错误.');
             }else{
                 //查找所有菜单
-                $this->MenuModel =  $this->loader->model('MenuModel',$this);
+                $this->MenuModel =  $this->loader->model(MenuModel::class,$this);
                 $all = yield $this->MenuModel->getAll();
                 //print_r($all);
 
@@ -165,7 +167,7 @@ class Role  extends Base{
 //                $all = yield $this->RoleModel->getAll();
 
                 //查找当前角色组所有权限
-                $this->RolePrivModel =  $this->loader->model('RolePrivModel',$this);
+                $this->RolePrivModel =  $this->loader->model(RolePrivModel::class,$this);
                 $d_rolepriv_model = yield $this->RolePrivModel->getByRoleId($id,'menu_id');
                 $priv_data = [];
                 foreach ($d_rolepriv_model as $key=>$value){
@@ -241,10 +243,10 @@ class Role  extends Base{
             //这里由于关联到2个表，使用事务
             $transaction_id = yield $this->mysql_pool->coroutineBegin($this);
             //删除权限分配表中数据
-            $this->RolePrivModel = $this->loader->model('RolePrivModel',$this);
+            $this->RolePrivModel = $this->loader->model(RolePrivModel::class,$this);
             $delete_model_rolepriv = yield $this->mysql_pool->dbQueryBuilder->from($this->RolePrivModel->getTable())->where('role_id',$id)->delete()->coroutineSend($transaction_id);
             //删除主表中数据
-            $this->RoleModel = $this->loader->model('RoleModel',$this);
+            $this->RoleModel = $this->loader->model(RoleModel::class,$this);
             $delete_model_role = yield $this->mysql_pool->dbQueryBuilder->from($this->RoleModel->getTable())->where('id',$id)->delete()->coroutineSend($transaction_id);
             //print_r( $delete_model_rolepriv);
             //print_r($delete_model_role);

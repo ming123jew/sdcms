@@ -327,7 +327,7 @@ abstract class SwooleServer extends ProcessRPC
      */
     public function onSwooleReceive($serv, $fd, $from_id, $data, $server_port = null)
     {
-        var_dump("diceng:".$data);
+        //var_dump("diceng:".$data);
         if (!Start::$testUnity) {
             $server_port = $this->getServerPort($fd);
             $uid = $this->getUidFromFd($fd);

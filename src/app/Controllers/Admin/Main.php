@@ -2,7 +2,9 @@
 
 namespace app\Controllers\Admin;
 use app\Helpers\Tree;
-use app\Models\UserModel;
+use app\Models\Data\UserModel;
+use app\Models\Data\RolePrivModel;
+use app\Models\Data\MenuModel;
 use Server\Memory\Cache;
 use app\Tasks\WebCache;
 
@@ -81,7 +83,7 @@ class Main extends Base
 
         if($this->http_input->getRequestMethod()=='POST'){
 
-            $this->UserModel = $this->loader->model('UserModel',$this);
+            $this->UserModel = $this->loader->model(UserModel::class,$this);
             $result = yield $this->UserModel->getOneUserByUsernameAndPassword($this->http_input->post('username'),$this->http_input->post('password'));
             print_r($result);
             //验证失败
@@ -105,7 +107,7 @@ class Main extends Base
 
                     //查询权限，并存到Cache
                     $role_id = $session_data['roleid'];
-                    $this->RolePrivModel = $this->loader->model('RolePrivModel',$this);
+                    $this->RolePrivModel = $this->loader->model(RolePrivModel::class,$this);
                     $d_model_rolepriv = yield  $this->RolePrivModel->getByRoleId($role_id);
                     $cache = Cache::getCache('WebCache');
                     $cache->addMap($this->AdminCacheRoleIdDataField.$role_id,serialize($d_model_rolepriv));
@@ -192,7 +194,7 @@ class Main extends Base
      */
     private function _getRoleMenu($role_id){
 
-        $this->MenuModel  = $this->loader->model('MenuModel',$this);
+        $this->MenuModel  = $this->loader->model(MenuModel::class,$this);
         $all = yield $this->MenuModel->getAll($role_id);
 
         //处理数据添加url属性
