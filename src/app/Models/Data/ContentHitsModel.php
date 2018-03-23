@@ -59,9 +59,9 @@ class ContentHitsModel extends BaseModel
      * @param $id
      * @return bool
      */
-    public function deleteById(int $content_id){
+    public function deleteByContentId(int $content_id,$transaction_id=null){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('content_id',$content_id)->delete()->coroutineSend();
+            ->where('content_id',$content_id)->delete()->coroutineSend($transaction_id);
         //print_r($r);
         if(empty($r['result'])){
             return false;

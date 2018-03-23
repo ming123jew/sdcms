@@ -43,15 +43,15 @@ class CategoryModel extends BaseModel
      * @param int $role_id
      * @return bool
      */
-    public function getByRoleId(int $role_id,$fields='*'){
+    public function getById(int $id,$fields='*'){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('role_id',$role_id)
+            ->where('id',$id)
             ->select($fields)
             ->coroutineSend();
         if(empty($r['result'])){
             return false;
         }else{
-            return $r['result'] ;
+            return $r['result'][0] ;
         }
     }
 
@@ -91,32 +91,26 @@ class CategoryModel extends BaseModel
         if(empty($r['result'])){
             return false;
         }else{
-            return $r['result'] ;
+            return $r ;
         }
     }
 
-
     /**
-     * 用于验证权限
-     * @param int $role_id
-     * @param string $m
-     * @param string $c
-     * @param string $a
-     * @param string $fields
+     * 根据ID更新单条
+     * @param array $intoColumns
+     * @param array $intoValues
      * @return bool
      */
-    public function authRole(int $role_id,string $m,string $c,string $a,string $fields='*'){
-        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('role_id',$role_id)
-            ->where('m',$m)
-            ->where('c',$c)
-            ->where('a',$a)
-            ->select($fields)
-            ->coroutineSend();
+    public function updateById(int $id,array $columns_values,$transaction_id=null){
+        $r = yield $this->mysql_pool->dbQueryBuilder->update($this->prefix.$this->table)
+            ->set($columns_values)
+            ->where('id',$id)
+            ->coroutineSend($transaction_id);
+        //print_r($r);
         if(empty($r['result'])){
             return false;
         }else{
-            return $r['result'][0] ;
+            return $r['result'] ;
         }
     }
 

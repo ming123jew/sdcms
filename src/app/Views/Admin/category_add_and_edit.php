@@ -95,6 +95,7 @@ Purchase: http://wrapbootstrap.com
 
                             <div class="widget-body">
                                 <form id="form" method="post" class="form-horizontal">
+                                    <input type="hidden" value="<?php echo $data['d_category_model']['id']??'';?>" name="info[id]" id="id" />
                                 <div class="widget-main ">
                                     <div class="tabbable">
                                         <ul class="nav nav-tabs tabs-flat" id="myTab11">
@@ -123,16 +124,17 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">请选择模型：</label>
                                                                 <div class="col-lg-4">
-                                                                    <select class="form-control" name="info[model_id]" style="">
+                                                                    <select class="form-control" name="info[model_id]" readonly="readonly" disabled style="">
                                                                         <option value="">请选择</option>
-                                                                        <option value="1">文章模型</option>
+                                                                        <?php echo $data['selectModel'];?>
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">上级栏目：</label>
                                                                 <div class="col-lg-4">
-                                                                    <select class="form-control" name="info[parent_id]" style="">
+                                                                    <input type="hidden" value="<?php echo $data['d_category_model']['catid']??'';?>" name="info[oldcatid]" />
+                                                                    <select class="form-control" name="info[parent_id]" readonly="readonly" disabled style="">
                                                                         <option value="0">≡ 作为一级栏目 ≡</option>
                                                                         <?php echo $data['selectCategorys'];?>
                                                                     </select>
@@ -142,14 +144,14 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">栏目名称：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input type="text" class="form-control" name="info[catname]"/>
+                                                                    <input type="text" class="form-control" name="info[catname]" value="<?php echo $data['d_category_model']['catname']??'';?>"/>
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">英文目录：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input class="form-control" name="info[catdir]" type="text"/>
+                                                                    <input class="form-control" name="info[catdir]" type="text" value="<?php echo $data['d_category_model']['catdir']??'';?>"/>
                                                                 </div>
                                                             </div>
 
@@ -160,7 +162,7 @@ Purchase: http://wrapbootstrap.com
                                                                         <i class="layui-icon">&#xe67c;</i>
                                                                         <p>点击上传，或将文件拖拽到此处</p>
                                                                     </div>
-                                                                    <input class="form-control" name="info[image]" type="text"/>
+                                                                    <input class="form-control" name="info[image]" type="text" value="<?php echo $data['d_category_model']['image']??'';?>"/>
                                                                 </div>
                                                             </div>
 
@@ -168,27 +170,26 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">备注：</label>
                                                                 <div class="col-lg-8">
-                                                                    <textarea name="info[description]" class="form-control" rows="3"></textarea>
+                                                                    <textarea name="info[description]" class="form-control" rows="3"><?php echo $data['d_category_model']['description']??'';?></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">是否在导航显示：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input style="position: initial;opacity: inherit;" type="radio" name="info[is_menu]" checked="" value="1">显示
-                                                                    <input style="position: initial;opacity: inherit;" type="radio" name="info[is_menu]" checked="" value="0">隐藏
+                                                                    <input style="position: initial;opacity: inherit;" type="radio" name="info[is_menu]" <?php if($data['d_category_model']['is_menu']==1){?>checked="checked"<?php }?> value="1">显示
+                                                                    <input style="position: initial;opacity: inherit;" type="radio" name="info[is_menu]"  <?php if($data['d_category_model']['is_menu']==0){?>checked="checked"<?php }?> value="0">隐藏
                                                                 </div>
                                                             </div>
                                                         <div class="form-group">
                                                             <label class="col-lg-4 control-label">状态：</label>
                                                             <div class="col-lg-8">
-                                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" checked="checked" value="1">开启
-                                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" checked="" value="0">禁用
+                                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php if($data['d_category_model']['status']==1){?>checked="checked"<?php }?> value="1">开启
+                                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php if($data['d_category_model']['status']==0){?>checked="checked"<?php }?> value="0">禁用
                                                             </div>
                                                         </div>
                                                             <div class="form-group">
                                                                 <div class="col-lg-offset-4 col-lg-8">
                                                                     <button class="btn btn-palegreen" type="submit">Validate</button>
-
                                                                 </div>
                                                             </div>
 
@@ -210,21 +211,21 @@ Purchase: http://wrapbootstrap.com
                                                         <div class="form-group">
                                                             <label class="col-lg-4 control-label">META Title（栏目标题）：</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" data-toggle="tooltip" data-placement="top" data-original-title="针对搜索引擎设置的标题" class="form-control   tooltip-info" name="setting[meta_title]"/>
+                                                                <input type="text" data-toggle="tooltip" data-placement="top" data-original-title="针对搜索引擎设置的标题" class="form-control   tooltip-info" name="setting[meta_title]" value="<?php echo $data['d_category_model_setting']['meta_title']??'';?>" />
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label class="col-lg-4 control-label">META Keywords（栏目关键词）：</label>
                                                             <div class="col-lg-8">
-                                                                <input data-toggle="tooltip" data-placement="top" data-original-title="关键字中间用半角逗号隔开" class="form-control tooltip-info" name="setting[meta_keywords]" type="text"/>
+                                                                <input data-toggle="tooltip" data-placement="top" data-original-title="关键字中间用半角逗号隔开" class="form-control tooltip-info" name="setting[meta_keywords]" type="text" value="<?php echo $data['d_category_model_setting']['meta_keywords']??'';?>"/>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label class="col-lg-4 control-label">META Description（栏目描述）：</label>
                                                             <div class="col-lg-8">
-                                                                <input data-toggle="tooltip" data-placement="top" data-original-title="针对搜索引擎设置的网页描述" class="form-control tooltip-info" name="setting[meta_description]" type="text"/>
+                                                                <input data-toggle="tooltip" data-placement="top" data-original-title="针对搜索引擎设置的网页描述" class="form-control tooltip-info" name="setting[meta_description]" type="text" value="<?php echo $data['d_category_model_setting']['meta_description']??'';?>"/>
                                                             </div>
                                                         </div>
 
@@ -232,7 +233,7 @@ Purchase: http://wrapbootstrap.com
                                                         <div class="form-group">
                                                             <label class="col-lg-4 control-label">备注：</label>
                                                             <div class="col-lg-8">
-                                                                <textarea name="setting[description]" class="form-control" rows="3"></textarea>
+                                                                <textarea name="setting[description]" class="form-control" rows="3"><?php echo $data['d_category_model_setting']['description']??'';?></textarea>
                                                             </div>
                                                         </div>
 
@@ -359,9 +360,15 @@ Purchase: http://wrapbootstrap.com
             submitHandler: function (validator, form, submitButton) {
                 // Do nothing
                 //alert('here.')
-
+                var id = parseInt($('#id').val());
+                if(id==0)
+                {
+                    var post_url = '<?php echo  url('','','category_add');?>';
+                }else{
+                    var post_url = '<?php echo  url('','','category_edit');?>';
+                }
                 // 实用ajax提交表单
-                $.post('<?php echo  url('','','category_add');?>', form.serialize(), function(result) {
+                $.post(post_url, form.serialize(), function(result) {
                     // .自定义回调逻辑
                     if(result.status==1){
                         $("#modal-success").find(".modal-body").html(result.message);

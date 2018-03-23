@@ -15,8 +15,12 @@ use app\Helpers\ChinesePinyin;
 
 class ContentBusiness extends BaseBusiness
 {
+    protected $ContentModel;
+    protected $ContentHitsModel;
+    protected $CategoryModel;
+    protected $TagsModel;
     /**
-     * 文章插入逻辑
+     * 文章插入{整个逻辑}
      * @param array $data
      * @return bool|\Generator
      */
@@ -68,7 +72,7 @@ class ContentBusiness extends BaseBusiness
     }
 
     /**
-     * 文章更新逻辑
+     * 文章更新{整个逻辑}
      * @param int $id        文章ID
      * @param array $data    数组
      * @param int $oldcatid  旧栏目catid
@@ -131,4 +135,43 @@ class ContentBusiness extends BaseBusiness
         //[--end::开始更新操作，执行事务--]
     }
 
+    /**
+     * 删除文章{整个逻辑}
+     * @param int $id
+     * @param int $catid
+     * @return bool|\Generator
+     */
+    public function delete_by_id_and_catid(int $id,int $catid){
+        //[--start::开始删除操作，执行事务--]
+        $transaction_id = yield $this->mysql_pool->coroutineBegin($this);
+        //[--start::删除主表]
+        $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
+        $r_content_model = yield $this->ContentModel->deleteById($id,$transaction_id);
+        //[--end::删除主表]
+
+        //[--start::删除统计表]
+        $this->ContentHitsModel =  $this->loader->model(ContentHitsModel::class,$this);
+        $r_content_hits_model = yield $this->ContentHitsModel->deleteByContentId($id,$transaction_id);
+        //[--end::删除统计表]
+
+        //[--start::删除标签表]
+        $this->TagsModel =  $this->loader->model(TagsModel::class,$this);
+        $r_tags_model = yield $this->TagsModel->deleteByContentId($id,$transaction_id);
+        //[--end::删除标签表]
+
+        //[--start::更新栏目数据]
+        $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
+        $r_category_model = yield $this->CategoryModel->setDec($catid,'arc_count',1,$transaction_id);
+        //[--end::更新栏目数据]
+
+        if(!$r_content_model&&!$r_content_hits_model&&!$r_category_model&&!$r_tags_model)
+        {
+            yield $this->mysql_pool->coroutineRollback($transaction_id);
+            return false;
+        }else{
+            yield $this->mysql_pool->coroutineCommit($transaction_id);
+            return $r_content_model;
+        }
+        //[--end::开始删除操作，执行事务--]
+    }
 }

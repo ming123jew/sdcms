@@ -8,8 +8,7 @@
 namespace app\Controllers\Admin;
 use app\Models\Business\ContentBusiness;
 use app\Models\Data\ContentModel;
-use app\Models\Data\CategoryModel;
-use app\Helpers\Tree;
+use app\Models\Business\CategoryBusiness;
 
 /**
  * 内容管理 | 菜单管理 | 推荐位管理
@@ -21,6 +20,7 @@ class Content extends Base
 {
     protected $ContentModel;
     protected $ContentBusiness;
+    protected $CategoryBusiness;
     protected $ContentHitsModel;
     protected $CategoryModel;
     protected $TagsModel;
@@ -117,7 +117,8 @@ class Content extends Base
             //显示添加内容页面
             $parent_id  =  $this->http_input->postGet('parent_id') ?? 0;
             //显示分类
-            $selectCategorys= yield self::_get_category_info(intval($parent_id));
+            $this->CategoryBusiness =  $this->loader->model(CategoryBusiness::class,$this);
+            $selectCategorys= yield  $this->CategoryBusiness->get_category_by_parentid(intval($parent_id));
 
             parent::templateData('selectCategorys',$selectCategorys);
             parent::templateData('test',1);
@@ -180,7 +181,8 @@ class Content extends Base
             if($id && $d)
             {
                 //自动选择分类
-                $selectCategorys= yield self::_get_category_info(intval($d['catid']));
+                $this->CategoryBusiness =  $this->loader->model(CategoryBusiness::class,$this);
+                $selectCategorys= yield  $this->CategoryBusiness->get_category_by_parentid(intval($d['catid']));
                 parent::templateData('d_content_model',$d);
                 parent::templateData('selectCategorys',$selectCategorys);
                 parent::templateData('token',token('__CONTENT_EDIT__'));
@@ -200,35 +202,33 @@ class Content extends Base
      */
     public function http_content_delete()
     {
-
-    }
-
-    /**
-     * 获取分类内容
-     * @param int $parent_id
-     * @return string
-     */
-    private function _get_category_info(int $parent_id)
-    {
-        //显示分类
-        $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
-        $all = yield $this->CategoryModel->getAll();
-        $info='';
-        if($all)
+        if($this->http_input->getRequestMethod()=='POST')
         {
-            $selected = $parent_id;
-            $tree = new Tree();
-            foreach ($all as $r)
+            //查找对应文章，验证是否存在
+            $id = $this->http_input->postGet('id');
+            $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
+            $d = yield $this->ContentModel->getById(intval($id));
+            if($id && $d)
             {
-                $r['selected'] = $r['id'] == $selected ? 'selected' : '';
-                $array[] = $r;
-                $str = "<option value='\$id' \$selected>\$spacer \$catname</option>";
-                $tree->init($array);
-                $info = $tree->get_tree(0, $str);
+                //[--start::删除文章{业务逻辑}--]
+                $this->ContentBusiness = $this->loader->model(ContentBusiness::class,$this);
+                $r = yield $this->ContentBusiness->delete_by_id_and_catid($id,$d['catid']);
+                if($r)
+                {
+                    parent::httpOutputEnd('文章删除成功.','文章删除失败.',$r);
+                }else{
+                    parent::httpOutputTis('ContentBusiness请求失败.');
+                }
+                //[--end::删除文章{业务逻辑}--]
+            }else{
+                parent::httpOutputTis('id参数错误，或数据不存在.');
             }
+        }else{
+            parent::httpOutputTis('非法请求.');
         }
-        return $info;
     }
+
+
 
     private function _check_title(){
 

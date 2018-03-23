@@ -8,14 +8,14 @@
 
 namespace app\Models\Data;
 
-class ContentModel extends BaseModel
+class ModelModel extends BaseModel
 {
 
     /**
      * 数据库表名称，不包含前缀
      * @var string
      */
-    private $table = 'content';
+    private $table = 'model';
 
     public function getTable(){
         return $this->prefix.$this->table;
@@ -29,28 +29,6 @@ class ContentModel extends BaseModel
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
             ->orderBy('id','asc')
             ->select('*')
-            ->coroutineSend();
-        if(empty($r['result'])){
-            return false;
-        }else{
-            return $r['result'] ;
-        }
-    }
-
-    /**
-     * 后台列表
-     * @param int $start
-     * @param int $end
-     * @return bool
-     */
-    public function getAllByPage(int $start,int $end=10){
-
-        $m = $this->loader->model('ContentHitsModel',$this);
-        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
-            ->join($m->getTable(),'a.id=b.content_id','left join','b')
-            ->orderBy('a.id','desc')
-            ->select('a.*,b.*')
-            ->limit("{$start},{$end}")
             ->coroutineSend();
         if(empty($r['result'])){
             return false;
@@ -79,9 +57,9 @@ class ContentModel extends BaseModel
      * @param $id
      * @return bool
      */
-    public function deleteById(int $id,$transaction_id=null){
+    public function deleteById(int $id){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
-            ->where('id',$id)->delete()->coroutineSend($transaction_id);
+            ->where('id',$id)->delete()->coroutineSend();
         //print_r($r);
         if(empty($r['result'])){
             return false;

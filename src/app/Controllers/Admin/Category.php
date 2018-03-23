@@ -6,8 +6,9 @@
  * Time: 15:17
  */
 namespace app\Controllers\Admin;
+use app\Models\Business\CategoryBusiness;
+use app\Models\Business\ModelBusiness;
 use app\Models\Data\CategoryModel;
-use app\Helpers\Tree;
 
 /**
  *  菜单管理
@@ -18,6 +19,8 @@ use app\Helpers\Tree;
 class Category extends Base
 {
     protected $CategoryModel;
+    protected $CategoryBusiness;
+    protected $ModelBusiness;
     /**
      * @param string $controller_name
      * @param string $method_name
@@ -40,42 +43,9 @@ class Category extends Base
             ];
             $this->http_output->end(json_encode($end),false);
         }else{
-            $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
-            $all = yield $this->CategoryModel->getAll();
-            $all_menu = '';
-            if($all){
-                $tree       = new Tree();
-                $tree->nbsp = '&nbsp;&nbsp;&nbsp;';
-
-                foreach ($all as $n=> $r) {
-                    $all[$n]['parent_id_node'] = isset($r['parent_id']) ? ' class="child-of-node-' . $r['parent_id'] . '"' : '';
-                    //$all[$n]['str_manage'] = checkRole('auth/menuAdd',["parent_id" => $r['id']]) ? '<a href="'.url("auth/menuAdd",["parent_id" => $r['id']]).'">添加子菜单</a> |':'';
-                    $all[$n]['str_manage'] = (yield check_role('Admin','Category','category_edit',$this)) ?'<a href="'.url('','','menu_edit',["menu_id" => $r['id']]).'">编辑</a> |':'';
-                    $all[$n]['str_manage'] .= (yield check_role('Admin','Category','category_delete',$this)) ?'<a  onclick="category_delete('.$r['id'].')" href="javascript:;">删除</a>':'';
-                    $all[$n]['status'] = $r['status'] ? '启用' : '禁用';
-                    $all[$n]['is_menu'] = $r['is_menu'] ? '是' : '否';
-                    $all[$n]['model_name'] = get_modelname_bymodelid($r['model_id']);
-                    $all[$n]['cat_type'] = get_cattype_bymodelid($r['model_id']);
-                }
-
-                $str = "<tr id='node-\$id' \$parent_id_node>
-                    <td style='padding-left:20px;'>
-                        <input name='listorders[\$id]' type='text' size='3' value='\$list_order' data='\$id' class='listOrder'>
-                    </td>
-                    <td>\$id</td>
-                    <td>\$spacer  \$catname</td>
-                    <td>\$cat_type</td>
-                    <td>\$model_name</td>
-                    <td>\$arc_count</td>
-                    <td>\$is_menu</td>
-                    <td>\$status</td>
-                    <td>\$str_manage</td>
-                </tr>";
-
-                $tree->init($all);
-                $info = $tree->get_tree(0, $str);
-            }
-            parent::templateData('allcategory',$info);
+            $this->CategoryBusiness =  $this->loader->model(CategoryBusiness::class,$this);
+            $allcategory = yield $this->CategoryBusiness->get_category_for_category_list();
+            parent::templateData('allcategory',$allcategory);
             //web or app
             parent::webOrApp(function (){
                 $template = $this->loader->view('app::Admin/category_list');
@@ -89,7 +59,8 @@ class Category extends Base
      */
     public function http_category_add()
     {
-        if($this->http_input->getRequestMethod()=='POST'){
+        if($this->http_input->getRequestMethod()=='POST')
+        {
             $data['info'] = ($this->http_input->postGet('info'));
             $data['info']['setting'] = json_encode($this->http_input->postGet('setting'));
             //print_r(array_keys($data['info']));
@@ -97,30 +68,22 @@ class Category extends Base
             //print_r(array_values($data['info']));
             $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
             $r_category_model = yield $this->CategoryModel->insertMultiple(array_keys($data['info']),array_values($data['info']));
-            if(!$r_category_model){
+            if(!$r_category_model)
+            {
                 parent::httpOutputTis('CategoryModel添加请求失败.');
             }else{
                 parent::httpOutputEnd('栏目添加成功.','栏目添加失败.',$r_category_model);
             }
         }else{
+            //获取模型
+            $this->ModelBusiness =  $this->loader->model(ModelBusiness::class,$this);
+            $selectModel= yield  $this->ModelBusiness->get_all_by_parent_id(0);
+            //获取分类
             $parent_id  =  $this->http_input->postGet('parent_id') ?? 0;
-            $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
-            $all = yield $this->CategoryModel->getAll();
-            $info='';
-
-            if($all) {
-                $selected = $parent_id;
-                $tree = new Tree();
-                foreach ($all as $r) {
-                    $r['selected'] = $r['id'] == $selected ? 'selected' : '';
-                    $array[] = $r;
-                    $str = "<option value='\$id' \$selected>\$spacer \$catname</option>";
-                    $tree->init($array);
-                    $parentid = isset($parent_id)?intval($parent_id):0;
-                    $info = $tree->get_tree($parentid, $str);
-                }
-            }
-            parent::templateData('selectCategorys',$info);
+            $this->CategoryBusiness =  $this->loader->model(CategoryBusiness::class,$this);
+            $selectCategorys= yield  $this->CategoryBusiness->get_category_by_parentid(intval($parent_id));
+            parent::templateData('selectModel',$selectModel);
+            parent::templateData('selectCategorys',$selectCategorys);
             parent::templateData('test',1);
             //web or app
             parent::webOrApp(function (){
@@ -130,13 +93,71 @@ class Category extends Base
         }
     }
 
+    /**
+     * 栏目编辑
+     */
     public function http_category_edit()
     {
+        if($this->http_input->getRequestMethod()=='POST')
+        {
+            $data['info'] = ($this->http_input->postGet('info'));
+            $data['info']['setting'] = json_encode($this->http_input->postGet('setting'));
+            $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
+            $id = intval($data['info']['id']);
+            unset($data['info']['id']);
+            //预留更改catid,修改了catid,则对应多有的文章-文章统计等表中catid也需跟随修改
+            $oldcatid = intval($data['info']['oldcatid']);
+            unset($data['info']['oldcatid']);
+            $r_category_model = yield $this->CategoryModel->updateById($id,$data['info']);
+            if(!$r_category_model)
+            {
+                parent::httpOutputTis('CategoryModel更新请求失败.');
+            }else{
+                parent::httpOutputEnd('栏目更新成功.','栏目更新失败.',$r_category_model);
+            }
+        }else{
+            $id = intval($this->http_input->postGet('id'));
+            $this->CategoryModel = $this->loader->model(CategoryModel::class,$this);
+            $d = yield $this->CategoryModel->getById($id);
+            if($id&&$d)
+            {
+                //获取模型
+                $this->ModelBusiness =  $this->loader->model(ModelBusiness::class,$this);
+                $selectModel= yield  $this->ModelBusiness->get_all_by_parent_id(intval($d['model_id']));
+                //获取分类
+                $this->CategoryBusiness =  $this->loader->model(CategoryBusiness::class,$this);
+                $selectCategorys= yield  $this->CategoryBusiness->get_category_by_parentid(intval($d['parent_id']));
+                parent::templateData('selectModel',$selectModel);
+                parent::templateData('selectCategorys',$selectCategorys);
+                parent::templateData('d_category_model',$d);
+                parent::templateData('d_category_model_setting',json_decode($d['setting'],true));
+                //web or app
+                parent::webOrApp(function (){
+                    $template = $this->loader->view('app::Admin/category_add_and_edit');
+                    $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+                });
+            }else{
+                parent::httpOutputTis('id参数错误，或不存在记录.');
+            }
 
+        }
     }
 
     public function http_category_delete()
     {
-
+        if($this->http_input->getRequestMethod()=='GET')
+        {
+            $id = intval($this->http_input->postGet('id'));
+            $this->CategoryModel = $this->loader->model(CategoryModel::class,$this);
+            $d = yield $this->CategoryModel->getById($id);
+            if($id&&$d)
+            {
+                //
+            }else{
+                parent::httpOutputTis('id参数错误，或不存在记录.');
+            }
+        }
     }
+
+
 }
