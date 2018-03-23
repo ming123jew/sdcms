@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50635
 File Encoding         : 65001
 
-Date: 2018-03-15 17:54:16
+Date: 2018-03-23 17:29:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -161,12 +161,13 @@ CREATE TABLE `sd_category` (
   `arc_count` int(11) NOT NULL DEFAULT '0' COMMENT '文章数',
   `list_order` smallint(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_category
 -- ----------------------------
-INSERT INTO `sd_category` VALUES ('1', '1', '0', '诗意人生', 'poetic_life', '', ' ', '1', '1', '{\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"description\":\"\"}', '4', '0');
+INSERT INTO `sd_category` VALUES ('1', '1', '0', '诗意人生', 'poetic_life', '', ' a', '1', '1', '{\"meta_title\":\"1\",\"meta_keywords\":\"2\",\"meta_description\":\"3\",\"description\":\"\"}', '3', '0');
+INSERT INTO `sd_category` VALUES ('2', '1', '0', '编程指南', 'sczn', '', '', '1', '1', '{\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"description\":\"\"}', '2', '0');
 
 -- ----------------------------
 -- Table structure for `sd_category_priv`
@@ -475,15 +476,16 @@ CREATE TABLE `sd_content` (
   `body` text NOT NULL,
   `copyfrom` varchar(40) NOT NULL DEFAULT '本站' COMMENT '来源',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_content
 -- ----------------------------
 INSERT INTO `sd_content` VALUES ('1', '1', '诗意人生', '', '诗意 人生', '测试题1331', 'ming', '1520585025', '1520585025', '0', 'https://baidu.com', '', '本站');
 INSERT INTO `sd_content` VALUES ('2', '1', '诗意人生', '', '诗意 人生', '测试题13317', 'ming', '1520585093', '1520585093', '0', 'https://baidu.com', '', '本站');
-INSERT INTO `sd_content` VALUES ('3', '1', '诗意人生', '', '诗意 人生', '测试题1331733', 'ming', '1520585238', '1520585238', '0', 'https://baidu.com', '', '本站');
-INSERT INTO `sd_content` VALUES ('4', '1', '日志', '', '高性能 管理系统', '', 'ming', '1520819382', '1520819382', '0', '', '<p>fsdfdsfd</p><p>f</p>', '');
+INSERT INTO `sd_content` VALUES ('3', '2', '诗意人生', '', '诗意 人生', '测试题1331733\r\nalert&#40;\"ok\"&#41;;', 'ming', '1521710247', '1521710247', '0', '', '', '本站');
+INSERT INTO `sd_content` VALUES ('4', '1', '日志', '/uploads/images/20180322/thumb_1521690901626173.png', '高性能 管理系统1', '啊aa3aa', 'ming', '1521710218', '1521710218', '0', '', '<p>fsdfdsfd</p><p>f</p>', '本站');
+INSERT INTO `sd_content` VALUES ('5', '2', 'aaaa', '', '', '', 'ming', '1521714616', '1521714616', '0', '', '', '本站');
 
 -- ----------------------------
 -- Table structure for `sd_content_hits`
@@ -505,8 +507,9 @@ CREATE TABLE `sd_content_hits` (
 -- ----------------------------
 INSERT INTO `sd_content_hits` VALUES ('1', '1', '0', '0', '0', '0', '0', '1520585025');
 INSERT INTO `sd_content_hits` VALUES ('2', '1', '0', '0', '0', '0', '0', '1520585093');
-INSERT INTO `sd_content_hits` VALUES ('3', '1', '0', '0', '0', '0', '0', '1520585238');
+INSERT INTO `sd_content_hits` VALUES ('3', '2', '0', '0', '0', '0', '0', '1520585238');
 INSERT INTO `sd_content_hits` VALUES ('4', '1', '0', '0', '0', '0', '0', '1520819382');
+INSERT INTO `sd_content_hits` VALUES ('5', '2', '0', '0', '0', '0', '0', '1521714616');
 
 -- ----------------------------
 -- Table structure for `sd_log`
@@ -5479,6 +5482,24 @@ INSERT INTO `sd_log` VALUES ('4959', null, '0', 'admin', null, 'index', '?m=admi
 INSERT INTO `sd_log` VALUES ('4960', null, '0', 'admin', null, 'site', '?m=admin&c=site&a=edit', null, '1', 'ming123jew', '14.23.162.51', '2018-01-05 10:32:40');
 
 -- ----------------------------
+-- Table structure for `sd_model`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_model`;
+CREATE TABLE `sd_model` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `name` varchar(10) NOT NULL,
+  `desc` varchar(100) DEFAULT NULL,
+  `parent_id` int(8) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_model
+-- ----------------------------
+INSERT INTO `sd_model` VALUES ('1', '文章模型', null, '0');
+INSERT INTO `sd_model` VALUES ('2', '单页', null, '0');
+
+-- ----------------------------
 -- Table structure for `sd_stats`
 -- ----------------------------
 DROP TABLE IF EXISTS `sd_stats`;
@@ -5514,7 +5535,7 @@ CREATE TABLE `sd_tags` (
   `content_id` int(11) NOT NULL,
   `ucwords` char(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_tags
@@ -5523,10 +5544,10 @@ INSERT INTO `sd_tags` VALUES ('1', '诗意', '1', 'S');
 INSERT INTO `sd_tags` VALUES ('2', '人生', '1', 'R');
 INSERT INTO `sd_tags` VALUES ('3', '诗意', '2', 'S');
 INSERT INTO `sd_tags` VALUES ('4', '人生', '2', 'R');
-INSERT INTO `sd_tags` VALUES ('5', '诗意', '3', 'S');
-INSERT INTO `sd_tags` VALUES ('6', '人生', '3', 'R');
-INSERT INTO `sd_tags` VALUES ('7', '高性能', '4', 'G');
-INSERT INTO `sd_tags` VALUES ('8', '管理系统', '4', 'G');
+INSERT INTO `sd_tags` VALUES ('19', '高性能', '4', 'G');
+INSERT INTO `sd_tags` VALUES ('20', '管理系统1', '4', 'G');
+INSERT INTO `sd_tags` VALUES ('21', '诗意', '3', 'S');
+INSERT INTO `sd_tags` VALUES ('22', '人生', '3', 'R');
 
 -- ----------------------------
 -- Table structure for `sd_task_log`
