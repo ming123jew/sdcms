@@ -11,15 +11,30 @@ class WebCache extends Task
 {
     public $map = [];
 
-    public function addMap($key,$value)
+    /**
+     * 写入缓存
+     * @param $key
+     * @param $value
+     * @param int $expire
+     * @return bool
+     */
+    public function addMap($key,$value,$expire=24*3600)
     {
+        $this->map[$key]['create_time'] = time();
+        $this->map[$key]['expire_time'] = $expire;
         $this->map[$key] = $value;
         return true;
     }
 
     public function getOneMap($key){
+
         if(isset($this->map[$key])){
-            return $this->map[$key];
+            //判断是否过期
+            if( time() - $this->map[$key]['create_time'] > $this->map[$key]['expire_time'] ){
+               self::destroy();
+            }else{
+                return $this->map[$key];
+            }
         }else{
             return null;
         }
@@ -29,5 +44,9 @@ class WebCache extends Task
     public function getAllMap()
     {
         return $this->map;
+    }
+
+    public function destroy(){
+        unset($this->map);
     }
 }

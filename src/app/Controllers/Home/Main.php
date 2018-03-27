@@ -5,6 +5,9 @@ namespace app\Controllers\Home;
 
 use app\Models\BaseModel;
 use app\Models\UserModel;
+use QL\QueryList;
+use Server\Components\CatCache\CatCacheRpcProxy;
+
 /**
  * Created by PhpStorm.
  * User: ming123jew
@@ -22,6 +25,15 @@ class Main extends Base
     {
         parent::initialization($controller_name, $method_name);
         $this->BaseModel = $this->loader->model('BaseModel', $this);
+    }
+
+    public function http_index(){
+        parent::templateData('test',1);
+        //web or app
+        parent::webOrApp(function (){
+            $template = $this->loader->view('app::Home/index');
+            $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+        });
     }
 
     public function http_hello(){
@@ -119,5 +131,36 @@ class Main extends Base
 
     }
 
+    public function http_testSC1()
+    {
 
+        $result = yield set_cache('test1','ok',10);
+        $this->http_output->end($result, false);
+    }
+
+    public function http_testSC2()
+    {
+
+        $result = yield get_cache('test1');
+        $this->http_output->end($result, false);
+    }
+
+    public function http_testSC5()
+    {
+        $result = yield CatCacheRpcProxy::getRpc()->getAll();
+        $this->http_output->end($result, false);
+    }
+
+    public function http_phpquery(){
+        /**
+         * 下面实现多线程采集文章信息
+         */
+
+        //$res = QueryList::get('https://github.com')->find('img')->attrs('src');
+
+        $html = file_get_html('https://www.baidu.com');
+
+        $this->http_output->end($html,false);
+
+    }
 }

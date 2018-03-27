@@ -7,8 +7,11 @@
  */
 use app\Helpers\Sessions\Session;
 use app\Controllers;
-use  Server\Memory\Cache;
-function Test(){
+use Server\Memory\Cache;
+use Server\Components\CatCache\CatCacheRpcProxy;
+
+function Test()
+{
     return 'test_123';
 }
 
@@ -21,7 +24,8 @@ function Test(){
  */
 function session($name, $value = '', $prefix = null)
 {
-    if (is_array($name)) {
+    if (is_array($name))
+    {
         // 初始化
         Session::init($name);
     } elseif (is_null($name)) {
@@ -39,38 +43,43 @@ function session($name, $value = '', $prefix = null)
     }
 }
 
-
-
 /**
- * 生成url
+ * 生成url{全局助手函数}
  * @param $module       module
  * @param $controller   controller
  * @param $method
  * @param string $params
  */
-function url($module='',$controller='',$action='', $params=''){
-
+function url($module='',$controller='',$action='', $params='')
+{
     $host = Controllers\BaseController::$Host2;
-    if(empty($module)){
+    if(empty($module))
+    {
         $module = Controllers\BaseController::$ModuleName2;
     }
-    if(empty($controller)){
+    if(empty($controller))
+    {
         $controller = Controllers\BaseController::$ControllerName2;
     }
-    if(empty($action)){
+    if(empty($action))
+    {
         $action = Controllers\BaseController::$ActionName2;
     }
     $url = $module.'/'.$controller.'/'.$action;
     //print_r($url);
     // 解析参数
-    if (is_string($params)) {
+    if (is_string($params))
+    {
         // aaa=1&bbb=2 转换成数组
         parse_str($params, $params);
     }
     $url .= '?';
-    if(is_array($params)){
-        foreach ($params as $key=>$value){
-            if ('' !== trim($value)) {
+    if(is_array($params))
+    {
+        foreach ($params as $key=>$value)
+        {
+            if ('' !== trim($value))
+            {
                 $url .=  $key . '=' . urlencode($value).'&';
             }
         }
@@ -83,7 +92,7 @@ function url($module='',$controller='',$action='', $params=''){
 }
 
 /**
- * 生成请求令牌
+ * 生成请求令牌{全局助手函数}
  * @access public
  * @param string $name 令牌名称
  * @param mixed  $type 令牌生成方法
@@ -93,11 +102,84 @@ function token($name = '__token__', $type = 'md5', $is_ajax=false)
 {
     $type  = is_callable($type) ? $type : 'md5';
     $token = call_user_func($type, $_SERVER['REQUEST_TIME_FLOAT']);
-    if ($is_ajax) {
+    if ($is_ajax)
+    {
         header($name . ': ' . $token);
     }
     Session::set($name, $token);
     return $token;
+}
+
+
+/**
+ * 设置缓存{全局助手函数}
+ * @param $key
+ * @param $value
+ * @param int $expire
+ * @return Generator
+ */
+function set_cache($key,$value,$expire=24*3600)
+{
+    $data = [
+        'data'=>$value,
+        'create_time'=>time(),
+        'expire_time'=>$expire
+    ];
+    yield CatCacheRpcProxy::getRpc()->offsetSet($key,$data);
+}
+
+/**
+ * 获取缓存{全局助手函数}
+ * @param $key
+ * @return bool
+ */
+function get_cache($key)
+{
+    $result = yield CatCacheRpcProxy::getRpc()->offsetExists($key);
+    if($result)
+    {
+        $result =  yield CatCacheRpcProxy::getRpc()[$key];
+        //判断是否过期
+        //print_r($result);
+        if(time() - $result['create_time']>$result['expire_time'])
+        {
+            yield CatCacheRpcProxy::getRpc()->offsetUnset($key);
+            $result = false;
+        }
+    }else{
+        $result = false;
+    }
+    return $result;
+
+}
+
+/**
+ * Curl版本post提交{全局助手函数}
+ * 使用方法：
+ * $post_string = "app=request&version=beta";
+ * request_by_curl('http://facebook.cn/restServer.php',$post_string);
+ */
+function http_post_url($remote_server, array $params)
+{
+
+    $post_string = "{";
+    foreach($params as $key => &$val)
+    {
+        $post_string .= '"'.$key .'":"'.$val .'",';
+    }
+    $post_string .= "}";
+
+    //$post_string = substr($post_string,0,-1);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $remote_server);
+    curl_setopt($ch, CURLOPT_POSTFIELDS,  $post_string);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_USERAGENT, "Ming123jew");
+    //curl_setopt($ch, CURLOPT_HTTPHEADER, '');//设置HTTP头
+    curl_setopt($ch, CURLOPT_POST, 1);//设置为POST方式
+    $data = curl_exec($ch);
+    curl_close($ch);
+    return $data;
 }
 
 /**
@@ -182,31 +264,14 @@ function get_role_byid($roleid,$context,$flag='__CACHE_ROLE__'){
     return false;
 }
 
-/**
- * Curl版本   post 提交
- * 使用方法：
- * $post_string = "app=request&version=beta";
- * request_by_curl('http://facebook.cn/restServer.php',$post_string);
- */
-function http_post_url($remote_server, array $params){
+function get_content_list_bycatid()
+{
 
-    $post_string = "{";
-    foreach($params as $key => &$val){
-        $post_string .= '"'.$key .'":"'.$val .'",';
-    }
-    $post_string .= "}";
+}
 
-    //$post_string = substr($post_string,0,-1);
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $remote_server);
-    curl_setopt($ch, CURLOPT_POSTFIELDS,  $post_string);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_USERAGENT, "Ming123jew");
-    //curl_setopt($ch, CURLOPT_HTTPHEADER, '');//设置HTTP头
-    curl_setopt($ch, CURLOPT_POST, 1);//设置为POST方式
-    $data = curl_exec($ch);
-    curl_close($ch);
-    return $data;
+function get_content_byid()
+{
+
 }
 
 function get_modelname_bymodelid($model_id){

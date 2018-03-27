@@ -8,6 +8,9 @@ $baseDir = dirname($vendorDir);
 return array(
     'e40631d46120a9c38ea139981f8dab26' => $vendorDir . '/ircmaxell/password-compat/lib/password.php',
     '5255c38a0faeba867671b61dfda6d864' => $vendorDir . '/paragonie/random_compat/lib/random.php',
+    'f54c9b5e988cab550b89236716b03511' => $vendorDir . '/graylog2/gelf-php/src/check_technical_requirements.php',
+    'c964ee0ededf28c96ebd9db5099ef910' => $vendorDir . '/guzzlehttp/promises/src/functions_include.php',
+    'a0edc8309cc5e1d60e3047b5df6b7052' => $vendorDir . '/guzzlehttp/psr7/src/functions_include.php',
     '848a06382c1c883893a9c9833ae2b551' => $vendorDir . '/symfony/polyfill/src/Apcu/bootstrap.php',
     'd075ca29fdd460a76e9d730a9724dc20' => $vendorDir . '/symfony/polyfill/src/Php54/bootstrap.php',
     '7d1c739f734e1193d0c090179eeb95aa' => $vendorDir . '/symfony/polyfill/src/Php55/bootstrap.php',
@@ -19,8 +22,12 @@ return array(
     '299b3c040b39cb03c6eceb9bb272ad1d' => $vendorDir . '/symfony/polyfill/src/Intl/Normalizer/bootstrap.php',
     'e59f725579f9974327c76777296d6dcc' => $vendorDir . '/symfony/polyfill/src/Mbstring/bootstrap.php',
     '17dde14e168d8aa5de531eefe5689d6b' => $vendorDir . '/symfony/polyfill/src/Xml/bootstrap.php',
-    'f54c9b5e988cab550b89236716b03511' => $vendorDir . '/graylog2/gelf-php/src/check_technical_requirements.php',
+    '667aeda72477189d0494fecd327c3641' => $vendorDir . '/symfony/var-dumper/Resources/functions/dump.php',
+    '37a3dc5111fe8f707ab4c132ef1dbc62' => $vendorDir . '/guzzlehttp/guzzle/src/functions_include.php',
     'b46ad4fe52f4d1899a2951c7e6ea56b0' => $vendorDir . '/voku/portable-utf8/bootstrap.php',
+    'fe62ba7e10580d903cc46d808b5961a4' => $vendorDir . '/tightenco/collect/src/Collect/Support/helpers.php',
+    'caf31cc6ec7cf2241cb6f12c226c3846' => $vendorDir . '/tightenco/collect/src/Collect/Support/alias.php',
+    '31a7cf013d73a96bec3a5977a94ebccd' => $vendorDir . '/shark/simple_html_dom/simple_html_dom.php',
     '01872de466184325f7c54c2eed2fbb45' => $vendorDir . '/tmtbe/swooledistributed/src/Server/helpers/Common.php',
     '5f6cf907edcd4d0f2954cb7d08ba1f01' => $baseDir . '/src/app/Helpers/Common.php',
 );

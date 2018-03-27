@@ -28,7 +28,8 @@ class CategoryModel extends BaseModel
      * @return bool
      */
     public function getAll(){
-        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
+
+        $r = yield $this->db->from($this->prefix.$this->table)
             ->orderBy('id','asc')
             ->select('*')
             ->coroutineSend();
@@ -44,7 +45,7 @@ class CategoryModel extends BaseModel
      * @return bool
      */
     public function getById(int $id,$fields='*'){
-        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
+        $r = yield $this->db()->from($this->prefix.$this->table)
             ->where('id',$id)
             ->select($fields)
             ->coroutineSend();
