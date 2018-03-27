@@ -47,9 +47,7 @@ class EventDispatcher
         if (!array_key_exists($type, $this->_eventListeners)) {
             $this->_eventListeners [$type] = array();
         }
-        if (!in_array($listener, $this->_eventListeners [$type])) {
-            array_push($this->_eventListeners [$type], $listener);
-        }
+        array_push($this->_eventListeners [$type], $listener);
     }
 
     /**
@@ -153,6 +151,17 @@ class EventDispatcher
         } else {//仅仅发布自己的进程
             self::workerDispatchEventWith([$type, $data]);
         }
+    }
+
+    /**
+     * 派发给指定进程
+     * @param $workerId
+     * @param $type
+     * @param null $data
+     */
+    public function dispathToWorkerId($workerId, $type, $data = null)
+    {
+        get_instance()->sendToOneWorker($workerId, SwooleMarco::DISPATCHER_NAME, [$type, $data], EventDispatcher::class . "::workerDispatchEventWith");
     }
 
     /**

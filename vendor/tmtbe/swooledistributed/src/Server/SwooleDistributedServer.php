@@ -14,11 +14,13 @@ use Server\Components\Cluster\ClusterHelp;
 use Server\Components\Cluster\ClusterProcess;
 use Server\Components\Consul\ConsulHelp;
 use Server\Components\Consul\ConsulProcess;
+use Server\Components\Event\EventDispatcher;
 use Server\Components\GrayLog\GrayLogHelp;
 use Server\Components\Process\ProcessManager;
 use Server\Components\SDHelp\SDHelpProcess;
 use Server\Components\TimerTask\Timer;
 use Server\Components\TimerTask\TimerTask;
+use Server\CoreBase\Actor;
 use Server\CoreBase\ControllerFactory;
 use Server\CoreBase\ModelFactory;
 use Server\CoreBase\SwooleException;
@@ -102,6 +104,12 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
     private $bind_ip;
 
     /**
+     * 重载锁
+     * @var array
+     */
+    private $reloadLockMap = [];
+
+    /**
      * SwooleDistributedServer constructor.
      */
     public function __construct()
@@ -177,6 +185,11 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
         Timer::init();
         //init锁
         $this->initLock = new \swoole_lock(SWOOLE_RWLOCK);
+        //reload锁
+        for ($i = 0; $i < $this->worker_num; $i++) {
+            $lock = new \swoole_lock(SWOOLE_MUTEX);
+            $this->reloadLockMap[$i] = $lock;
+        }
     }
 
     /**
@@ -254,6 +267,24 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
     }
 
     /**
+     * 发送给指定进程
+     * @param $workerId
+     * @param $type
+     * @param $uns_data
+     * @param string $callStaticFuc
+     */
+    public function sendToOneWorker($workerId, $type, $uns_data, string $callStaticFuc)
+    {
+        $send_data = get_instance()->packServerMessageBody($type, $uns_data, $callStaticFuc);
+        if ($this->server->worker_id == $workerId) {
+            //自己的进程是收不到消息的所以这里执行下
+            call_user_func($callStaticFuc, $uns_data);
+        } else {
+            get_instance()->server->sendMessage($send_data, $workerId);
+        }
+    }
+
+    /**
      * task异步任务
      * @param $serv
      * @param $task_id
@@ -298,6 +329,15 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
         }
     }
 
+    /**
+     * 是否是重载
+     */
+    protected function isReload()
+    {
+        $lock = $this->reloadLockMap[$this->workerId];
+        $result = $lock->trylock();
+        return !$result;
+    }
 
     /**
      * 获取同步redis
@@ -508,10 +548,17 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
         }
         //向SDHelp進程取數據
         if (!$this->isTaskWorker()) {
+            $isReload = $this->isReload();
             ConsulHelp::start();
             TimerTask::start();
             if ($this->config->get('catCache.enable', false)) {
                 TimerCallBack::init();
+                Coroutine::startCoroutine(function () use ($workerId, $isReload) {
+                    if (!$isReload) {
+                        yield EventDispatcher::getInstance()->addOnceCoroutine(CatCacheProcess::READY);
+                    }
+                    yield Actor::recovery($workerId);
+                });
             }
         }
     }

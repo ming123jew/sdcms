@@ -13,17 +13,40 @@ use Server\CoreBase\Actor;
 
 class TestActor extends Actor
 {
-    public function test()
+    public function test1()
     {
-        var_dump(2);
-        $this->tick(1000, function () {
-            var_dump("test");
-        });
+        yield $this->redis_pool->getCoroutine()->set("test", 199);
+        return 1;
     }
 
-    public function destroy()
+    public function test2()
     {
-        var_dump("destory");
-        parent::destroy();
+        $result = yield $this->redis_pool->getCoroutine()->get("test");
+        return $result;
+    }
+
+    public function test3()
+    {
+        $result = yield $this->redis_pool->getCoroutine()->del("test");
+        return "3";
+    }
+    /**
+     * 处理注册状态
+     * @param $key
+     * @param $value
+     */
+    public function registStatusHandle($key, $value)
+    {
+        /* switch ($key) {
+             case 'status':
+                 switch ($value) {
+                     case 1:
+                         $this->tick(100, function () {
+                             echo "1\n";
+                         });
+                         break;
+                 }
+                 break;
+         }*/
     }
 }

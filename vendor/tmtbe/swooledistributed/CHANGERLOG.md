@@ -361,3 +361,45 @@ php start_swoole_server.php start -de --f "[ip] => 127.0.0.1"
  Actor::call("actor", "destroy");
 ```
 2.修复404页面http头不对的问题
+
+# 2.7.5.2
+1.完善Actor，支持自动恢复状态
+
+2.修复进程间RPC的一个bug
+
+3.修复EventDispatch的一个bug
+
+# 2.7.5.3
+1.优化定时器
+
+2.优化协程
+
+3.redis的set支持标签
+```php
+$result = yield $this->redis_pool->getCoroutine()->set('testroute', 21,["XX","EX"=>10]);
+```
+# 2.7.6
+Actor专版
+
+1.Actor名称重复性检测，集群中不允许出现重名的Actor
+
+2.Actor间可以自由RPC，支持集群
+
+3.Actor中可以使用一切异步客户端，支持协程,可以调用Model，Task
+
+4.Actor支持事务，保证事务执行的顺序
+```php
+$rpc = Actor::getRpc("Test2");
+try {
+    $beginid = yield $rpc->beginCo();
+    $result = yield $rpc->test1();
+    $result = yield $rpc->test2();
+    //var_dump($result);
+    $result = yield $rpc->test3();
+    //var_dump($result);
+} finally {
+    //var_dump("finally end");
+    $rpc->end();
+}
+```
+5.Actor现在默认会落地存盘，如不手动调用Destroy，重启服务器会自动恢复Actor，可以删除cache文件夹清理。
