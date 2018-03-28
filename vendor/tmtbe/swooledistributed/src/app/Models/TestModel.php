@@ -32,6 +32,7 @@ class TestModel extends Model
         print_r("model timer\n");
     }
 
+    //Controller和Model中的用法
     public function contextTest()
     {
         $testTask = $this->loader->task('TestTask', $this);

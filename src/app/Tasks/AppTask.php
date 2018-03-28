@@ -13,6 +13,7 @@ class AppTask extends Task
 {
     public function testTask()
     {
+        print_r("1");
         return "test task\n";
     }
 }

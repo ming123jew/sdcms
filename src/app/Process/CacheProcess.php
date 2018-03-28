@@ -10,7 +10,7 @@ namespace app\Process;
 
 use Server\Components\Process\Process;
 
-class MyProcess extends Process
+class CacheProcess extends Process
 {
     public function __construct($name, $worker_id, $coroutine_need = true)
     {
@@ -23,9 +23,8 @@ class MyProcess extends Process
 
     }
 
-    public function getData()
-    {
-        return '123';
+    public function run(){
+
     }
 
     protected function onShutDown()

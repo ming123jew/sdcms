@@ -4,7 +4,9 @@ namespace app\Controllers\Home;
 
 
 use app\Models\BaseModel;
+use app\Models\Task\CacheTask;
 use app\Models\UserModel;
+use app\Tasks\AppTask;
 use QL\QueryList;
 use Server\Components\CatCache\CatCacheRpcProxy;
 
@@ -161,6 +163,16 @@ class Main extends Base
         $html = file_get_html('https://www.baidu.com');
 
         $this->http_output->end($html,false);
+
+    }
+
+    public function http_task(){
+        //测试controller 调用任务
+        $testTask = $this->loader->task( AppTask::class);
+        $testTask->testTask();
+        $testTask->startTask(null,function($serv, $task_id, $data){
+            $this->http_output->end($data,false);
+        });
 
     }
 }

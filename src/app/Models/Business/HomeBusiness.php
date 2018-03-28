@@ -21,27 +21,27 @@ class HomeBusiness extends BaseBusiness
     protected $TagsModel;
 
 
-    public function get_new_contents()
+    public function get_new_contents(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
     {
 
     }
 
-    public function get_hot()
+    public function get_hot(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
     {
 
     }
 
-    public function get_commend()
+    public function get_commend(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
     {
 
     }
 
-    public function get_comment()
+    public function get_comment(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
     {
 
     }
 
-    public function get_recorded()
+    public function get_recorded(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
     {
 
     }
