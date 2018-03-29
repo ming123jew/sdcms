@@ -27,8 +27,6 @@ class AppServer extends SwooleDistributedServer
         //通过这个可以精确判断发生异常和错误的位置，也可以了解到SD框架的工作流程。
         $this->setDebugMode();
         parent::__construct();
-
-
     }
 
     /**
@@ -48,25 +46,9 @@ class AppServer extends SwooleDistributedServer
     public function initAsynPools($workerId)
     {
         parent::initAsynPools($workerId);
-        if($workerId==0)
-        {
 
-            $amqp = new AMQP('localhost',5672,'guest','guest');
-            $channel = $amqp->channel();
-            //声明一个队里，durable消息持久化
-            $channel->queue_declare('msgs', false, true, false, false);
-            //交换机,直连交换机（direct）, 主题交换机（topic）, （头交换机）headers和 扇型交换机（fanout）
-            $channel->exchange_declare('router', 'direct', false, true, false);
-            //我们已经创建了一个扇型交换机和一个队列。现在我们需要告诉交换机如何发送消息给我们的队列。交换器和队列之间的联系我们称之为绑定（binding）
-            $channel->queue_bind('msgs', 'router');
-            $channel->basic_consume('msgs', 'consumer', false, false, false, false, function (AMQPMessage $message)
-            {
+        $this->addAsynPool('AMQP',new AMQP('localhost',5672,'guest','guest'));
 
-                echo "\n--------\n";
-                echo $message->body;
-                $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
-            });
-        }
     }
 
     /**
@@ -83,6 +65,7 @@ class AppServer extends SwooleDistributedServer
         {
             ProcessManager::getInstance()->addProcess(MyAMQPTaskProcess::class,true,$i);
         }
+
     }
 
     /**

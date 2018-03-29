@@ -8,10 +8,11 @@
 
 namespace app\AMQPTasks;
 
+use PhpAmqpLib\Exception\AMQPBasicCancelException;
 use PhpAmqpLib\Message\AMQPMessage;
 use Server\Components\AMQPTaskSystem\AMQPTask;
-use Server\Models\TestModel;
 
+//创建作业任务
 class TestAMQPTask extends AMQPTask
 {
     /**
@@ -22,16 +23,21 @@ class TestAMQPTask extends AMQPTask
     public function initialization(AMQPMessage $message)
     {
         parent::initialization($message);
-        $this->TestModel = $this->loader->model(TestModel::class, $this);
     }
 
     /**
+     * 处理任务
      * handle
      * @param $body
      */
     public function handle($body)
     {
-        var_dump($body);
+        //print_r('testaqptask-handle'.$body);
+        //file_put_contents('/home/wwwroot/sdcms/a.txt',var_export($body,true), FILE_APPEND);
+        //file_put_contents('/home/wwwroot/sdcms/c.txt','aa');
+        //var_dump($body);
         $this->ack();
     }
+
+
 }

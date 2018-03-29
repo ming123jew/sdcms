@@ -26,6 +26,5 @@ class CacheTask extends BaseModel
         $data = yield  ProcessManager::getInstance()->getRpcCall(MyProcess::class)->getData();
         print_r($data);
         return "ticker";
-
     }
 }

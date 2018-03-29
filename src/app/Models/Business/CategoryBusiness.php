@@ -13,9 +13,7 @@ use app\Helpers\Tree;
 class CategoryBusiness extends BaseBusiness
 {
     protected $CategoryModel;
-
     /**
-     * 返回栏目，如传入parent_id，则显示对应选择的栏目
      * @param int $parent_id
      * @return string
      */
@@ -41,7 +39,6 @@ class CategoryBusiness extends BaseBusiness
     }
 
     /**
-     * 返回所有栏目列表
      * @return string
      */
     public function get_category_for_category_list()
@@ -84,16 +81,5 @@ class CategoryBusiness extends BaseBusiness
             $info = $tree->get_tree(0, $str);
         }
         return $info;
-    }
-
-
-    public function delete_by_id(){
-        //[--start::开始更新操作，执行事务--]
-        $transaction_id = yield $this->mysql_pool->coroutineBegin($this);
-        //[--start::删除主表信息--]
-        //[--end::删除主表信息--]
-
-        //[--start::删除文章相关信息--]
-        //[--end::删除文章相关信息--]
     }
 }

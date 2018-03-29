@@ -6,9 +6,15 @@ namespace app\Controllers\Home;
 use app\Models\BaseModel;
 use app\Models\Task\CacheTask;
 use app\Models\UserModel;
+use app\Process\MyAMQPTaskProcess;
 use app\Tasks\AppTask;
-use QL\QueryList;
+use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Exception\AMQPException;
+use PhpAmqpLib\Connection\AMQPQueue;
+use PhpAmqpLib\Message\AMQPMessage;
+use Server\Asyn\AMQP\AMQP;
 use Server\Components\CatCache\CatCacheRpcProxy;
+use Server\Components\Process\ProcessManager;
 
 /**
  * Created by PhpStorm.
@@ -167,12 +173,30 @@ class Main extends Base
     }
 
     public function http_task(){
-        //测试controller 调用任务
         $testTask = $this->loader->task( AppTask::class);
         $testTask->testTask();
         $testTask->startTask(null,function($serv, $task_id, $data){
             $this->http_output->end($data,false);
         });
-
     }
+
+
+    protected $queueName = 'amqp-cache';
+    protected $exchange = 'amqp-cache';
+    protected $consumerTag = 'sys';
+
+    public function http_process(){
+        //投递一个信息到队列
+
+        $amqt =  get_instance()->getAsynPool('AMQP');
+        $channel = $amqt->channel();
+
+        $msgBody = json_encode(["name" => "iGoo`1", "age" => 22]);
+        $msg = new AMQPMessage($msgBody, ['content_type' => 'text/plain', 'delivery_mode' => 2]); //生成消息  //, ['content_type' => 'text/plain', 'delivery_mode' => 2]
+        $r = $channel->basic_publish($msg,$this->exchange); //推送消息到某个交换机
+        $channel->close();
+        //print_r($r);
+        $this->http_output->end($r,false);
+    }
+
 }

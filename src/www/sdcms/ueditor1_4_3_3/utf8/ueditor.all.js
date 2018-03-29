@@ -7086,7 +7086,8 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             !options.isShow && me.setHide();
             options.readonly && me.setDisabled();
 
-
+            alert(me.body);
+            alert('ok');
         },
 
         /**

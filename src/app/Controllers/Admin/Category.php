@@ -105,7 +105,6 @@ class Category extends Base
             $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
             $id = intval($data['info']['id']);
             unset($data['info']['id']);
-            //预留更改catid,修改了catid,则对应多有的文章-文章统计等表中catid也需跟随修改
             $oldcatid = intval($data['info']['oldcatid']);
             unset($data['info']['oldcatid']);
             $r_category_model = yield $this->CategoryModel->updateById($id,$data['info']);
@@ -145,18 +144,7 @@ class Category extends Base
 
     public function http_category_delete()
     {
-        if($this->http_input->getRequestMethod()=='GET')
-        {
-            $id = intval($this->http_input->postGet('id'));
-            $this->CategoryModel = $this->loader->model(CategoryModel::class,$this);
-            $d = yield $this->CategoryModel->getById($id);
-            if($id&&$d)
-            {
-                //
-            }else{
-                parent::httpOutputTis('id参数错误，或不存在记录.');
-            }
-        }
+
     }
 
 
