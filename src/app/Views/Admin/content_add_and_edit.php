@@ -190,6 +190,14 @@ Purchase: http://wrapbootstrap.com
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
+                                                                <label class="col-lg-4 control-label">推荐：</label>
+                                                                <div class="col-lg-8">
+                                                                    <input style="position: initial;opacity: inherit;" name="info[flag][]" value="p" type="checkbox"  <?php if(strpos($data['d_content_model']['flag'],'p')!==false){?>checked="checked"<?php } ?>>幻灯&nbsp;&nbsp;
+                                                                    <input style="position: initial;opacity: inherit;" name="info[flag][]" value="t" type="checkbox" <?php if(strpos($data['d_content_model']['flag'],'t')){?>checked="checked"<?php } ?>>头条&nbsp;&nbsp;
+                                                                    <input style="position: initial;opacity: inherit;" name="info[flag][]" value="r" type="checkbox"  <?php if(strpos($data['d_content_model']['flag'],'r')){?>checked="checked"<?php } ?>>推荐&nbsp;&nbsp;
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
                                                                 <div class="col-lg-offset-4 col-lg-8">
                                                                     <button class="btn btn-palegreen" type="submit">Validate</button>
 

@@ -35,7 +35,7 @@ class TestAMQPTask extends AMQPTask
         //print_r('testaqptask-handle'.$body);
         //file_put_contents('/home/wwwroot/sdcms/a.txt',var_export($body,true), FILE_APPEND);
         //file_put_contents('/home/wwwroot/sdcms/c.txt','aa');
-        //var_dump($body);
+        var_dump($body);
         $this->ack();
     }
 

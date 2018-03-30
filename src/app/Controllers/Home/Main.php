@@ -4,6 +4,7 @@ namespace app\Controllers\Home;
 
 
 use app\Models\BaseModel;
+use app\Models\Business\HomeBusiness;
 use app\Models\Task\CacheTask;
 use app\Models\UserModel;
 use app\Process\MyAMQPTaskProcess;
@@ -28,6 +29,7 @@ class Main extends Base
      * @var AppModel
      */
     public $BaseModel;
+    protected $ConentBusiness;
 
     protected function initialization($controller_name, $method_name)
     {
@@ -36,6 +38,20 @@ class Main extends Base
     }
 
     public function http_index(){
+
+        //[获取幻灯:start]
+        $this->ConentBusiness = $this->loader->model(HomeBusiness::class,$this);
+        $d_slide = yield $this->ConentBusiness->get_slide();
+        //[获取幻灯:end]
+
+        //[获取推荐:start]
+        $this->ConentBusiness = $this->loader->model(HomeBusiness::class,$this);
+        $d_get_recommend = yield $this->ConentBusiness->get_recommend();
+        //[获取推荐:end]
+
+        print_r($d_slide);
+        print_r($d_get_recommend);
+
         parent::templateData('test',1);
         //web or app
         parent::webOrApp(function (){

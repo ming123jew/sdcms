@@ -76,6 +76,37 @@ class ContentModel extends BaseModel
     }
 
     /**
+     * 获取幻灯[flag:p|]列表
+     * @param string $flag
+     * @param int $start
+     * @param int $end
+     * @param int $catid
+     * @param int $status
+     * @param string $fields
+     * @return bool
+     */
+    public function getByFlag(string $flag='p',int $start=0,int $end=9,int $catid=0,int $status=0,$fields='*')
+    {
+        //FIND_IN_SET();
+        if($catid!=0){
+            $sql = "select {$fields} from {$this->getTable()}  where catid={$catid} and FIND_IN_SET('{$flag}',flag) and status={$status} limit {$start},{$end}";
+        }else{
+            $sql = "select {$fields} from {$this->getTable()}  where FIND_IN_SET('{$flag}',flag) and status={$status} limit {$start},{$end}";
+        }
+        echo $sql;
+
+        $r = yield $this->mysql_pool->dbQueryBuilder
+            ->coroutineSend('',$sql);
+
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r['result'];
+        }
+    }
+
+
+    /**
      * @param $id
      * @return bool
      */

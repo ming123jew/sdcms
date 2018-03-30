@@ -21,8 +21,37 @@ class HomeBusiness extends BaseBusiness
     protected $TagsModel;
 
 
-    public function get_slide()
+    /**
+     * 获取幻灯{flag字段包含p}
+     *
+     */
+    public function get_slide(string $flag='p',int $start=0,int $end=9,int $catid=0,int $status=0,$fields='*',bool $cache=true,int $expire=24*3600)
     {
+        $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
+        $d = yield $this->ContentModel->getByFlag($flag,$start,$end,$catid,$status,$fields);
+        if($d!=false){
+            return $d;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 获取推荐
+     * @param int $catid
+     * @param int $limit
+     * @param bool $cache
+     * @param int $expire
+     */
+    public function get_recommend(string $flag='r',int $start=0,int $end=9,int $catid=0,int $status=0,$fields='*',bool $cache=true,int $expire=24*3600)
+    {
+        $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
+        $d = yield $this->ContentModel->getByFlag($flag,$start,$end,$catid,$status,$fields);
+        if($d!=false){
+            return $d;
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -50,17 +79,6 @@ class HomeBusiness extends BaseBusiness
 
     }
 
-    /**
-     * 获取推荐
-     * @param int $catid
-     * @param int $limit
-     * @param bool $cache
-     * @param int $expire
-     */
-    public function get_commend(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
-    {
-
-    }
 
     /**
      * 获取评论
