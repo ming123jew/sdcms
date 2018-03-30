@@ -101,6 +101,11 @@ class Content extends Base
             {
                 unset($data['info']['oldcatid']);
             }
+            if(isset($data['info']['flag']))
+            {
+                //FIND_IN_SET('b','a,b,c,d');
+                $data['info']['flag'] = implode(',',$data['info']['flag']);
+            }
 
             //[--start::添加文章{业务逻辑}--]
             $this->ContentBusiness = $this->loader->model(ContentBusiness::class,$this);
@@ -157,6 +162,10 @@ class Content extends Base
             {
                 $data['info']['copyfrom'] = '本站';
             }
+            if(isset($data['info']['flag']))
+            {
+                $data['info']['flag'] = implode(',',$data['info']['flag']);
+            }
             $id = $data['info']['id'];
             unset($data['info']['id']);
             $oldcatid = intval($data['info']['oldcatid']);
@@ -172,7 +181,6 @@ class Content extends Base
                 parent::httpOutputTis('ContentModel编辑请求失败.');
             }
             //[--end::更新文章{业务逻辑}--]
-
         }else{
             $id = $this->http_input->get('id');
             $this->ContentModel =  $this->loader->model(ContentModel::class,$this);

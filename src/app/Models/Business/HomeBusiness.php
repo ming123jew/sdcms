@@ -21,26 +21,66 @@ class HomeBusiness extends BaseBusiness
     protected $TagsModel;
 
 
-    public function get_new_contents(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
+    public function get_slide()
     {
+    }
+
+    /**
+     * 最新文章
+     * @param int $catid
+     * @param int $limit
+     * @param bool $cache
+     * @param int $expire
+     */
+    public function get_new(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
+    {
+        $this->ContentModel = yield $this->loader->model(ContentModel::class,$this);
 
     }
 
+    /**
+     * 热门文章
+     * @param int $catid
+     * @param int $limit
+     * @param bool $cache
+     * @param int $expire
+     */
     public function get_hot(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
     {
 
     }
 
+    /**
+     * 获取推荐
+     * @param int $catid
+     * @param int $limit
+     * @param bool $cache
+     * @param int $expire
+     */
     public function get_commend(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
     {
 
     }
 
+    /**
+     * 获取评论
+     * @param int $catid
+     * @param int $limit
+     * @param bool $cache
+     * @param int $expire
+     */
     public function get_comment(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
     {
 
     }
 
+    /**
+     * 获取语录
+     * @param int $catid
+     * @param int $limit
+     * @param bool $cache
+     * @param int $expire
+     */
     public function get_recorded(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
     {
 
