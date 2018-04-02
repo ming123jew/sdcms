@@ -62,10 +62,10 @@ Purchase: http://wrapbootstrap.com
                 <div class="or">OR</div>
             </div>
             <div class="loginbox-textbox">
-                <input type="text" class="form-control" placeholder="Email" id="username" />
+                <input type="text" class="form-control" placeholder="Username" id="username" />
             </div>
             <div class="loginbox-textbox">
-                <input type="text" class="form-control" placeholder="Password" id="password" />
+                <input type="password" class="form-control" placeholder="Password" id="password" />
             </div>
             <div class="loginbox-forgot">
                 <a href="">Forgot Password?</a>

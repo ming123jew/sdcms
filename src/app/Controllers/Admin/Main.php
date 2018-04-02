@@ -91,12 +91,11 @@ class Main extends Base
                 $end = [
                     'status' => 0,
                     'code'=>200,
-                    'message'=>'info'
+                    'message'=>'用户名或密码错误。'
                 ];
             }else{
 
                 if($result){
-
                     //储存到SESSION - memory
                     unset($result['password']);
                     $session_data = $result;

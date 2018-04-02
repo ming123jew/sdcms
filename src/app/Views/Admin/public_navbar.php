@@ -27,7 +27,7 @@
         <div class="navbar-container">
             <!-- Navbar Barnd -->
             <div class="navbar-header pull-left">
-                <a href="#" class="navbar-brand">
+                <a  class="navbar-brand">
                     <small>
                         <img src="assets/img/logo.png" alt="" />
                     </small>
@@ -44,8 +44,8 @@
             <div class="navbar-header pull-right">
                 <div class="navbar-account">
                     <ul class="account-area">
-                        <li>
-                            <a class=" dropdown-toggle" data-toggle="dropdown" title="Help" href="#">
+                        <li style="display: none;">
+                            <a class=" dropdown-toggle" data-toggle="dropdown" title="Help">
                                 <i class="icon fa fa-warning"></i>
                             </a>
                             <!--Notification Dropdown-->
@@ -126,7 +126,7 @@
                             </ul>
                             <!--/Notification Dropdown-->
                         </li>
-                        <li>
+                        <li style="display: none;">
                             <a class="wave in dropdown-toggle" data-toggle="dropdown" title="Help" href="#">
                                 <i class="icon fa fa-envelope"></i>
                                 <span class="badge">3</span>
@@ -194,7 +194,7 @@
                             <!--/Messages Dropdown-->
                         </li>
 
-                        <li>
+                        <li style="display: none;">
                             <a class="dropdown-toggle" data-toggle="dropdown" title="Tasks" href="#">
                                 <i class="icon fa fa-tasks"></i>
                                 <span class="badge">4</span>
@@ -268,13 +268,13 @@
                                     <img src="assets/img/avatars/adam-jansen.jpg">
                                 </div>
                                 <section>
-                                    <h2><span class="profile"><span>David Stevenson</span></span></h2>
+                                    <h2><span class="profile"><span style="min-width: 75px;"><?php echo $data['username'];?></span></span></h2>
                                 </section>
                             </a>
                             <!--Login Area Dropdown-->
                             <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
-                                <li class="username"><a>David Stevenson</a></li>
-                                <li class="email"><a>David.Stevenson@live.com</a></li>
+                                <li class="username"><a><?php echo $data['username'];?></a></li>
+                                <li class="email"><a><?php echo $data['email'];?></a></li>
                                 <!--Avatar Area-->
                                 <li>
                                     <div class="avatar-area">
@@ -283,12 +283,12 @@
                                     </div>
                                 </li>
                                 <!--Avatar Area-->
-                                <li class="edit">
+                                <li class="edit" style="display: none;">
                                     <a href="profile.html" class="pull-left">Profile</a>
                                     <a href="#" class="pull-right">Setting</a>
                                 </li>
                                 <!--Theme Selector Area-->
-                                <li class="theme-area">
+                                <li class="theme-area" style="display: none;">
                                     <ul class="colorpicker" id="skin-changer">
                                         <li><a class="colorpick-btn" href="#" style="background-color:#5DB2FF;" rel="assets/css/skins/blue.min.css"></a></li>
                                         <li><a class="colorpick-btn" href="#" style="background-color:#2dc3e8;" rel="assets/css/skins/azure.min.css"></a></li>
@@ -318,7 +318,7 @@
                         no space must be between these elements-->
                         <!-- Settings -->
                     </ul><div class="setting">
-                        <a id="btn-setting" title="Setting" href="#">
+                        <a id="btn-setting" title="Setting" >
                             <i class="icon glyphicon glyphicon-cog"></i>
                         </a>
                     </div><div class="setting-container">

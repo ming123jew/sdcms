@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50635
 File Encoding         : 65001
 
-Date: 2018-03-23 17:29:22
+Date: 2018-03-30 17:36:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,7 +166,7 @@ CREATE TABLE `sd_category` (
 -- ----------------------------
 -- Records of sd_category
 -- ----------------------------
-INSERT INTO `sd_category` VALUES ('1', '1', '0', '诗意人生', 'poetic_life', '', ' a', '1', '1', '{\"meta_title\":\"1\",\"meta_keywords\":\"2\",\"meta_description\":\"3\",\"description\":\"\"}', '3', '0');
+INSERT INTO `sd_category` VALUES ('1', '1', '0', '诗意人生', 'poetic_life', '', ' a', '1', '1', '{\"meta_title\":\"1\",\"meta_keywords\":\"2\",\"meta_description\":\"3\",\"description\":\"\"}', '4', '0');
 INSERT INTO `sd_category` VALUES ('2', '1', '0', '编程指南', 'sczn', '', '', '1', '1', '{\"meta_title\":\"\",\"meta_keywords\":\"\",\"meta_description\":\"\",\"description\":\"\"}', '2', '0');
 
 -- ----------------------------
@@ -475,17 +475,20 @@ CREATE TABLE `sd_content` (
   `gourl` varchar(150) NOT NULL COMMENT '跳转链接',
   `body` text NOT NULL,
   `copyfrom` varchar(40) NOT NULL DEFAULT '本站' COMMENT '来源',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+  `flag` varchar(10) DEFAULT NULL COMMENT 'p:幻灯  r:推荐   t:头条',
+  PRIMARY KEY (`id`),
+  KEY `flag` (`flag`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_content
 -- ----------------------------
-INSERT INTO `sd_content` VALUES ('1', '1', '诗意人生', '', '诗意 人生', '测试题1331', 'ming', '1520585025', '1520585025', '0', 'https://baidu.com', '', '本站');
-INSERT INTO `sd_content` VALUES ('2', '1', '诗意人生', '', '诗意 人生', '测试题13317', 'ming', '1520585093', '1520585093', '0', 'https://baidu.com', '', '本站');
-INSERT INTO `sd_content` VALUES ('3', '2', '诗意人生', '', '诗意 人生', '测试题1331733\r\nalert&#40;\"ok\"&#41;;', 'ming', '1521710247', '1521710247', '0', '', '', '本站');
-INSERT INTO `sd_content` VALUES ('4', '1', '日志', '/uploads/images/20180322/thumb_1521690901626173.png', '高性能 管理系统1', '啊aa3aa', 'ming', '1521710218', '1521710218', '0', '', '<p>fsdfdsfd</p><p>f</p>', '本站');
-INSERT INTO `sd_content` VALUES ('5', '2', 'aaaa', '', '', '', 'ming', '1521714616', '1521714616', '0', '', '', '本站');
+INSERT INTO `sd_content` VALUES ('1', '1', '诗意人生', '', '诗意 人生', '测试题1331', 'ming', '1520585025', '1520585025', '0', 'https://baidu.com', '', '本站', null);
+INSERT INTO `sd_content` VALUES ('2', '1', '诗意人生', '', '诗意 人生', '测试题13317', 'ming', '1520585093', '1520585093', '0', 'https://baidu.com', '', '本站', null);
+INSERT INTO `sd_content` VALUES ('3', '2', '诗意人生', '', '诗意 人生', '测试题1331733\r\nalert&#40;\"ok\"&#41;;', 'ming', '1521710247', '1521710247', '0', '', '', '本站', null);
+INSERT INTO `sd_content` VALUES ('4', '1', '日志', '/uploads/images/20180322/thumb_1521690901626173.png', '高性能 管理系统1', '啊aa3aa', 'ming', '1521710218', '1521710218', '0', '', '<p>fsdfdsfd</p><p>f</p>', '本站', null);
+INSERT INTO `sd_content` VALUES ('5', '2', 'aaaa', '', '', '', 'ming', '1522402192', '1522402192', '0', '', '', '本站', 'r');
+INSERT INTO `sd_content` VALUES ('6', '1', 'sdfsdfsdf', '', '', 'aa7a', 'ming', '1522398204', '1522398204', '0', '', '', '本站', 'p');
 
 -- ----------------------------
 -- Table structure for `sd_content_hits`
@@ -510,6 +513,7 @@ INSERT INTO `sd_content_hits` VALUES ('2', '1', '0', '0', '0', '0', '0', '152058
 INSERT INTO `sd_content_hits` VALUES ('3', '2', '0', '0', '0', '0', '0', '1520585238');
 INSERT INTO `sd_content_hits` VALUES ('4', '1', '0', '0', '0', '0', '0', '1520819382');
 INSERT INTO `sd_content_hits` VALUES ('5', '2', '0', '0', '0', '0', '0', '1521714616');
+INSERT INTO `sd_content_hits` VALUES ('6', '1', '0', '0', '0', '0', '0', '1522392308');
 
 -- ----------------------------
 -- Table structure for `sd_log`
@@ -5535,7 +5539,7 @@ CREATE TABLE `sd_tags` (
   `content_id` int(11) NOT NULL,
   `ucwords` char(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_tags
