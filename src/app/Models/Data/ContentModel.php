@@ -76,7 +76,7 @@ class ContentModel extends BaseModel
     }
 
     /**
-     * 获取幻灯[flag:p|]列表
+     * 获取幻灯[flag:p|t|r]列表
      * @param string $flag
      * @param int $start
      * @param int $end

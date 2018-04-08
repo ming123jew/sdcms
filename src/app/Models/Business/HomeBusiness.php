@@ -23,7 +23,15 @@ class HomeBusiness extends BaseBusiness
 
     /**
      * 获取幻灯{flag字段包含p}
-     *
+     * @param string $flag
+     * @param int $start
+     * @param int $end
+     * @param int $catid
+     * @param int $status
+     * @param string $fields
+     * @param bool $cache
+     * @param int $expire
+     * @return bool
      */
     public function get_slide(string $flag='p',int $start=0,int $end=9,int $catid=0,int $status=0,$fields='*',bool $cache=true,int $expire=24*3600)
     {
