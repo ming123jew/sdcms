@@ -154,6 +154,63 @@ function get_cache($key)
 }
 
 /**
+ * 分页工具条
+ * @param $total
+ * @param $page
+ * @param int $pageSize
+ * @param int $showPage
+ */
+function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null){    //第一个参数为表总数 第二个参数为每页显示几个
+    if($total&&$context){
+        $totalPage = ceil($total / $pageSize);    //获取总页数
+        $pageOffset = ($showPage - 1) / 2;    //页码偏移量
+        $pageBanner = "";
+        $pageSelf = $context->Uri;
+        $start = 1;    //开始页码
+        $end = $totalPage;    //结束页码
+        if($page > 1){
+            $pageBanner .= "<a href='".$pageSelf."?p=1'>首页</a>";
+            $pageBanner .= "<a href='".$pageSelf."?p=".($page - 1)."'>上一页</a>";
+        }
+        if($totalPage > $showPage){    //当总页数大于显示页数时
+            if($page > $pageOffset + 1){    //当当前页大于页码偏移量+1时，也就是当页码为4时 开始页码1替换为...
+                $pageBanner .= "...";
+            }
+            if($page > $pageOffset){        //当当前页大于页码偏移量时 开始页码变为当前页-偏移页码
+                $start = $page - $pageOffset;
+                $end = $totalPage > $page + $pageOffset ?  $page + $pageOffset : $totalPage;
+                //如果当前页数+偏移量大于总页数 那么$end为总页数
+            }else{
+                $start = 1;
+                $end = $totalPage > $showPage ? $showPage : $totalPage;
+            }
+            if($page + $pageOffset > $totalPage){
+                $start = $start - ($page + $pageOffset - $end);
+            }
+        }
+        for($i = $start ; $i <= $end ; $i++){    //循环出页码
+            if($i == $page){
+                $pageBanner .= "<span>".$i."</span>";
+            }else{
+                $pageBanner .= "<a href='".$pageSelf."?p=".$i."'>".$i."</a>";
+            }
+
+        }
+        if($totalPage > $showPage && $totalPage > $page + $pageOffset){    //当总页数大于页码显示页数时 且总页数大于当前页+偏移量
+            $pageBanner .= "...";
+        }
+        if($page < $totalPage){
+            $pageBanner .= "<a href='".$pageSelf."?p=".($page + 1)."'>下一页</a>";
+            $pageBanner .= "<a href='".$pageSelf."?p=".$totalPage."'>尾页</a>";
+        }
+        return  $pageBanner;
+    }else{
+        return '';
+    }
+
+}
+
+/**
  * Curl版本post提交{全局助手函数}
  * 使用方法：
  * $post_string = "app=request&version=beta";

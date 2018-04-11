@@ -53,15 +53,18 @@ class Content extends Base
             $end = 10;
             $start = ($p-1)*$end;
             $r = yield $this->ContentModel->getAllByPage($start,$end);
-            if($r)
+
+            if($r['result'])
             {
-                foreach ($r as $n=> $v)
+                foreach ($r['result'] as $n=> $v)
                 {
-                    $r[$n]['str_manage'] = (yield check_role('Admin', 'Content', 'content_edit', $this)) ? '<a href="' . url('Admin', 'Content', 'content_edit', ["id" => $v['id']]) . '">编辑</a> |' : '';
-                    $r[$n]['str_manage'] .= (yield check_role('Admin', 'Content', 'content_delete', $this)) ? '<a  onclick="content_delete(' . $v['id'] . ')" href="javascript:;">删除</a>' : '';
+                    $r['result'][$n]['str_manage'] = (yield check_role('Admin', 'Content', 'content_edit', $this)) ? '<a href="' . url('Admin', 'Content', 'content_edit', ["id" => $v['id']]) . '">编辑</a> |' : '';
+                    $r['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Content', 'content_delete', $this)) ? '<a  onclick="content_delete(' . $v['id'] . ')" href="javascript:;">删除</a>' : '';
                 }
             }
-            parent::templateData('list',$r);
+            
+            parent::templateData('list',$r['result']);
+            parent::templateData('page',page_bar($r['num'],$start,10,5,$this));
 
             parent::templateData('test',1);
             //web or app

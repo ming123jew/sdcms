@@ -52,10 +52,19 @@ class ContentModel extends BaseModel
             ->select('a.*,b.*')
             ->limit("{$start},{$end}")
             ->coroutineSend();
+        //嵌入总记录
+        $count_arr = yield $this->mysql_pool->dbQueryBuilder->coroutineSend(null,"select count(0) as num from {$this->getTable()}");
+        $count = $count_arr['result'][0]['num'];
+        if($count>$end){
+            $r['num'] =$count;
+        }else{
+            $r['num'] = $end;
+        }
+
         if(empty($r['result'])){
             return false;
         }else{
-            return $r['result'] ;
+            return $r ;
         }
     }
 

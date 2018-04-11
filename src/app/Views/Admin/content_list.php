@@ -150,16 +150,39 @@ Purchase: http://wrapbootstrap.com
                                 </tbody>
                                 <?php } ?>
                             </table>
+                            <?php echo $data['page'];?>
+                            <div class="row DTTTFooter" style="margin-top: 25px;">
+                                <div class="col-sm-6">
+                                    <div class="dataTables_info" id="simpledatatable_info" role="alert" aria-live="polite" aria-relevant="all">
+                                        Showing 21 to 25 of 25 entries
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="dataTables_paginate paging_bootstrap" id="simpledatatable_paginate">
+                                        <ul class="pagination">
+                                            <li class="prev"><a href="#">Prev</a></li>
+                                            <li><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li><a href="#">4</a></li>
+                                            <li class="active"><a href="#">5</a></li>
+                                            <li class="next disabled"><a href="#">Next</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div style="display: none;"></div>
+                            </div>
 
                             <div class="footer">
                                 <code>class="table table-hover"</code>
+                                <div style="clear: both;"></div>
                             </div>
-                        </div>
 
+
+                        </div>
                     </div>
                 </div>
                 <!-- //内容列表end -->
-
 
             </div>
             <!-- /Page Body -->

@@ -85,7 +85,7 @@ class BaseController extends Controller
             self::$Host2 = $this->Host = $host;
             $this->Url = str_replace(':http_','/',$method_name);
             $this->Url = $host.str_replace('\\','/', $this->Url);
-            $this->Uri = $host.$this->http_input->getRequestUri();
+            $this->Uri = substr($host,0,-1).$this->http_input->getRequestUri();
             $arr_controller_name = explode('/',str_replace('\\','/',$controller_name));// admin/main 拆分
             //print_r($arr_controller_name);
             $this->ModuleName = $arr_controller_name[0];

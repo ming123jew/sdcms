@@ -408,7 +408,10 @@ Purchase: http://wrapbootstrap.com
                     if(result.status==1){
                         $("#modal-success").find(".modal-body").html(result.message);
                         $("#modal-success").modal("show");
-                        //window.location.href = '<?php echo url('','','content_list');?>';
+                        setTimeout(function () {
+                            window.location.href = '<?php echo url('','','content_list');?>';
+                        },2000)
+
                     }else{
                         $("#modal-warning").find(".modal-body").html(result.message);
                         $("#modal-warning").modal("show");
