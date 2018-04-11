@@ -62,9 +62,9 @@ class Content extends Base
                     $r['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Content', 'content_delete', $this)) ? '<a  onclick="content_delete(' . $v['id'] . ')" href="javascript:;">删除</a>' : '';
                 }
             }
-            
+
             parent::templateData('list',$r['result']);
-            parent::templateData('page',page_bar($r['num'],$start,10,5,$this));
+            parent::templateData('page',page_bar($r['num'],$p,10,5,$this));
 
             parent::templateData('test',1);
             //web or app

@@ -165,12 +165,34 @@ function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null){    //第
         $totalPage = ceil($total / $pageSize);    //获取总页数
         $pageOffset = ($showPage - 1) / 2;    //页码偏移量
         $pageBanner = "";
-        $pageSelf = $context->Uri;
+        $pageSelf = explode('?',$context->Uri)[0];
+
         $start = 1;    //开始页码
         $end = $totalPage;    //结束页码
+
+        $pageBanner = <<<html
+                            <div class="row DTTTFooter" style="margin-top: 25px;">
+                                <div class="col-sm-6">
+                                    <div style="display: none" class="dataTables_info" id="simpledatatable_info" role="alert" aria-live="polite" aria-relevant="all">
+                                        Showing 21 to 25 of 25 entries
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="dataTables_paginate paging_bootstrap" id="simpledatatable_paginate">
+                                        <ul class="pagination">
+html;
+//        <li class="prev"><a href="#">Prev</a></li>
+//                                            <li><a href="#">1</a></li>
+//                                            <li><a href="#">2</a></li>
+//                                            <li><a href="#">3</a></li>
+//                                            <li><a href="#">4</a></li>
+//                                            <li class="active"><a href="#">5</a></li>
+//                                            <li class="next disabled"><a href="#">Next</a></li>
         if($page > 1){
-            $pageBanner .= "<a href='".$pageSelf."?p=1'>首页</a>";
-            $pageBanner .= "<a href='".$pageSelf."?p=".($page - 1)."'>上一页</a>";
+
+            $pageBanner .= "<li class='prev'><a href='".$pageSelf."?p=".($page - 1)."'>Prev</a></li>";
+            $pageBanner .= "<li class='prev'><a href='".$pageSelf."?p=1'>First</a></li>";
+
         }
         if($totalPage > $showPage){    //当总页数大于显示页数时
             if($page > $pageOffset + 1){    //当当前页大于页码偏移量+1时，也就是当页码为4时 开始页码1替换为...
@@ -190,9 +212,10 @@ function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null){    //第
         }
         for($i = $start ; $i <= $end ; $i++){    //循环出页码
             if($i == $page){
-                $pageBanner .= "<span>".$i."</span>";
+                $pageBanner .= "<li class='active'><a href='#'>".$i."</a></li>";
             }else{
-                $pageBanner .= "<a href='".$pageSelf."?p=".$i."'>".$i."</a>";
+                $pageBanner .= "<li><a href='".$pageSelf."?p=".$i."'>".$i."</a></li>";
+
             }
 
         }
@@ -200,9 +223,16 @@ function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null){    //第
             $pageBanner .= "...";
         }
         if($page < $totalPage){
-            $pageBanner .= "<a href='".$pageSelf."?p=".($page + 1)."'>下一页</a>";
-            $pageBanner .= "<a href='".$pageSelf."?p=".$totalPage."'>尾页</a>";
+            $pageBanner .= "<li class='next'><a href='".$pageSelf."?p=".($page + 1)."'>Next</a></li>";
+            $pageBanner .= "<li><a href='".$pageSelf."?p=".$totalPage."'>Last</a></li>";
         }
+        $pageBanner .=<<<html
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div style="display: none;"></div>
+                            </div>
+html;
         return  $pageBanner;
     }else{
         return '';
