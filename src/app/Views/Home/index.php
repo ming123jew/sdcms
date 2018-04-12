@@ -69,19 +69,18 @@
                     <li data-target="#carousel-example-generic" data-slide-to="2"></li>
                 </ol>
                 <div class="carousel-inner" role="listbox">
-                    <div class="item active"> <a href="content.html" target="_blank"><img src="images/img1.jpg" alt="" /></a>
-                        <div class="carousel-caption"> 欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 </div>
-                        <span class="carousel-bg"></span> </div>
-                    <div class="item"> <a href="content.html" target="_blank"><img src="images/img2.jpg" alt="" /></a>
-                        <div class="carousel-caption"> 欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 </div>
-                        <span class="carousel-bg"></span> </div>
-                    <div class="item"> <a href="content.html" target="_blank"><img src="images/img3.jpg" alt="" /></a>
-                        <div class="carousel-caption"> 欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 </div>
-                        <span class="carousel-bg"></span> </div>
+                    <?php foreach ($data['d_slide'] as $k => $v){?>
+                        <div <?php if($k==0){?>class="item active"<?php }else{ ?>class="item"<?php } ?> data-id="article_<?php echo $v['id'];?>">
+                            <a href="<?php echo url('','Article','Read',['id'=>$v['id']]);?>" target="_blank">
+                                <img src="<?php echo $v['thumb'];?>" alt="<?php echo $v['title'];?>" />
+                            </a>
+                            <div class="carousel-caption"> <?php echo $v['title'];?></div>
+                            <span class="carousel-bg"></span> </div>
+                    <?php } ?>
                 </div>
                 <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">Previous</span> </a> <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <span class="sr-only">Next</span> </a> </div>
             <!--/banner-->
-            <div class="content-block hot-content hidden-xs">
+            <div class="content-block hot-content hidden-xs" style="display: none">
                 <h2 class="title"><strong>本周热门排行</strong></h2>
                 <ul>
                     <li class="large"><a href="content.html" target="_blank"><img src="images/img3.jpg" alt="">
@@ -104,99 +103,36 @@
             <div class="content-block new-content">
                 <h2 class="title"><strong>最新文章</strong></h2>
                 <div class="row">
+                    <?php foreach ($data['d_get_new'] as $k => $v){?>
                     <div class="news-list">
-                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href=""><img src="images/logo.jpg" alt=""> </a> </div>
+                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href=""><img style="width: 220px;height: 143px;" src="images/logo.jpg" alt=""> </a> </div>
                         <div class="news-info col-xs-7 col-sm-7 col-md-8">
                             <dl>
-                                <dt> <a href="" target="_blank" > 个人技术博客技术博客正式上线！ </a> </dt>
-                                <dd><span class="name"><a href="" title="由 个人技术博客 发布" rel="author">个人技术博客</a></span> <span class="identity"></span> <span class="time"> 2015-10-19 </span></dd>
-                                <dd class="text">欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</dd>
+                                <dt> <a href="" target="_blank" > <?php echo $v['title'];?> </a> </dt>
+                                <dd><span class="name"><a href="<?php echo url('','Article','Read',['id'=>$v['id']]);?>" title="<?php echo $v['title'];?>" rel="author"><?php echo $v['username'];?></a></span> <span class="identity"></span> <span class="time"> <?php echo date('Y-m-d',$v['create_time']);?> </span></dd>
+                                <dd class="text"><?php echo $v['description'];?></dd>
                             </dl>
-                            <div class="news_bot col-sm-7 col-md-8"> <span class="tags visible-lg visible-md"> <a href="">本站</a> <a href="">个人技术博客</a> </span> <span class="look"> 共 <strong>2126</strong> 人围观，发现 <strong> 12 </strong> 个不明物体 </span> </div>
+                            <div class="news_bot col-sm-7 col-md-8">
+                                <?php if(!empty($v['keywords'])){ $arr_keywords=explode(' ',trim($v['keywords']));?>
+                                <span class="tags visible-lg visible-md">
+                                    <?php foreach( $arr_keywords as $kk=>$vv){?>
+                                    <a href="#"><?php echo $vv;?></a>
+                                    <?php } ?>
+                                </span>
+                                <?php }else{ ?>
+                                <span class="tags visible-lg visible-md"></span>
+                                <?php } ?>
+                                <span class="look"> 共 <strong><?php echo $v['views'];?></strong> 人围观<!--，发现 <strong> 12 </strong> 个不明物体 --></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="news-list">
-                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href=""><img src="images/img1.jpg" alt=""> </a> </div>
-                        <div class="news-info col-xs-7 col-sm-7 col-md-8">
-                            <dl>
-                                <dt> <a href="" target="_blank" > 个人技术博客技术博客正式上线！ </a> </dt>
-                                <dd><span class="name"><a href="" title="由 个人技术博客 发布" rel="author">个人技术博客</a></span> <span class="identity"></span> <span class="time"> 2015-10-19 </span></dd>
-                                <dd class="text">欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</dd>
-                            </dl>
-                            <div class="news_bot col-sm-7 col-md-8"> <span class="tags visible-lg visible-md"> <a href="">本站</a> <a href="">个人技术博客</a> </span> <span class="look"> 共 <strong>2126</strong> 人围观，发现 <strong> 12 </strong> 个不明物体 </span> </div>
-                        </div>
-                    </div>
-                    <div class="news-list">
-                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href=""><img src="images/img2.jpg" alt=""> </a> </div>
-                        <div class="news-info col-xs-7 col-sm-7 col-md-8">
-                            <dl>
-                                <dt> <a href="" target="_blank" > 个人技术博客技术博客正式上线！ </a> </dt>
-                                <dd><span class="name"><a href="" title="由 个人技术博客 发布" rel="author">个人技术博客</a></span> <span class="identity"></span> <span class="time"> 2015-10-19 </span></dd>
-                                <dd class="text">欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</dd>
-                            </dl>
-                            <div class="news_bot col-sm-7 col-md-8"> <span class="tags visible-lg visible-md"> <a href="">本站</a> <a href="">个人技术博客</a> </span> <span class="look"> 共 <strong>2126</strong> 人围观，发现 <strong> 12 </strong> 个不明物体 </span> </div>
-                        </div>
-                    </div>
-                    <div class="news-list">
-                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href=""><img src="images/img3.jpg" alt=""> </a> </div>
-                        <div class="news-info col-xs-7 col-sm-7 col-md-8">
-                            <dl>
-                                <dt> <a href="" target="_blank" > 个人技术博客技术博客正式上线！ </a> </dt>
-                                <dd><span class="name"><a href="" title="由 个人技术博客 发布" rel="author">个人技术博客</a></span> <span class="identity"></span> <span class="time"> 2015-10-19 </span></dd>
-                                <dd class="text">欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</dd>
-                            </dl>
-                            <div class="news_bot col-sm-7 col-md-8"> <span class="tags visible-lg visible-md"> <a href="">本站</a> <a href="">个人技术博客</a> </span> <span class="look"> 共 <strong>2126</strong> 人围观，发现 <strong> 12 </strong> 个不明物体 </span> </div>
-                        </div>
-                    </div>
-                    <div class="news-list">
-                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href=""><img src="images/logo.jpg" alt=""> </a> </div>
-                        <div class="news-info col-xs-7 col-sm-7 col-md-8">
-                            <dl>
-                                <dt> <a href="" target="_blank" > 个人技术博客技术博客正式上线！ </a> </dt>
-                                <dd><span class="name"><a href="" title="由 个人技术博客 发布" rel="author">个人技术博客</a></span> <span class="identity"></span> <span class="time"> 2015-10-19 </span></dd>
-                                <dd class="text">欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</dd>
-                            </dl>
-                            <div class="news_bot col-sm-7 col-md-8"> <span class="tags visible-lg visible-md"> <a href="">本站</a> <a href="">个人技术博客</a> </span> <span class="look"> 共 <strong>2126</strong> 人围观，发现 <strong> 12 </strong> 个不明物体 </span> </div>
-                        </div>
-                    </div>
-                    <div class="news-list">
-                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href=""><img src="images/logo.jpg" alt=""> </a> </div>
-                        <div class="news-info col-xs-7 col-sm-7 col-md-8">
-                            <dl>
-                                <dt> <a href="" target="_blank" > 个人技术博客技术博客正式上线！ </a> </dt>
-                                <dd><span class="name"><a href="" title="由 个人技术博客 发布" rel="author">个人技术博客</a></span> <span class="identity"></span> <span class="time"> 2015-10-19 </span></dd>
-                                <dd class="text">欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</dd>
-                            </dl>
-                            <div class="news_bot col-sm-7 col-md-8"> <span class="tags visible-lg visible-md"> <a href="">本站</a> <a href="">个人技术博客</a> </span> <span class="look"> 共 <strong>2126</strong> 人围观，发现 <strong> 12 </strong> 个不明物体 </span> </div>
-                        </div>
-                    </div>
-                    <div class="news-list">
-                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href=""><img src="images/logo.jpg" alt=""> </a> </div>
-                        <div class="news-info col-xs-7 col-sm-7 col-md-8">
-                            <dl>
-                                <dt> <a href="" target="_blank" > 个人技术博客技术博客正式上线！ </a> </dt>
-                                <dd><span class="name"><a href="" title="由 个人技术博客 发布" rel="author">个人技术博客</a></span> <span class="identity"></span> <span class="time"> 2015-10-19 </span></dd>
-                                <dd class="text">欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</dd>
-                            </dl>
-                            <div class="news_bot col-sm-7 col-md-8"> <span class="tags visible-lg visible-md"> <a href="">本站</a> <a href="">个人技术博客</a> </span> <span class="look"> 共 <strong>2126</strong> 人围观，发现 <strong> 12 </strong> 个不明物体 </span> </div>
-                        </div>
-                    </div>
-                    <div class="news-list">
-                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href=""><img src="images/logo.jpg" alt=""> </a> </div>
-                        <div class="news-info col-xs-7 col-sm-7 col-md-8">
-                            <dl>
-                                <dt> <a href="" target="_blank" > 个人技术博客技术博客正式上线！ </a> </dt>
-                                <dd><span class="name"><a href="" title="由 个人技术博客 发布" rel="author">个人技术博客</a></span> <span class="identity"></span> <span class="time"> 2015-10-19 </span></dd>
-                                <dd class="text">欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</dd>
-                            </dl>
-                            <div class="news_bot col-sm-7 col-md-8"> <span class="tags visible-lg visible-md"> <a href="">本站</a> <a href="">个人技术博客</a> </span> <span class="look"> 共 <strong>2126</strong> 人围观，发现 <strong> 12 </strong> 个不明物体 </span> </div>
-                        </div>
-                    </div>
+                    <?php } ?>
                 </div>
                 <!--<div class="news-more" id="pagination">
                     <a href="">查看更多</a>
                 </div>-->
-                <div class="quotes" style="margin-top:15px"><span class="disabled">首页</span><span class="disabled">上一页</span><span class="current">1</span><a href="">2</a><a href="">下一页</a><a href="">尾页</a></div>
+<!--                <div class="quotes" style="margin-top:15px"><span class="disabled">首页</span><span class="disabled">上一页</span><span class="current">1</span><a href="">2</a><a href="">下一页</a><a href="">尾页</a></div>-->
+                <?php echo $data['page_d_get_new'];?>
             </div>
         </div>
     </div>

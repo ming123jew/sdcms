@@ -98,11 +98,11 @@ class ContentModel extends BaseModel
     {
         //FIND_IN_SET();
         if($catid!=0){
-            $sql = "select {$fields} from {$this->getTable()}  where catid={$catid} and FIND_IN_SET('{$flag}',flag) and status={$status} limit {$start},{$end}";
+            $sql = "select {$fields} from {$this->getTable()}  where catid={$catid} and FIND_IN_SET('{$flag}',flag) and status={$status} order by id desc limit {$start},{$end} ";
         }else{
-            $sql = "select {$fields} from {$this->getTable()}  where FIND_IN_SET('{$flag}',flag) and status={$status} limit {$start},{$end}";
+            $sql = "select {$fields} from {$this->getTable()}  where FIND_IN_SET('{$flag}',flag) and status={$status} order by id desc limit {$start},{$end} ";
         }
-        echo $sql;
+        //echo $sql;
 
         $r = yield $this->mysql_pool->dbQueryBuilder
             ->coroutineSend('',$sql);
@@ -114,6 +114,58 @@ class ContentModel extends BaseModel
         }
     }
 
+    /**
+     * @param int $catid
+     * @param int $start
+     * @param int $end
+     * @param int|null $status
+     * @param string $fields
+     * @return bool
+     */
+    public function getNew(int $catid=0,int $start=0,int $end=9,int $status=null,$fields='*')
+    {
+        if($status!=null){
+            if($catid!=0){
+                $where = " where a.stauts={$status} and a.catid={$catid}";
+            }else{
+                $where = " where a.stauts={$status}";
+            }
+        }else{
+            if($catid!=0) {
+                $where = "where a.catid={$catid}";
+            }else{
+                $where = "";
+            }
+        }
+        $m = $this->loader->model('ContentHitsModel',$this);
+        $join = " left join {$m->getTable()} as b on a.id=b.content_id ";
+
+        //FIND_IN_SET();
+        if($catid!=0){
+            $sql = "select {$fields} from {$this->getTable()} as a {$join} {$where} order by a.id desc limit {$start},{$end} ";
+        }else{
+            $sql = "select {$fields} from {$this->getTable()} as a {$join} $where  order by a.id desc limit {$start},{$end} ";
+        }
+        echo $sql;
+
+        $r = yield $this->mysql_pool->dbQueryBuilder
+            ->coroutineSend('',$sql);
+
+        //嵌入总记录
+        $count_arr = yield $this->mysql_pool->dbQueryBuilder->coroutineSend(null,"select count(0) as num from {$this->getTable()} as a {$where}");
+        $count = $count_arr['result'][0]['num'];
+        if($count>$end){
+            $r['num'] =$count;
+        }else{
+            $r['num'] = $end;
+        }
+
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r;
+        }
+    }
 
     /**
      * @param $id

@@ -108,6 +108,8 @@ class Content extends Base
             {
                 //FIND_IN_SET('b','a,b,c,d');
                 $data['info']['flag'] = implode(',',$data['info']['flag']);
+            }else{
+                $data['info']['flag'] = '';
             }
 
             //[--start::添加文章{业务逻辑}--]
@@ -168,6 +170,8 @@ class Content extends Base
             if(isset($data['info']['flag']))
             {
                 $data['info']['flag'] = implode(',',$data['info']['flag']);
+            }else{
+                $data['info']['flag'] = '';
             }
             $id = $data['info']['id'];
             unset($data['info']['id']);

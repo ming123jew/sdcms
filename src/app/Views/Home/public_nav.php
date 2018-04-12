@@ -10,7 +10,7 @@
     <div class="hidden-xs header"><!--超小屏幕不显示-->
         <h1 class="logo"> <a href="index.html" title="个人技术博客"></a> </h1>
         <ul class="nav hidden-xs-nav">
-            <li class="active"><a href="<?php echo $data['__URL__'];?>"><span class="glyphicon glyphicon-home"></span>网站首页</a></li>
+            <li class="active"><a href="<?php echo $data['__HOST__'];?>"><span class="glyphicon glyphicon-home"></span>网站首页</a></li>
             <li><a href=""><span class="glyphicon glyphicon-erase"></span>诗意人生</a></li>
             <li><a href=""><span class="glyphicon glyphicon-inbox"></span>编程指南</a></li>
             <li><a href="about.html"><span class="glyphicon glyphicon-user"></span>关于我们</a></li>
@@ -27,9 +27,8 @@
         <div id="header-xs-menu" class="navbar-collapse collapse">
             <ul class="nav navbar-nav header-xs-nav">
                 <li class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span>网站首页</a></li>
-                <li><a href=""><span class="glyphicon glyphicon-erase"></span>网站前端</a></li>
-                <li><a href=""><span class="glyphicon glyphicon-inbox"></span>后端技术</a></li>
-                <li><a href=""><span class="glyphicon glyphicon-globe"></span>管理系统</a></li>
+                <li><a href=""><span class="glyphicon glyphicon-erase"></span>诗意人生</a></li>
+                <li><a href=""><span class="glyphicon glyphicon-inbox"></span>编程指南</a></li>
                 <li><a href="about.html"><span class="glyphicon glyphicon-user"></span>关于我们</a></li>
                 <li><a href="friendly.html"><span class="glyphicon glyphicon-tags"></span>友情链接</a></li>
             </ul>

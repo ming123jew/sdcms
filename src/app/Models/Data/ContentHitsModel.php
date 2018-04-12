@@ -24,7 +24,7 @@ class ContentHitsModel extends BaseModel
     }
 
     /**
-     * 获取所有菜单
+     * 获取所有
      * @return bool
      */
     public function getAll(){
@@ -116,5 +116,16 @@ class ContentHitsModel extends BaseModel
     }
 
 
+
+    public function hits(int $content_id){
+        $curren_time = time();
+        $r=[];
+        $views = $r['views'] + 1;
+        $yesterdayviews = (date('Ymd', $r['updatetime']) == date('Ymd', strtotime('-1 day'))) ? $r['dayviews'] : $r['yesterdayviews'];
+        $dayviews = (date('Ymd', $r['updatetime']) == date('Ymd', $curren_time)) ? ($r['dayviews'] + 1) : 1;
+        $weekviews = (date('YW', $r['updatetime']) == date('YW', $curren_time)) ? ($r['weekviews'] + 1) : 1;
+        $monthviews = (date('Ym', $r['updatetime']) == date('Ym', $curren_time)) ? ($r['monthviews'] + 1) : 1;
+        $sql = array('views'=>$views,'yesterdayviews'=>$yesterdayviews,'dayviews'=>$dayviews,'weekviews'=>$weekviews,'monthviews'=>$monthviews,'updatetime'=>$curren_time);
+    }
 
 }

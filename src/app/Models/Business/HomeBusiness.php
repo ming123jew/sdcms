@@ -33,7 +33,7 @@ class HomeBusiness extends BaseBusiness
      * @param int $expire
      * @return bool
      */
-    public function get_slide(string $flag='p',int $start=0,int $end=9,int $catid=0,int $status=0,$fields='*',bool $cache=true,int $expire=24*3600)
+    public function get_slide(string $flag='p',int $start=0,int $end=3,int $catid=0,int $status=0,$fields='*',bool $cache=true,int $expire=24*3600)
     {
         $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
         $d = yield $this->ContentModel->getByFlag($flag,$start,$end,$catid,$status,$fields);
@@ -46,10 +46,15 @@ class HomeBusiness extends BaseBusiness
 
     /**
      * 获取推荐
+     * @param string $flag
+     * @param int $start
+     * @param int $end
      * @param int $catid
-     * @param int $limit
+     * @param int $status
+     * @param string $fields
      * @param bool $cache
      * @param int $expire
+     * @return bool
      */
     public function get_recommend(string $flag='r',int $start=0,int $end=9,int $catid=0,int $status=0,$fields='*',bool $cache=true,int $expire=24*3600)
     {
@@ -63,16 +68,22 @@ class HomeBusiness extends BaseBusiness
     }
 
     /**
-     * 最新文章
+     * 获取最新文章
      * @param int $catid
      * @param int $limit
      * @param bool $cache
      * @param int $expire
+     * @return bool
      */
-    public function get_new(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
+    public function get_new(int $catid=0,int $start=0,int $end=9,int $status=0,$fields='*',bool $cache=true,int $expire=24*3600)
     {
         $this->ContentModel = yield $this->loader->model(ContentModel::class,$this);
-
+        $d = yield $this->ContentModel->getNew(0,$start,$end);
+        if($d!=false){
+            return $d;
+        }else{
+            return false;
+        }
     }
 
     /**

@@ -159,6 +159,7 @@ function get_cache($key)
  * @param $page
  * @param int $pageSize
  * @param int $showPage
+ * @param mix $context
  */
 function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null){    //第一个参数为表总数 第二个参数为每页显示几个
     if($total&&$context){

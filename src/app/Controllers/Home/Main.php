@@ -38,6 +38,10 @@ class Main extends Base
     }
 
     public function http_index(){
+        $p = intval( $this->http_input->postGet('p') );
+        if($p == 0) {$p = 1;}
+        $end = 10;
+        $start = ($p-1)*$end;
 
         //[获取幻灯:start]
         $this->ConentBusiness = $this->loader->model(HomeBusiness::class,$this);
@@ -49,8 +53,17 @@ class Main extends Base
         $d_get_recommend = yield $this->ConentBusiness->get_recommend();
         //[获取推荐:end]
 
-        print_r($d_slide);
-        print_r($d_get_recommend);
+        //[获取最新文章:start]
+        $this->ConentBusiness = $this->loader->model(HomeBusiness::class,$this);
+        $d_get_new = yield $this->ConentBusiness->get_new(0,$start,$end);
+        //[获取最新文章:end]
+
+        //print_r($d_get_new);
+        //print_r($d_get_recommend);
+        parent::templateData('d_slide',$d_slide);
+        parent::templateData('d_get_recommend',$d_get_recommend);
+        parent::templateData('d_get_new',$d_get_new['result']);
+        parent::templateData('page_d_get_new',page_bar($d_get_new['num'],$p,10,5,$this));
 
         parent::templateData('test',1);
         //web or app
