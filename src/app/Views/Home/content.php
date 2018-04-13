@@ -32,7 +32,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>内容页 - ming123jew技术博客 - 高性能内容管理CMS</title>
+    <title><?php echo $data['article']['title'];?> - ming123jew技术博客 - 高性能内容管理CMS</title>
     <base href="<?php echo ($data['HTML_URL']);?>"/>
     <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="css/style.css" type="text/css" rel="stylesheet">
@@ -58,71 +58,32 @@
 
 <body>
 <section class="container user-select">
-    <header>
-        <div class="hidden-xs header"><!--超小屏幕不显示-->
-            <h1 class="logo"> <a href="index.html" title="个人技术博客"></a> </h1>
-            <ul class="nav hidden-xs-nav">
-                <li class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span>网站首页</a></li>
-                <li><a href=""><span class="glyphicon glyphicon-erase"></span>网站前端</a></li>
-                <li><a href=""><span class="glyphicon glyphicon-inbox"></span>后端技术</a></li>
-                <li><a href=""><span class="glyphicon glyphicon-globe"></span>管理系统</a></li>
-                <li><a href="about.html"><span class="glyphicon glyphicon-user"></span>关于我们</a></li>
-                <li><a href="friendly.html"><span class="glyphicon glyphicon-tags"></span>友情链接</a></li>
-            </ul>
-            <div class="feeds"> <a class="feed feed-xlweibo" href="" target="_blank"><i></i>新浪微博</a> <a class="feed feed-txweibo" href="" target="_blank"><i></i>腾讯微博</a> <a class="feed feed-rss" href="" target="_blank"><i></i>订阅本站</a> <a class="feed feed-weixin" data-toggle="popover" data-trigger="hover" title="微信扫一扫" data-html="true" data-content="<img src='images/weixin.jpg' alt=''>" href="javascript:;" target="_blank"><i></i>关注微信</a> </div>
-            <div class="wall"><a href="readerWall.html" target="_blank">读者墙</a> | <a href="tags.html" target="_blank">标签云</a></div>
-        </div>
-        <!--/超小屏幕不显示-->
-        <div class="visible-xs header-xs"><!--超小屏幕可见-->
-            <div class="navbar-header header-xs-logo">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-xs-menu" aria-expanded="false" aria-controls="navbar"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
-            </div>
-            <div id="header-xs-menu" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav header-xs-nav">
-                    <li class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span>网站首页</a></li>
-                    <li><a href=""><span class="glyphicon glyphicon-erase"></span>网站前端</a></li>
-                    <li><a href=""><span class="glyphicon glyphicon-inbox"></span>后端技术</a></li>
-                    <li><a href=""><span class="glyphicon glyphicon-globe"></span>管理系统</a></li>
-                    <li><a href="about.html"><span class="glyphicon glyphicon-user"></span>关于我们</a></li>
-                    <li><a href="friendly.html"><span class="glyphicon glyphicon-tags"></span>友情链接</a></li>
-                </ul>
-                <form class="navbar-form" action="search.php" method="post" style="padding:0 25px;">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="请输入关键字">
-                        <span class="input-group-btn">
-            <button class="btn btn-default btn-search" type="submit">搜索</button>
-            </span> </div>
-                </form>
-            </div>
-        </div>
-    </header>
+    <?php $this->insert('app::Home/public_nav',['data'=>$data]) ?>
     <!--/超小屏幕可见-->
     <div class="content-wrap"><!--内容-->
         <div class="content">
             <header class="news_header">
-                <h2>欢迎来到个人技术博客</h2>
+                <h2><?php echo $data['article']['title'];?></h2>
                 <ul>
-                    <li>admin 发布于 2015-06-29</li>
-                    <li>栏目：<a href="" title="" target="_blank">网站前端</a></li>
-                    <li>来源：<a href="" title="" target="_blank">互联网</a></li>
-                    <li>共 <strong>2345</strong> 人围观 </li>
-                    <li><strong>123</strong> 个不明物体</li>
+                    <li><?php echo $data['article']['username'];?> 发布于 <?php echo date('Y-m-d',$data['article']['create_time']);?></li>
+                    <li>栏目：<a href="" title="" target="_blank"><?php echo $data['article']['catid'];?></a></li>
+                    <li>来源：<a href="" title="" target="_blank"><?php echo $data['article']['copyfrom'];?></a></li>
+                    <li>共 <strong><?php echo $data['article']['views'];?></strong> 人围观 </li>
+<!--                    <li><strong>123</strong> 个不明物体</li>-->
                 </ul>
             </header>
             <article class="news_content">
-                <p>欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</p>
-                <p><img src="images/img2.jpg" alt="" title="" /></p>
-                <p>欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</p>
-                <p>欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</p>
-                <p><img src="images/img3.jpg" alt="" title="" /></p>
-                <p>欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</p>
-                <p>欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</p>
-                <p><img src="images/img1.jpg" alt="" title="" /></p>
-                <p>欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术，还有CMS内容管理系统，包括但不限于这些还有CMS内容管理系统，包括但不限于这些。</p>
+                <?php echo $data['article']['body'];?>
             </article>
-            <div class="reprint">转载请说明出处：<a href="" title="" target="_blank">个人技术博客</a> » <a href="" title="" target="_blank">欢迎来到个人技术博客</a></div>
+            <div class="reprint">转载请说明出处：<a href="" title="" target="_blank">ming123jew技术博客</a> » <a href="" title="" target="_blank">欢迎来到ming123jew个人技术博客</a></div>
             <div class="zambia"><a href="javascript:;" name="zambia" rel=""><span class="glyphicon glyphicon-thumbs-up"></span> 赞（0）</a></div>
-            <div class="tags news_tags">标签： <span data-toggle="tooltip" data-placement="bottom" title="查看关于 本站 的文章"><a href="">本站</a></span> <span data-toggle="tooltip" data-placement="bottom" title="查看关于 技术博客 的文章"><a href="">技术博客</a></span> </div>
+            <?php if(!empty($data['article']['keywords'])){ $arr_keywords=explode(' ',trim($data['article']['keywords']));?>
+            <div class="tags news_tags">标签：
+                <?php foreach( $arr_keywords as $kk=>$vv){?>
+                <span data-toggle="tooltip" data-placement="bottom" title="查看关于 本站 的文章"><a href="#"><?php echo $vv;?></a></span>
+                <?php } ?>
+            </div>
+            <?php } ?>
             <nav class="page-nav"> <span class="page-nav-prev">上一篇<br />
         <a href="" rel="prev">欢迎来到个人技术博客</a></span> <span class="page-nav-next">下一篇<br />
         <a href="" rel="next">欢迎来到个人技术博客</a></span> </nav>

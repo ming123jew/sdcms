@@ -69,13 +69,35 @@ class ContentModel extends BaseModel
     }
 
     /**
-     * @param int $role_id
+     * @param int $id
+     * @param string $fields
      * @return bool
      */
-    public function getById(int $id,$fields='*'){
+    public function getById(int $id,$fields='*')
+    {
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
             ->where('id',$id)
             ->select($fields)
+            ->coroutineSend();
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r['result'][0];
+        }
+    }
+
+    /**
+     * 读取文章内容+文章点击
+     * @param int $id
+     * @return bool
+     */
+    public function getArticle(int $id)
+    {
+        $m = $this->loader->model('ContentHitsModel',$this);
+        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
+            ->join($m->getTable(),'a.id=b.content_id','left join','b')
+            ->where('a.id',$id)
+            ->select('*')
             ->coroutineSend();
         if(empty($r['result'])){
             return false;
@@ -184,7 +206,9 @@ class ContentModel extends BaseModel
 
     /**
      * 插入多条数据
-     * @param array $arr
+     * @param array $intoColumns
+     * @param array $intoValues
+     * @param null $transaction_id
      * @return bool
      */
     public function insertMultiple( array $intoColumns,array $intoValues ,$transaction_id=null){
@@ -209,8 +233,9 @@ class ContentModel extends BaseModel
 
     /**
      * 根据ID更新单条
-     * @param array $intoColumns
-     * @param array $intoValues
+     * @param int $id
+     * @param array $columns_values
+     * @param null $transaction_id
      * @return bool
      */
     public function updateById(int $id,array $columns_values,$transaction_id=null){

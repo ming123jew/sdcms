@@ -43,7 +43,7 @@ class ContentHitsModel extends BaseModel
      * @param int $role_id
      * @return bool
      */
-    public function getById(int $content_id,$fields='*'){
+    public function getByContentId(int $content_id,$fields='*'){
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
             ->where('content_id',$content_id)
             ->select($fields)
@@ -51,7 +51,7 @@ class ContentHitsModel extends BaseModel
         if(empty($r['result'])){
             return false;
         }else{
-            return $r['result'] ;
+            return $r['result'][0] ;
         }
     }
 
@@ -116,16 +116,32 @@ class ContentHitsModel extends BaseModel
     }
 
 
-
-    public function hits(int $content_id){
+    /**
+     * 更新点击
+     * @param int $content_id
+     * @param array $sel
+     * @return bool
+     */
+    public function updateHits(int $content_id,array $sel=array()){
         $curren_time = time();
-        $r=[];
+        if(!$sel){
+            $r = yield self::getByContentId($content_id);
+        }else{
+            $r = $sel;
+        }
         $views = $r['views'] + 1;
         $yesterdayviews = (date('Ymd', $r['updatetime']) == date('Ymd', strtotime('-1 day'))) ? $r['dayviews'] : $r['yesterdayviews'];
         $dayviews = (date('Ymd', $r['updatetime']) == date('Ymd', $curren_time)) ? ($r['dayviews'] + 1) : 1;
         $weekviews = (date('YW', $r['updatetime']) == date('YW', $curren_time)) ? ($r['weekviews'] + 1) : 1;
         $monthviews = (date('Ym', $r['updatetime']) == date('Ym', $curren_time)) ? ($r['monthviews'] + 1) : 1;
-        $sql = array('views'=>$views,'yesterdayviews'=>$yesterdayviews,'dayviews'=>$dayviews,'weekviews'=>$weekviews,'monthviews'=>$monthviews,'updatetime'=>$curren_time);
+        $arr_update = array('views'=>$views,'yesterdayviews'=>$yesterdayviews,'dayviews'=>$dayviews,'weekviews'=>$weekviews,'monthviews'=>$monthviews,'updatetime'=>$curren_time);
+        $r = yield self::updateByContentId($content_id,$arr_update);
+
+        if($r==false){
+            return false;
+        }else{
+            return $r;
+        }
     }
 
 }

@@ -65,6 +65,7 @@ class BaseController extends Controller
     /**
      * @param string $controller_name
      * @param string $method_name
+     * @throws \Exception
      */
     protected function initialization($controller_name, $method_name)
     {

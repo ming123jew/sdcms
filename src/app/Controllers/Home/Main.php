@@ -43,18 +43,16 @@ class Main extends Base
         $end = 10;
         $start = ($p-1)*$end;
 
-        //[获取幻灯:start]
         $this->ConentBusiness = $this->loader->model(HomeBusiness::class,$this);
+        //[获取幻灯:start]
         $d_slide = yield $this->ConentBusiness->get_slide();
         //[获取幻灯:end]
 
         //[获取推荐:start]
-        $this->ConentBusiness = $this->loader->model(HomeBusiness::class,$this);
         $d_get_recommend = yield $this->ConentBusiness->get_recommend();
         //[获取推荐:end]
 
         //[获取最新文章:start]
-        $this->ConentBusiness = $this->loader->model(HomeBusiness::class,$this);
         $d_get_new = yield $this->ConentBusiness->get_new(0,$start,$end);
         //[获取最新文章:end]
 
@@ -78,7 +76,8 @@ class Main extends Base
         $return = [
             '0'=>'hi.'
         ];
-        $this->http_output->end($return,false);
+        parent::templateData('test',1);
+        parent::httpOutputTis($return);
     }
 
     public function http_redis_set(){

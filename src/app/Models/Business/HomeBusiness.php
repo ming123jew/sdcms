@@ -77,7 +77,7 @@ class HomeBusiness extends BaseBusiness
      */
     public function get_new(int $catid=0,int $start=0,int $end=9,int $status=0,$fields='*',bool $cache=true,int $expire=24*3600)
     {
-        $this->ContentModel = yield $this->loader->model(ContentModel::class,$this);
+        $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
         $d = yield $this->ContentModel->getNew(0,$start,$end);
         if($d!=false){
             return $d;
@@ -121,5 +121,27 @@ class HomeBusiness extends BaseBusiness
     public function get_recorded(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
     {
 
+    }
+
+    /**
+     * 获取文章内容+点击+更新点击
+     * @param int $content_id
+     * @return bool
+     */
+    public function get_article(int $content_id)
+    {
+        $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
+        //获取内容+点击
+        $d = yield $this->ContentModel->getArticle($content_id);
+
+        //更新点击
+        $this->ContentHitsModel = $this->loader->model(ContentHitsModel::class,$this);
+        $d_ContentHitsModel = yield $this->ContentHitsModel->updateHits($content_id);
+
+        if($d!=false&&$d_ContentHitsModel!=false){
+            return $d;
+        }else{
+            return false;
+        }
     }
 }

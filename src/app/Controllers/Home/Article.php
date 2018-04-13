@@ -7,7 +7,7 @@
  */
 
 namespace app\Controllers\Home;
-
+use app\Models\Business\HomeBusiness;
 
 class Article extends Base
 {
@@ -17,15 +17,28 @@ class Article extends Base
 
     }
 
+
     public function http_read()
     {
+        $id = intval( $this->http_input->postGet('id') );
+        if($id>0){
 
-        parent::templateData('test',1);
-        //web or app
-        parent::webOrApp(function (){
-            $template = $this->loader->view('app::Home/article_read');
-            $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
-        });
+            $this->HomeBusiness = $this->loader->model(HomeBusiness::class,$this);
+            //[读取内容+点击+更新点击:start]
+            $d = yield $this->HomeBusiness->get_article($id);
+            //[读取内容+点击+更新点击:end]
+            parent::templateData('article',$d);
+            //print_r($d);
+            parent::templateData('test',1);
+            //web or app
+            parent::webOrApp(function (){
+                $template = $this->loader->view('app::Home/content');
+                $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']),false);
+            });
+        }else{
+            parent::httpOutputTis('参数错误.');
+        }
+
     }
 
     public function http_list()
@@ -37,4 +50,6 @@ class Article extends Base
             $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
         });
     }
+
+
 }
