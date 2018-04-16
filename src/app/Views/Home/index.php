@@ -105,10 +105,10 @@
                 <div class="row">
                     <?php foreach ($data['d_get_new'] as $k => $v){?>
                     <div class="news-list">
-                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href=""><img style="width: 220px;height: 143px;" src="images/logo.jpg" alt=""> </a> </div>
+                        <div class="news-img col-xs-5 col-sm-5 col-md-4"> <a target="_blank" href="<?php echo url('','Article','Read',['id'=>$v['id']]);?>"><img style="width: 220px;height: 143px;" src="images/logo.jpg" alt=""> </a> </div>
                         <div class="news-info col-xs-7 col-sm-7 col-md-8">
                             <dl>
-                                <dt> <a href="" target="_blank" > <?php echo $v['title'];?> </a> </dt>
+                                <dt> <a href="<?php echo url('','Article','Read',['id'=>$v['id']]);?>" target="_blank" > <?php echo $v['title'];?> </a> </dt>
                                 <dd><span class="name"><a href="<?php echo url('','Article','Read',['id'=>$v['id']]);?>" title="<?php echo $v['title'];?>" rel="author"><?php echo $v['username'];?></a></span> <span class="identity"></span> <span class="time"> <?php echo date('Y-m-d',$v['create_time']);?> </span></dd>
                                 <dd class="text"><?php echo $v['description'];?></dd>
                             </dl>
@@ -139,7 +139,7 @@
     <!--/内容-->
     <aside class="sidebar visible-lg"><!--右侧>992px显示-->
         <div class="sentence"> <strong>每日一句</strong>
-            <h2>2015年11月1日 星期日</h2>
+            <h2><?php echo $data['date'];?></h2>
             <p>你是我人生中唯一的主角，我却只能是你故事中的一晃而过得路人甲。</p>
         </div>
         <div id="search" class="sidebar-block search" role="search">
@@ -155,31 +155,30 @@
         <div class="sidebar-block recommend">
             <h2 class="title"><strong>热门推荐</strong></h2>
             <ul>
-                <li><a target="_blank" href=""> <span class="thumb"><img src="images/icon/icon.png" alt=""></span> <span class="text">个人技术博客技术博客的SHORTCUT和ICON图标 ...</span> <span class="text-muted">阅读(2165)</span></a></li>
-                <li><a target="_blank" href=""> <span class="thumb"><img src="images/icon/icon.png" alt=""></span> <span class="text">个人技术博客技术博客的SHORTCUT和ICON图标 ...</span> <span class="text-muted">阅读(2165)</span></a></li>
-                <li><a target="_blank" href=""> <span class="thumb"><img src="images/icon/icon.png" alt=""></span> <span class="text">个人技术博客技术博客的SHORTCUT和ICON图标 ...</span> <span class="text-muted">阅读(2165)</span></a></li>
-                <li><a target="_blank" href=""> <span class="thumb"><img src="images/icon/icon.png" alt=""></span> <span class="text">个人技术博客技术博客的SHORTCUT和ICON图标 ...</span> <span class="text-muted">阅读(2165)</span></a></li>
-                <li><a target="_blank" href=""> <span class="thumb"><img src="images/icon/icon.png" alt=""></span> <span class="text">个人技术博客技术博客的SHORTCUT和ICON图标 ...</span> <span class="text-muted">阅读(2165)</span></a></li>
+                <?php foreach ($data['d_get_recommend'] as $k=>$v){?>
+                <li>
+                    <a target="_blank" href="<?php echo url('','Article','Read',['id'=>$v['id']]);?>">
+                        <span class="thumb"><img src="images/icon/icon.png" alt=""></span>
+                        <span class="text"> <?php echo $v['title'];?> </span>
+                        <span class="text-muted">阅读(<?php echo $v['views'];?>)</span>
+                    </a>
+                </li>
+               <?php } ?>
             </ul>
         </div>
         <div class="sidebar-block comment">
             <h2 class="title"><strong>最新评论</strong></h2>
             <ul>
+
                 <li data-toggle="tooltip" data-placement="top" title="站长的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>个人技术博客站长</strong> (2015-10-18) 说：<br />
           欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
-                <li data-toggle="tooltip" data-placement="top" title="读者墙上的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>个人技术博客站长</strong> (2015-10-18) 说：<br />
-          欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
-                <li data-toggle="tooltip" data-placement="top" title="个人技术博客技术博客的SHORTCUT和ICON图标...的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>个人技术博客站长</strong> (2015-10-18) 说：<br />
-          欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
-                <li data-toggle="tooltip" data-placement="top" title="个人技术博客技术博客的SHORTCUT和ICON图标...的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>个人技术博客站长</strong> (2015-10-18) 说：<br />
-          欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
-                <li data-toggle="tooltip" data-placement="top" title="个人技术博客技术博客的SHORTCUT和ICON图标...的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>个人技术博客站长</strong> (2015-10-18) 说：<br />
-          欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
+
             </ul>
         </div>
     </aside>
     <!--/右侧>992px显示-->
-    <footer class="footer">POWERED BY &copy;<a href="#">个人技术博客 XXXXX.COM</a> ALL RIGHTS RESERVED &nbsp;&nbsp;&nbsp;<span><a href="http://www.mycodes.net/" target="_blank">源码之家</a></span> <span style="display:none"><a href="">网站统计</a></span> </footer>
+    <!--底部导航-->
+    <?php $this->insert('app::Home/public_footer',['data'=>$data]) ?>
 </section>
 <div><a href="javascript:;" class="gotop" style="display:none;"></a></div>
 <!--/返回顶部-->

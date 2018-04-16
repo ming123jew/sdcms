@@ -131,9 +131,10 @@ function set_cache($key,$value,$expire=24*3600)
 /**
  * 获取缓存{全局助手函数}
  * @param $key
- * @return bool
+ * @param string $type
+ * @return bool|Generator
  */
-function get_cache($key)
+function get_cache($key,$type="data")
 {
     $result = yield CatCacheRpcProxy::getRpc()->offsetExists($key);
     if($result)
@@ -149,8 +150,42 @@ function get_cache($key)
     }else{
         $result = false;
     }
-    return $result;
+    if($type)
+    {
+        return $result[$type];
+    }else{
+        return $result;
+    }
 
+}
+
+/**
+ * 获取星期几
+ * @param $date
+ * @return mixed
+ */
+function get_week($date){
+    //强制转换日期格式
+    $date_str=date('Y-m-d',strtotime($date));
+    //封装成数组
+    $arr=explode("-", $date_str);
+    //参数赋值
+    //年
+    $year=$arr[0];
+    //月，输出2位整型，不够2位右对齐
+    $month=sprintf('%02d',$arr[1]);
+    //日，输出2位整型，不够2位右对齐
+    $day=sprintf('%02d',$arr[2]);
+    //时分秒默认赋值为0；
+    $hour = $minute = $second = 0;
+    //转换成时间戳
+    $strap = mktime($hour,$minute,$second,$month,$day,$year);
+    //获取数字型星期几
+    $number_wk=date("w",$strap);
+    //自定义星期数组
+    $weekArr=array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
+    //获取数字对应的星期
+    return $weekArr[$number_wk];
 }
 
 /**
@@ -159,9 +194,11 @@ function get_cache($key)
  * @param $page
  * @param int $pageSize
  * @param int $showPage
- * @param mix $context
+ * @param null $context
+ * @return string
  */
-function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null){    //第一个参数为表总数 第二个参数为每页显示几个
+function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null)
+{    //第一个参数为表总数 第二个参数为每页显示几个
     if($total&&$context){
         $totalPage = ceil($total / $pageSize);    //获取总页数
         $pageOffset = ($showPage - 1) / 2;    //页码偏移量
@@ -249,7 +286,6 @@ html;
  */
 function http_post_url($remote_server, array $params)
 {
-
     $post_string = "{";
     foreach($params as $key => &$val)
     {
@@ -277,20 +313,24 @@ function http_post_url($remote_server, array $params)
  * @param $a
  * @param $context
  * @param array $param
+ * @return bool
  */
-function check_role($m,$c,$a,$context,$param=[]){
+function check_role($m,$c,$a,$context,$param=[])
+{
     $login_info = session('__SESSION__ADMIN__');
     //print_r($login_info);
 
     $role_id = $login_info['roleid'];
     $cache = Cache::getCache('WebCache');
     $role_id_priv =  unserialize($cache->getOneMap('__ROLEID__DATA__ADMIN__'.$role_id));
-    if(!$role_id_priv){
+    if(!$role_id_priv)
+    {
         //数据库查找
         $model = get_instance()->loader->model(\app\Models\RolePrivModel::class,$context);
         $r =  yield $model->authRole($role_id,$m,$c,$a);
         //print_r('check_role from db \n;');
-        if(!($r)){
+        if(!($r))
+        {
             return false;
         }else{
            return true;
@@ -299,9 +339,12 @@ function check_role($m,$c,$a,$context,$param=[]){
         //print_r('check_role from cache \n;');
         //从缓存种查找
         $find = false;
-        if(is_array($role_id_priv)&&!empty($role_id_priv)){
-            foreach ($role_id_priv as $key=>$value){
-                if($m==$value['m']&&$c==$value['c']&&$a==$value['a']){
+        if(is_array($role_id_priv)&&!empty($role_id_priv))
+        {
+            foreach ($role_id_priv as $key=>$value)
+            {
+                if($m==$value['m']&&$c==$value['c']&&$a==$value['a'])
+                {
                     $find = true;
                 }else{
                     continue;
@@ -321,16 +364,18 @@ function check_role($m,$c,$a,$context,$param=[]){
  * @param string $flag
  * @return bool
  */
-function get_role_byid($roleid,$context,$flag='__CACHE_ROLE__'){
-    if($roleid&&$flag){
-
+function get_role_byid($roleid,$context,$flag='__CACHE_ROLE__')
+{
+    if($roleid&&$flag)
+    {
         $cache = Cache::getCache('WebCache');
         $d = $cache->getOneMap($flag);
-        if($d){
+        if($d)
+        {
             $all_role =  unserialize($d);
             print_r('role from cache.');
         }else{
-            $m = get_instance()->loader->model(\app\Models\RoleModel::class,$context);
+            $m = get_instance()->loader->model(\app\Models\Data\RoleModel::class,$context);
             $d = yield $m->getAll();
             $all_role = $d;
             //存入缓存
@@ -339,32 +384,30 @@ function get_role_byid($roleid,$context,$flag='__CACHE_ROLE__'){
 
         }
         $find = [];
-        foreach ($all_role as $key=>$value){
-            if($roleid==$value['id']){
+        foreach ($all_role as $key=>$value)
+        {
+            if($roleid==$value['id'])
+            {
                 $find = $value;
             }else{
                 continue;
             }
         }
-
         return $find;
     }
     return false;
 }
 
-function get_content_list_bycatid()
+/**
+ * 获取文章模型ID
+ * @param $model_id
+ * @return string
+ */
+function get_modelname_bymodelid($model_id)
 {
-
-}
-
-function get_content_byid()
-{
-
-}
-
-function get_modelname_bymodelid($model_id){
     $return = '';
-    switch ($model_id){
+    switch ($model_id)
+    {
         case 1:
             $return = "文章模型";break;
         case 2:
@@ -373,9 +416,16 @@ function get_modelname_bymodelid($model_id){
     return $return;
 }
 
-function get_cattype_bymodelid($model_id){
+/**
+ * 获取文章栏目类型
+ * @param $model_id
+ * @return string
+ */
+function get_cattype_bymodelid($model_id)
+{
     $return = '';
-    switch ($model_id){
+    switch ($model_id)
+    {
         case 1:
             $return = "内部栏目";break;
         default :
@@ -384,3 +434,49 @@ function get_cattype_bymodelid($model_id){
     return $return;
 }
 
+
+/**
+ * 根据catid查找对应的栏目信息
+ * @param int $catid
+ * @param $context
+ * @return bool|Generator
+ */
+function get_catname_by_catid(int $catid,$context)
+{
+    $cache_arr = [];
+    $find = false;
+    $key = '__CACHE_CATEGORY_ALL_DATA__';
+    if($catid>0)
+    {
+        //查找缓存
+        $cache_arr = yield get_cache($key);
+        if($cache_arr)
+        {
+            print_r('catname from cache');
+        }else{
+            //数据库查找
+            $model = get_instance()->loader->model(\app\Models\Data\CategoryModel::class,$context);
+            $r =  yield $model->getAll();
+            if($r)
+            {
+                $cache_arr = $r;
+                //存入缓存
+                yield set_cache($key,$r);
+                print_r('catname from db');
+            }
+        }
+    }
+
+    if($cache_arr)
+    {
+        //查找对应catid数据
+        foreach ($cache_arr as $key=>$value)
+        {
+            if ($catid==$value['id'])
+            {
+                $find = $value['catname'];
+            }
+        }
+    }
+    return $find;
+}

@@ -29,7 +29,7 @@ class Main extends Base
      * @var AppModel
      */
     public $BaseModel;
-    protected $ConentBusiness;
+    protected $HomeBusiness;
 
     protected function initialization($controller_name, $method_name)
     {
@@ -43,17 +43,17 @@ class Main extends Base
         $end = 10;
         $start = ($p-1)*$end;
 
-        $this->ConentBusiness = $this->loader->model(HomeBusiness::class,$this);
+        $this->HomeBusiness = $this->loader->model(HomeBusiness::class,$this);
         //[获取幻灯:start]
-        $d_slide = yield $this->ConentBusiness->get_slide();
+        $d_slide = yield $this->HomeBusiness->get_slide();
         //[获取幻灯:end]
 
         //[获取推荐:start]
-        $d_get_recommend = yield $this->ConentBusiness->get_recommend();
+        $d_get_recommend = yield $this->HomeBusiness->get_recommend();
         //[获取推荐:end]
 
         //[获取最新文章:start]
-        $d_get_new = yield $this->ConentBusiness->get_new(0,$start,$end);
+        $d_get_new = yield $this->HomeBusiness->get_new(0,$start,$end);
         //[获取最新文章:end]
 
         //print_r($d_get_new);
@@ -62,8 +62,8 @@ class Main extends Base
         parent::templateData('d_get_recommend',$d_get_recommend);
         parent::templateData('d_get_new',$d_get_new['result']);
         parent::templateData('page_d_get_new',page_bar($d_get_new['num'],$p,10,5,$this));
-
-        parent::templateData('test',1);
+        $date = date('Y-m-d');
+        parent::templateData('date',$date.' '.get_week($date));
         //web or app
         parent::webOrApp(function (){
             $template = $this->loader->view('app::Home/index');

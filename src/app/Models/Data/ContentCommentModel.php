@@ -8,23 +8,21 @@
 
 namespace app\Models\Data;
 
-
-class CategoryModel extends BaseModel
+class ContentCommentModel extends BaseModel
 {
 
     /**
      * 数据库表名称，不包含前缀
      * @var string
      */
-    private $table = 'category';
-
+    private $table = 'content_comment';
 
     public function getTable(){
         return $this->prefix.$this->table;
     }
 
     /**
-     * 获取所有菜单
+     * 获取所有数据
      * @return bool
      */
     public function getAll(){
@@ -40,11 +38,43 @@ class CategoryModel extends BaseModel
     }
 
     /**
+     * 后台列表
+     * @param int $start
+     * @param int $end
+     * @return bool
+     */
+    public function getAllByPage(int $start,int $end=10){
+
+        $m = $this->loader->model('ContentModel',$this);
+        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
+            ->join($m->getTable(),'a.content_id=b.id','left join','b')
+            ->orderBy('a.id','desc')
+            ->select('a.*,b.*')
+            ->limit("{$start},{$end}")
+            ->coroutineSend();
+        //嵌入总记录
+        $count_arr = yield $this->mysql_pool->dbQueryBuilder->coroutineSend(null,"select count(0) as num from {$this->getTable()}");
+        $count = $count_arr['result'][0]['num'];
+        if($count>$end){
+            $r['num'] =$count;
+        }else{
+            $r['num'] = $end;
+        }
+
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r ;
+        }
+    }
+
+    /**
      * @param int $id
      * @param string $fields
      * @return bool
      */
-    public function getById(int $id,$fields='*'){
+    public function getById(int $id,$fields='*')
+    {
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
             ->where('id',$id)
             ->select($fields)
@@ -52,12 +82,13 @@ class CategoryModel extends BaseModel
         if(empty($r['result'])){
             return false;
         }else{
-            return $r['result'][0] ;
+            return $r['result'][0];
         }
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param null $transaction_id
      * @return bool
      */
     public function deleteById(int $id,$transaction_id=null){
@@ -73,10 +104,12 @@ class CategoryModel extends BaseModel
 
     /**
      * 插入多条数据
-     * @param array $arr
+     * @param array $intoColumns
+     * @param array $intoValues
+     * @param null $transaction_id
      * @return bool
      */
-    public function insertMultiple( array $intoColumns,array $intoValues,$transaction_id=null){
+    public function insertMultiple( array $intoColumns,array $intoValues ,$transaction_id=null){
         //原生sql执行
 //        $sql = 'INSERT INTO '.$this->prefix.$this->table.'(role_id,m,c,a,menu_id) VALUES';
 //        foreach ($arr as $key=>$value){
@@ -92,14 +125,15 @@ class CategoryModel extends BaseModel
         if(empty($r['result'])){
             return false;
         }else{
-            return $r ;
+            return $r ;//插入返回所有结果集
         }
     }
 
     /**
      * 根据ID更新单条
-     * @param array $intoColumns
-     * @param array $intoValues
+     * @param int $id
+     * @param array $columns_values
+     * @param null $transaction_id
      * @return bool
      */
     public function updateById(int $id,array $columns_values,$transaction_id=null){
@@ -115,34 +149,5 @@ class CategoryModel extends BaseModel
         }
     }
 
-    /**
-     * 自增
-     * @return bool
-     */
-    public function setInc(int $catid, string $field, int $num=1,$transaction_id=null){
-        $sql = 'update '.$this->prefix.$this->table.' set '.$field.'='.$field.'+'.$num.' where id='.$catid;
-        $r = yield $this->mysql_pool->dbQueryBuilder->coroutineSend($transaction_id,$sql);
-
-        if(empty($r['result'])){
-            return false;
-        }else{
-            return ($r['result']);
-        }
-    }
-
-    /**
-     * 自减
-     * @return bool
-     */
-    public function setDec(int $catid, string $field, int $num=1,$transaction_id=null){
-        $sql = 'update '.$this->prefix.$this->table.' set '.$field.'='.$field.'-'.$num.' where id='.$catid;
-        $r = yield $this->mysql_pool->dbQueryBuilder->coroutineSend($transaction_id,$sql);
-
-        if(empty($r['result'])){
-            return false;
-        }else{
-            return ($r['result']);
-        }
-    }
 
 }

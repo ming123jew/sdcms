@@ -131,17 +131,55 @@ class HomeBusiness extends BaseBusiness
     public function get_article(int $content_id)
     {
         $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
-        //获取内容+点击
+        //获取内容
         $d = yield $this->ContentModel->getArticle($content_id);
+
+        //获取上下篇
+        $d['prev'] = '最前一篇';
+        $d['next'] = '最后一篇';
+        $d_prev_next = yield $this->ContentModel->getArticlePrevNext($d['id'],$d['catid']);
+        foreach ($d_prev_next as $k=>$v)
+        {
+            if($v['flag']=='prev')
+            {
+                if($v)
+                {
+                    $d['prev'] = '<a href="'.url('','','read',['id'=>$v['id']]).'" rel="prev">'.$v['title'].'</a>';
+                } else {
+                    $d['prev'] = '最前一篇';
+                }
+
+            }else if($v['flag']=='next')
+            {
+                if($v)
+                {
+                    $d['next'] = '<a href="'.url('','','read',['id'=>$v['id']]).'" rel="next">'.$v['title'].'</a>';
+                } else {
+                    $d['next'] = '最后一篇';
+                }
+            }
+        }
 
         //更新点击
         $this->ContentHitsModel = $this->loader->model(ContentHitsModel::class,$this);
-        $d_ContentHitsModel = yield $this->ContentHitsModel->updateHits($content_id);
+        $d_ContentHitsModel = yield $this->ContentHitsModel->updateHits($content_id,$d);
+
+        //f
 
         if($d!=false&&$d_ContentHitsModel!=false){
             return $d;
         }else{
             return false;
         }
+    }
+
+    public function get_article_prev()
+    {
+
+    }
+
+    public function get_article_next()
+    {
+
     }
 }

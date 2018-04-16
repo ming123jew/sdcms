@@ -19,7 +19,8 @@ class ContentHitsModel extends BaseModel
     private $table = 'content_hits';
 
 
-    public function getTable(){
+    public function getTable()
+    {
         return $this->prefix.$this->table;
     }
 
@@ -27,7 +28,8 @@ class ContentHitsModel extends BaseModel
      * 获取所有
      * @return bool
      */
-    public function getAll(){
+    public function getAll()
+    {
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
             ->orderBy('content_id','asc')
             ->select('*')
@@ -43,7 +45,8 @@ class ContentHitsModel extends BaseModel
      * @param int $role_id
      * @return bool
      */
-    public function getByContentId(int $content_id,$fields='*'){
+    public function getByContentId(int $content_id,$fields='*')
+    {
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
             ->where('content_id',$content_id)
             ->select($fields)
@@ -59,7 +62,8 @@ class ContentHitsModel extends BaseModel
      * @param $id
      * @return bool
      */
-    public function deleteByContentId(int $content_id,$transaction_id=null){
+    public function deleteByContentId(int $content_id,$transaction_id=null)
+    {
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
             ->where('content_id',$content_id)->delete()->coroutineSend($transaction_id);
         //print_r($r);
@@ -75,7 +79,8 @@ class ContentHitsModel extends BaseModel
      * @param array $arr
      * @return bool
      */
-    public function insertMultiple( array $intoColumns,array $intoValues,$transaction_id=null ){
+    public function insertMultiple( array $intoColumns,array $intoValues,$transaction_id=null )
+    {
         //原生sql执行
 //        $sql = 'INSERT INTO '.$this->prefix.$this->table.'(role_id,m,c,a,menu_id) VALUES';
 //        foreach ($arr as $key=>$value){
@@ -88,7 +93,8 @@ class ContentHitsModel extends BaseModel
             ->intoValues($intoValues)
             ->coroutineSend($transaction_id);
         //print_r($r);
-        if(empty($r['result'])){
+        if(empty($r['result']))
+        {
             return false;
         }else{
             return $r['result'] ;
@@ -102,13 +108,15 @@ class ContentHitsModel extends BaseModel
      * @param array $columns_values
      * @return bool
      */
-    public function updateByContentId(int $content_id,array $columns_values,$transaction_id=null){
+    public function updateByContentId(int $content_id,array $columns_values,$transaction_id=null)
+    {
         $r = yield $this->mysql_pool->dbQueryBuilder->update($this->prefix.$this->table)
             ->set($columns_values)
             ->where('content_id',$content_id)
             ->coroutineSend($transaction_id);
         //print_r($r);
-        if(empty($r['result'])){
+        if(empty($r['result']))
+        {
             return false;
         }else{
             return $r['result'] ;
@@ -122,9 +130,11 @@ class ContentHitsModel extends BaseModel
      * @param array $sel
      * @return bool
      */
-    public function updateHits(int $content_id,array $sel=array()){
+    public function updateHits(int $content_id,array $sel=array())
+    {
         $curren_time = time();
-        if(!$sel){
+        if(!$sel)
+        {
             $r = yield self::getByContentId($content_id);
         }else{
             $r = $sel;
@@ -137,7 +147,33 @@ class ContentHitsModel extends BaseModel
         $arr_update = array('views'=>$views,'yesterdayviews'=>$yesterdayviews,'dayviews'=>$dayviews,'weekviews'=>$weekviews,'monthviews'=>$monthviews,'updatetime'=>$curren_time);
         $r = yield self::updateByContentId($content_id,$arr_update);
 
-        if($r==false){
+        if($r==false)
+        {
+            return false;
+        }else{
+            return $r;
+        }
+    }
+
+    /**
+     * 更新点赞
+     * @param int $content_id
+     * @param array $sel
+     * @return array|bool
+     */
+    public function updatePraise(int $content_id,array $sel=array())
+    {
+        if(!$sel)
+        {
+            $r = yield self::getByContentId($content_id);
+        }else{
+            $r = $sel;
+        }
+        $arr_update = [ 'praise'=> ($r['praise']+1) ];
+        $r = yield self::updateByContentId($content_id,$arr_update);
+
+        if($r==false)
+        {
             return false;
         }else{
             return $r;

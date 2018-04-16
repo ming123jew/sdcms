@@ -107,6 +107,34 @@ class ContentModel extends BaseModel
     }
 
     /**
+     * 获取上下篇
+     * @param int $id
+     * @return bool
+     */
+    public function getArticlePrevNext(int $id,int $catid=0)
+    {
+        if($catid>0)
+        {
+            $sql = "(select id,title,'prev' as flag from {$this->getTable()} where id < {$id} and catid={$catid} order by id desc limit 1) 
+        union all (select id,title,'next' as flag from {$this->getTable()} where id > {$id} and catid={$catid} order by id asc limit 1);";
+        }else{
+            $sql = "(select id,title,'prev' as flag from {$this->getTable()} where id < {$id} order by id desc limit 1) 
+        union all (select id,title,'next' as flag from {$this->getTable()} where id > {$id}  order by id asc limit 1);";
+
+        }
+        //echo $sql;
+        $r = yield $this->mysql_pool->dbQueryBuilder->coroutineSend(null,$sql);
+        //print_r( $r);
+        if(empty($r['result'])){
+            return false;
+        }else{
+
+
+            return $r['result'];
+        }
+    }
+
+    /**
      * 获取幻灯[flag:p|t|r]列表
      * @param string $flag
      * @param int $start
@@ -119,10 +147,11 @@ class ContentModel extends BaseModel
     public function getByFlag(string $flag='p',int $start=0,int $end=9,int $catid=0,int $status=0,$fields='*')
     {
         //FIND_IN_SET();
+        $m = $this->loader->model('ContentHitsModel',$this);
         if($catid!=0){
-            $sql = "select {$fields} from {$this->getTable()}  where catid={$catid} and FIND_IN_SET('{$flag}',flag) and status={$status} order by id desc limit {$start},{$end} ";
+            $sql = "select {$fields} from {$this->getTable()} a left join  {$m->getTable()} b on a.id=b.content_id  where a.catid={$catid} and FIND_IN_SET('{$flag}',a.flag) and a.status={$status} order by a.id desc limit {$start},{$end} ";
         }else{
-            $sql = "select {$fields} from {$this->getTable()}  where FIND_IN_SET('{$flag}',flag) and status={$status} order by id desc limit {$start},{$end} ";
+            $sql = "select {$fields} from {$this->getTable()} a left join  {$m->getTable()} b on a.id=b.content_id  where FIND_IN_SET('{$flag}',a.flag) and a.status={$status} order by a.id desc limit {$start},{$end} ";
         }
         //echo $sql;
 

@@ -66,7 +66,7 @@
                 <h2><?php echo $data['article']['title'];?></h2>
                 <ul>
                     <li><?php echo $data['article']['username'];?> 发布于 <?php echo date('Y-m-d',$data['article']['create_time']);?></li>
-                    <li>栏目：<a href="" title="" target="_blank"><?php echo $data['article']['catid'];?></a></li>
+                    <li>栏目：<a href="" title="" target="_blank"><?php echo $data['article']['catname'];?></a></li>
                     <li>来源：<a href="" title="" target="_blank"><?php echo $data['article']['copyfrom'];?></a></li>
                     <li>共 <strong><?php echo $data['article']['views'];?></strong> 人围观 </li>
 <!--                    <li><strong>123</strong> 个不明物体</li>-->
@@ -76,7 +76,7 @@
                 <?php echo $data['article']['body'];?>
             </article>
             <div class="reprint">转载请说明出处：<a href="" title="" target="_blank">ming123jew技术博客</a> » <a href="" title="" target="_blank">欢迎来到ming123jew个人技术博客</a></div>
-            <div class="zambia"><a href="javascript:;" name="zambia" rel=""><span class="glyphicon glyphicon-thumbs-up"></span> 赞（0）</a></div>
+            <div class="zambia"><a href="javascript:;" name="zambia" rel="<?php echo $data['article']['praise'];?>"><span class="glyphicon glyphicon-thumbs-up"></span> 赞（<?php echo $data['article']['praise'];?>）</a></div>
             <?php if(!empty($data['article']['keywords'])){ $arr_keywords=explode(' ',trim($data['article']['keywords']));?>
             <div class="tags news_tags">标签：
                 <?php foreach( $arr_keywords as $kk=>$vv){?>
@@ -84,10 +84,16 @@
                 <?php } ?>
             </div>
             <?php } ?>
-            <nav class="page-nav"> <span class="page-nav-prev">上一篇<br />
-        <a href="" rel="prev">欢迎来到个人技术博客</a></span> <span class="page-nav-next">下一篇<br />
-        <a href="" rel="next">欢迎来到个人技术博客</a></span> </nav>
-            <div class="content-block related-content visible-lg visible-md">
+            <nav class="page-nav">
+                <span class="page-nav-prev">
+                    上一篇<br />
+                    <?php echo $data['article']['prev'];?>
+                </span>
+                <span class="page-nav-next">下一篇<br />
+                    <?php echo $data['article']['next'];?>
+                </span>
+            </nav>
+            <!--<div class="content-block related-content visible-lg visible-md" style="display: none;">
                 <h2 class="title"><strong>相关推荐</strong></h2>
                 <ul>
                     <li><a target="_blank" href=""><img src="images/logo.jpg" alt="">
@@ -115,10 +121,10 @@
                             <h3> 欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等 </h3>
                         </a></li>
                 </ul>
-            </div>
+            </div>-->
             <div class="content-block comment">
                 <h2 class="title"><strong>评论</strong></h2>
-                <form action="comment.php" method="post" class="form-inline" id="comment-form">
+                <form action="" method="post" class="form-inline" id="comment-form">
                     <div class="comment-title">
                         <div class="form-group">
                             <label for="commentName">昵称：</label>
@@ -130,9 +136,9 @@
                         </div>
                     </div>
                     <div class="comment-form">
-                        <textarea placeholder="你的评论可以一针见血" name="commentContent"></textarea>
+                        <textarea placeholder="你的评论可以一针见血" name="commentContent" id="commentContent"></textarea>
                         <div class="comment-form-footer">
-                            <div class="comment-form-text">请先 <a href="javascript:;">登录</a> 或 <a href="javascript:;">注册</a>，也可匿名评论 </div>
+                            <div class="comment-form-text">请先 <a href="<?php echo url('Home','Main','login')?>">登录</a> 或 <a href="<?php echo url('Home','Main','register')?>">注册</a>，也可匿名评论 </div>
                             <div class="comment-form-btn">
                                 <button type="submit" class="btn btn-default btn-comment">提交评论</button>
                             </div>
@@ -140,17 +146,7 @@
                     </div>
                 </form>
                 <div class="comment-content">
-                    <ul>
-                        <li><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>技术博客站长</strong> (2015-10-18) 说：<br />
-              欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等 ...</span></li>
-                        <li><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>技术博客编辑</strong> (2015-10-18) 说：<br />
-              欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等 ...</span></li>
-                        <li><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>令狐冲</strong> (2015-10-18) 说：<br />
-              欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等 ...</span></li>
-                        <li><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>任盈盈</strong> (2015-10-18) 说：<br />
-              欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等 ...欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等 ...欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等在这里可以看到网站前端和后端的技术等 ...</span></li>
-                        <li><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>技术博客站长</strong> (2015-10-18) 说：<br />
-              欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等 ...</span></li>
+                    <ul id="comment-list">
                     </ul>
                 </div>
             </div>
@@ -175,31 +171,27 @@
         <div class="sidebar-block recommend">
             <h2 class="title"><strong>热门推荐</strong></h2>
             <ul>
-                <li><a target="_blank" href=""> <span class="thumb"><img src="images/icon/icon.png" alt=""></span> <span class="text">个人技术博客的SHORTCUT和ICON图标 ...</span> <span class="text-muted">阅读(2165)</span></a></li>
-                <li><a target="_blank" href=""> <span class="thumb"><img src="images/icon/icon.png" alt=""></span> <span class="text">个人技术博客的SHORTCUT和ICON图标 ...</span> <span class="text-muted">阅读(2165)</span></a></li>
-                <li><a target="_blank" href=""> <span class="thumb"><img src="images/icon/icon.png" alt=""></span> <span class="text">个人技术博客的SHORTCUT和ICON图标 ...</span> <span class="text-muted">阅读(2165)</span></a></li>
-                <li><a target="_blank" href=""> <span class="thumb"><img src="images/icon/icon.png" alt=""></span> <span class="text">个人技术博客的SHORTCUT和ICON图标 ...</span> <span class="text-muted">阅读(2165)</span></a></li>
-                <li><a target="_blank" href=""> <span class="thumb"><img src="images/icon/icon.png" alt=""></span> <span class="text">个人技术博客的SHORTCUT和ICON图标 ...</span> <span class="text-muted">阅读(2165)</span></a></li>
+                <?php foreach ($data['d_get_recommend'] as $k=>$v){?>
+                <li>
+                    <a target="_blank" href="<?php echo url('','Article','Read',['id'=>$v['id']]);?>">
+                        <span class="thumb"><img src="images/icon/icon.png" alt=""></span>
+                        <span class="text"> <?php echo $v['title'];?> </span>
+                        <span class="text-muted">阅读(<?php echo $v['views'];?>)</span>
+                    </a>
+                </li>
+                <?php } ?>
             </ul>
         </div>
         <div class="sidebar-block comment">
             <h2 class="title"><strong>最新评论</strong></h2>
             <ul>
-                <li data-toggle="tooltip" data-placement="top" title="站长的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>技术博客站长</strong> (2015-10-18) 说：<br />
-          欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
-                <li data-toggle="tooltip" data-placement="top" title="读者墙上的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>技术博客站长</strong> (2015-10-18) 说：<br />
-          欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
-                <li data-toggle="tooltip" data-placement="top" title="个人技术博客的SHORTCUT和ICON图标...的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>技术博客站长</strong> (2015-10-18) 说：<br />
-          欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
-                <li data-toggle="tooltip" data-placement="top" title="个人技术博客的SHORTCUT和ICON图标...的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>技术博客站长</strong> (2015-10-18) 说：<br />
-          欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
-                <li data-toggle="tooltip" data-placement="top" title="个人技术博客的SHORTCUT和ICON图标...的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>技术博客站长</strong> (2015-10-18) 说：<br />
-          欢迎来到个人技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
+
             </ul>
         </div>
     </aside>
     <!--/右侧>992px显示-->
-    <footer class="footer">POWERED BY &copy;<a href="#">技术博客 XXXXX.COM</a> ALL RIGHTS RESERVED &nbsp;&nbsp;&nbsp;<span><a href="http://www.mycodes.net/" target="_blank">源码之家</a></span> <span style="display:none"><a href="">网站统计</a></span> </footer>
+    <!--底部导航-->
+    <?php $this->insert('app::Home/public_footer',['data'=>$data]) ?>
 </section>
 <div><a href="javascript:;" class="gotop" style="display:none;"></a></div>
 <!--/返回顶部-->
@@ -298,21 +290,57 @@
     $(function(){
         $(".content .zambia a").click(function(){
             var zambia = $(this);
-            var id = zambia.attr("rel"); //对应id
+            var praise = parseInt( zambia.attr("rel") ); //对应id
             zambia.fadeOut(1000); //渐隐效果
             $.ajax({
                 type:"POST",
-                url:"zambia.php",
-                data:"id="+id,
+                url:"<?php echo url('','Article','praise',['id'=>$data['article']['id']]);?>",
+                data:"praise="+praise,
                 cache:false, //不缓存此页面
-                success:function(data){
-                    zambia.html(data);
-                    zambia.fadeIn(1000); //渐显效果
+                success:function(json){
+                    if(json.status==1){
+                        zambia.html('<span class="glyphicon glyphicon-thumbs-up"></span> 赞（'+(praise+1)+'）');
+                        zambia.fadeIn(1000); //渐显效果
+                    }
+                }
+            });
+            return false;
+        });
+
+        $("#comment-form").submit(function(e){
+            $.ajax({
+                type:"POST",
+                url:"<?php echo url('','Article','comment',['content_id'=>$data['article']['id']]);?>",
+                data:{"title":"<?php echo $data['article']['title']?>","username":$("#commentName").val(),"email":$("#commentEmail").val(),"content":$("#commentContent").val()},
+                cache:false, //不缓存此页面
+                success:function(json){
+                    if(json.status==1){
+
+                        $('#comment-list').prepend('<li><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>'+$('#commentName').val()+'</strong> ('+getNowFormatDate()+') 说：<br />\n' +
+                            $('#commentContent').val()+'</span></li>')
+                    }
                 }
             });
             return false;
         });
     })
+
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
+
 </script>
 </body>
 </html>
