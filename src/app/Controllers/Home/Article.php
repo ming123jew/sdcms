@@ -44,7 +44,7 @@ class Article extends Base
             //[获取推荐:start]
             $d_get_recommend = yield $this->HomeBusiness->get_recommend();
             //[获取推荐:end]
-
+            $d['body'] = htmlspecialchars_decode($d['body']);
             parent::templateData('article',$d);
             //print_r($d);
             parent::templateData('d_get_recommend',$d_get_recommend);
@@ -108,30 +108,62 @@ class Article extends Base
             $email = $this->http_input->postGet('email');
             $data = [
                 'content_id'=>$content_id,
-                'content'=>$content,
+                'content'=>strip_tags($content),
                 'title'=>$title,
                 'create_time'=>time(),
-                'username'=>$username,
+                'username'=>strip_tags($username),
                 'uid'=>$uid,
                 'email'=>$email
             ];
-            $this->ContentCommentModel = $this->loader->model(ContentCommentModel::class,$this);
-            $r = yield $this->ContentCommentModel->insertMultiple(array_keys($data),array_values($data));
-            if($r)
+            if(empty($data['content'])||empty($data['username']))
             {
-                parent::httpOutputEnd('评论成功.','评论失败',$r);
+                $this->httpOutputTis('请输入用户名、邮箱、评论内容.');
             }else{
-                parent::httpOutputEnd('评论成功.','评论失败',$r);
+                $this->ContentCommentModel = $this->loader->model(ContentCommentModel::class,$this);
+                $r = yield $this->ContentCommentModel->insertMultiple(array_keys($data),array_values($data));
+                if($r)
+                {
+                    parent::httpOutputEnd('评论成功.','评论失败',$r);
+                }else{
+                    parent::httpOutputEnd('评论成功.','评论失败',$r);
+                }
             }
+
         }else{
             $this->httpOutputTis('非法请求.');
         }
     }
 
-    
-    public function get_comment()
+    /**
+     * 获取评论
+     */
+    public function http_get_comment()
     {
+        $content_id = intval( $this->http_input->postGet('content_id') );
+        if($this->http_input->getRequestMethod()=='POST' && $content_id>0)
+        {
+            $p = intval( $this->http_input->postGet('p') );
+            if($p == 0) {$p = 1;}
+            $end = 10;
+            $start = ($p-1)*$end;
+            $this->ContentCommentModel = $this->loader->model(ContentCommentModel::class,$this);
+            $r = yield $this->ContentCommentModel->getAllByPage($start,$end);
+            if($r)
+            {
+                $end = [
+                    'status' => 1,
+                    'code'=>200,
+                    'message'=>'list',
+                    'data'=>$r['result']
+                ];
+            }else{
+                $end = [];
+            }
+            parent::httpOutputEnd('获取评论成功.','获取评论失败',$r,$end);
 
+        }else{
+            $this->httpOutputTis('非法请求.');
+        }
     }
 
 }

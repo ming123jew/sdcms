@@ -148,6 +148,7 @@
                 <div class="comment-content">
                     <ul id="comment-list">
                     </ul>
+                    <input type="hidden" value="1" id="comment-page">
                 </div>
             </div>
         </div>
@@ -286,8 +287,9 @@
     });
 
 
-    //ajax更新点赞值
+
     $(function(){
+        //ajax更新点赞值
         $(".content .zambia a").click(function(){
             var zambia = $(this);
             var praise = parseInt( zambia.attr("rel") ); //对应id
@@ -306,7 +308,7 @@
             });
             return false;
         });
-
+        //提交评论
         $("#comment-form").submit(function(e){
             $.ajax({
                 type:"POST",
@@ -317,12 +319,19 @@
                     if(json.status==1){
 
                         $('#comment-list').prepend('<li><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>'+$('#commentName').val()+'</strong> ('+getNowFormatDate()+') 说：<br />\n' +
-                            $('#commentContent').val()+'</span></li>')
+                            $('#commentContent').val().replace(/[\n\r]/g,'<br>')+'</span></li>')
+                    }else {
+                        alert(json.message);
                     }
                 }
             });
             return false;
         });
+
+        //加载评论
+        var p = parseInt( $('#comment-page').val() );
+        getComment(p);
+        
     })
 
     function getNowFormatDate() {
@@ -339,6 +348,47 @@
         }
         var currentdate = year + seperator1 + month + seperator1 + strDate;
         return currentdate;
+    }
+    function formatDateTime(timeStamp) {
+        var date = new Date();
+        date.setTime(timeStamp * 1000);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+    }
+    function getComment(p) {
+        $.ajax({
+            url: "<?php echo url('','Article','get_comment',['content_id'=>$data['article']['id']]);?>",
+            data: {
+                p:p,
+                url: window.location.href,
+                type: "signature"
+            },
+            type:'post',
+            dataType: "jsonp",
+            jsonp: "jsonpcallback",//服务端用于接收callback调用的function名的参数
+        }).success(function (result) {
+            //alert(result)
+            var html = '';
+            if(result.status==1){
+                $(result.data).each(function (i,e) {
+                    html +='<li><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>'+e.username+'</strong> ('+formatDateTime(e.create_time)+') 说：<br />\n' +
+                        e.content.replace(/[\n\r]/g,'<br>')+'</span></li>';
+                })
+                $('#comment-list').html(html).show(300)
+                $('#comment-page').val( p+1 );
+            }
+
+        });
     }
 
 </script>

@@ -84,12 +84,22 @@ class Content extends Base
         {
             //数据处理
             $data['info'] = $this->http_input->postGet('info');
-            $data['info']['body'] = $this->http_input->postGet('editorValue');
+            $data['info']['body'] = htmlspecialchars($this->http_input->postGet('editorValue'),ENT_QUOTES);
             //获取登录信息
             $login_session = self::get_login_session();
             $data['info']['username'] = $login_session['username'];
             $data['info']['create_time'] = time();
             $data['info']['update_time'] = time();
+            if(empty($data['info']['title']))
+            {
+                $data['info']['title'] = '标题待补充';
+            }else{
+                $data['info']['title'] = strip_tags($data['info']['title']);
+            }
+            if(!empty($data['info']['keywords']))
+            {
+                $data['info']['keywords'] = strip_tags($data['info']['keywords']);
+            }
             if(isset($data['info']['isgourl']))
             {
                 unset($data['info']['isgourl']);
@@ -99,6 +109,8 @@ class Content extends Base
             if(empty($data['info']['copyfrom']))
             {
                 $data['info']['copyfrom'] = '本站';
+            }else{
+                $data['info']['copyfrom'] = strip_tags($data['info']['copyfrom']);
             }
             if(isset($data['info']['oldcatid']))
             {
@@ -151,12 +163,22 @@ class Content extends Base
         {
             //数据处理
             $data['info'] = $this->http_input->postGet('info');
-            $data['info']['body'] = $this->http_input->postGet('editorValue');
+            $data['info']['body'] = htmlspecialchars($this->http_input->postGet('editorValue'),ENT_QUOTES);
             //获取登录信息
             $login_session = self::get_login_session();
             $data['info']['username'] = $login_session['username'];
             $data['info']['create_time'] = time();
             $data['info']['update_time'] = time();
+            if(empty($data['info']['title']))
+            {
+                $data['info']['title'] = '标题待补充';
+            }else{
+                $data['info']['title'] = strip_tags($data['info']['title']);
+            }
+            if(!empty($data['info']['keywords']))
+            {
+                $data['info']['keywords'] = strip_tags($data['info']['keywords']);
+            }
             if(isset($data['info']['isgourl']))
             {
                 unset($data['info']['isgourl']);
@@ -166,6 +188,8 @@ class Content extends Base
             if(empty($data['info']['copyfrom']))
             {
                 $data['info']['copyfrom'] = '本站';
+            }else{
+                $data['info']['copyfrom'] = strip_tags($data['info']['copyfrom']);
             }
             if(isset($data['info']['flag']))
             {
@@ -198,6 +222,7 @@ class Content extends Base
                 //自动选择分类
                 $this->CategoryBusiness =  $this->loader->model(CategoryBusiness::class,$this);
                 $selectCategorys= yield  $this->CategoryBusiness->get_category_by_parentid(intval($d['catid']));
+                //$d['body'] = htmlspecialchars_decode($d['body']);
                 parent::templateData('d_content_model',$d);
                 parent::templateData('selectCategorys',$selectCategorys);
                 parent::templateData('token',token('__CONTENT_EDIT__'));

@@ -47,9 +47,8 @@ class ContentCommentModel extends BaseModel
 
         $m = $this->loader->model('ContentModel',$this);
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
-            ->join($m->getTable(),'a.content_id=b.id','left join','b')
             ->orderBy('a.id','desc')
-            ->select('a.*,b.*')
+            ->select('a.*')
             ->limit("{$start},{$end}")
             ->coroutineSend();
         //嵌入总记录

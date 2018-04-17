@@ -169,8 +169,17 @@ class BaseController extends Controller
                 ];
             }
         }
-        $this->http_output->setHeader('Content-Type','application/json');
-        $this->http_output->end(json_encode($end),$gzip);
+
+        $jsonp = $this->http_input->postGet('jsonpcallback');//get接收jsonp自动生成的函数名
+        if($jsonp)
+        {
+            $this->http_output->setHeader('Content-Type','application/json');
+            $this->http_output->end($jsonp.'(' .json_encode($end).')',$gzip);
+        }else{
+            $this->http_output->setHeader('Content-Type','application/json');
+            $this->http_output->end(json_encode($end),$gzip);
+        }
+
     }
 
     /**
