@@ -1,4 +1,16 @@
 <?php
+$url = 'http://118.89.26.188:8081/Home/Article/list?id=1&p=1';
+echo $url='?s=view&p=5'."\n";
+echo '';
+$p=6;
+
+echo preg_replace('/p=([\d]+)/', 'p=' . $p, $url);
+echo ''."\n";
+//echo preg_replace('/([\d]+)/', $p, $url);
+
+print_r( strpos('http://118.89.26.188:8081/Home/Article/list?id=1','?') );
+
+exit(0);
 /**
  * Created by PhpStorm.
  * User: ming123jew
@@ -16,8 +28,8 @@ spl_autoload_register('autoload1');
 $Danli = Danli::getInstance();
 $Danli->echoHi();  //首次创建
 
-$Danli = Danli::getInstance();
-$Danli->echoHi();  //重复调用
+$Danli2 = Danli::getInstance();
+$Danli2->echoHi();  //重复调用
 
 
 
@@ -39,6 +51,7 @@ class Page
         $this->strategy->showCategory();
         echo "<br>";
     }
+    //装载器
     function setStrategy(Strategy $strategy){
         $this->strategy=$strategy;
     }
@@ -68,7 +81,7 @@ $c = new Canvas();
 $c->init();
 //$canvas1 = new Canvas();
 // $canvas1->init();
-$canvas1 = clone $c;//通过克隆，可以省去init()方法，这个方法循环两百次
+$canvas1 = clone $c;//通过克隆，可以省去init()方法，这个方法循环两百次  这样就免去了类创建时重复的初始化操作
 //去产生一个数组。当项目中需要产生很多的这样的对象时，就会new很多的对象，那样
 //是非常消耗性能的。
 $canvas1->rect(2, 2, 8, 8);

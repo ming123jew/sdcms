@@ -44,13 +44,22 @@ class Article extends Base
             //[获取推荐:start]
             $d_get_recommend = yield $this->HomeBusiness->get_recommend();
             //[获取推荐:end]
+
+            //[获取最新评论:start]
+            $d_get_new_comment = yield $this->HomeBusiness->get_new_comment();
+            //[获取最新评论:end]
+
             $d['body'] = htmlspecialchars_decode($d['body']);
             parent::templateData('article',$d);
             //print_r($d);
+
             parent::templateData('d_get_recommend',$d_get_recommend);
+            parent::templateData('d_get_new_comment',$d_get_new_comment);
+            $date = date('Y-m-d');
+            parent::templateData('date',$date.' '.get_week($date));
             //web or app
             parent::webOrApp(function (){
-                $template = $this->loader->view('app::Home/content');
+                $template = $this->loader->view('app::Home/article_read');
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']),false);
             });
         }else{
@@ -64,12 +73,56 @@ class Article extends Base
      */
     public function http_list()
     {
-        parent::templateData('test',1);
-        //web or app
-        parent::webOrApp(function (){
-            $template = $this->loader->view('app::Home/article_list');
-            $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
-        });
+        $catid = intval( $this->http_input->postGet('id') );
+        if($catid>0)
+        {
+            //获取栏目最新信息
+            $category = yield get_catname_by_catid($catid,$this,'*');
+
+            $p = intval( $this->http_input->postGet('p') );
+            if($p == 0) {$p = 1;}
+            $end = 10;
+            $start = ($p-1)*$end;
+            $this->HomeBusiness = $this->loader->model(HomeBusiness::class,$this);
+            //[获取分类最新文章:start]
+            $d_get_new = yield $this->HomeBusiness->get_new($catid,$start,$end);
+            //[获取分类最新文章:end]
+//print_r($d_get_new);
+            //[获取推荐:start]
+            $d_get_recommend = yield $this->HomeBusiness->get_recommend();
+            //[获取推荐:end]
+
+            //[获取最新评论:start]
+            $d_get_new_comment = yield $this->HomeBusiness->get_new_comment();
+            //[获取最新评论:end]
+
+            parent::templateData('category',$category);
+
+            parent::templateData('d_get_new',$d_get_new['result']);
+            parent::templateData('page_d_get_new',page_bar($d_get_new['num'],$p,10,5,$this));
+
+            parent::templateData('d_get_recommend',$d_get_recommend);
+            parent::templateData('d_get_new_comment',$d_get_new_comment);
+
+            $date = date('Y-m-d');
+            parent::templateData('date',$date.' '.get_week($date));
+            //web or app
+            parent::webOrApp(function (){
+                $template = $this->loader->view('app::Home/article_list');
+                $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+            });
+        }else{
+            parent::httpOutputTis('参数错误.');
+        }
+
+    }
+
+    /**
+     * 单页
+     */
+    public function http_page()
+    {
+
     }
 
     /**
@@ -99,6 +152,7 @@ class Article extends Base
     public function http_comment()
     {
         $content_id = intval( $this->http_input->postGet('content_id') );
+        $catid = intval( $this->http_input->postGet('catid') );
         if($this->http_input->getRequestMethod()=='POST' && $content_id>0)
         {
             $uid = 0;
@@ -113,7 +167,8 @@ class Article extends Base
                 'create_time'=>time(),
                 'username'=>strip_tags($username),
                 'uid'=>$uid,
-                'email'=>$email
+                'email'=>$email,
+                'catid'=>$catid
             ];
             if(empty($data['content'])||empty($data['username']))
             {
@@ -147,7 +202,7 @@ class Article extends Base
             $end = 10;
             $start = ($p-1)*$end;
             $this->ContentCommentModel = $this->loader->model(ContentCommentModel::class,$this);
-            $r = yield $this->ContentCommentModel->getAllByPage($start,$end);
+            $r = yield $this->ContentCommentModel->getAllByPage($content_id,$start,$end);
             if($r)
             {
                 $end = [

@@ -62,46 +62,9 @@
     <!--/超小屏幕可见-->
     <div class="content-wrap"><!--内容-->
         <div class="content">
-            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel"> <!--banner-->
-                <ol class="carousel-indicators">
-                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner" role="listbox">
-                    <?php foreach ($data['d_slide'] as $k => $v){?>
-                        <div <?php if($k==0){?>class="item active"<?php }else{ ?>class="item"<?php } ?> data-id="article_<?php echo $v['id'];?>">
-                            <a href="<?php echo url('','Article','Read',['id'=>$v['id']]);?>" target="_blank">
-                                <img src="<?php echo $v['thumb'];?>" alt="<?php echo $v['title'];?>" />
-                            </a>
-                            <div class="carousel-caption"> <?php echo $v['title'];?></div>
-                            <span class="carousel-bg"></span> </div>
-                    <?php } ?>
-                </div>
-                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">Previous</span> </a> <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <span class="sr-only">Next</span> </a> </div>
-            <!--/banner-->
-            <div class="content-block hot-content hidden-xs" style="display: none">
-                <h2 class="title"><strong>本周热门排行</strong></h2>
-                <ul>
-                    <li class="large"><a href="content.html" target="_blank"><img src="images/img3.jpg" alt="">
-                            <h3> 欢迎来到个人技术博客技术博客 </h3>
-                        </a></li>
-                    <li><a href="content.html" target="_blank"><img src="images/logo.jpg" alt="">
-                            <h3> 欢迎来到个人技术博客技术博客,在这里可以看到网站前端和后端的技术等 </h3>
-                        </a></li>
-                    <li><a href="content.html" target="_blank"><img src="images/img2.jpg" alt="">
-                            <h3> 欢迎来到个人技术博客技术博客,在这里可以看到网站前端和后端的技术等 </h3>
-                        </a></li>
-                    <li><a href="content.html" target="_blank"><img src="images/img1.jpg" alt="">
-                            <h3> 欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 </h3>
-                        </a></li>
-                    <li><a href="content.html" target="_blank"><img src="images/logo.jpg" alt="">
-                            <h3> 欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 </h3>
-                        </a></li>
-                </ul>
-            </div>
+
             <div class="content-block new-content">
-                <h2 class="title"><strong>最新文章</strong></h2>
+                <h2 class="title"><strong><?php echo $data['category']['catname'];?></strong></h2>
                 <div class="row">
                     <?php foreach ($data['d_get_new'] as $k => $v){?>
                     <div class="news-list">

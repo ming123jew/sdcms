@@ -11,10 +11,10 @@
         <h1 class="logo"> <a href="index.html" title="个人技术博客"></a> </h1>
         <ul class="nav hidden-xs-nav">
             <li class="active"><a href="<?php echo $data['__HOST__'];?>"><span class="glyphicon glyphicon-home"></span>网站首页</a></li>
-            <li><a href=""><span class="glyphicon glyphicon-erase"></span>诗意人生</a></li>
-            <li><a href=""><span class="glyphicon glyphicon-inbox"></span>编程指南</a></li>
-            <li><a href="about.html"><span class="glyphicon glyphicon-user"></span>关于我们</a></li>
-            <li><a href="friendly.html"><span class="glyphicon glyphicon-tags"></span>友情链接</a></li>
+            <li><a href="<?php echo url('','Article','list',['id'=>1])?>"><span class="glyphicon glyphicon-erase"></span>诗意人生</a></li>
+            <li><a href="<?php echo url('','Article','list',['id'=>2])?>"><span class="glyphicon glyphicon-inbox"></span>编程指南</a></li>
+            <li><a href="<?php echo url('','Article','page',['id'=>1])?>"><span class="glyphicon glyphicon-user"></span>关于我们</a></li>
+            <li><a href="<?php echo url('','Article','page',['id'=>2])?>"><span class="glyphicon glyphicon-tags"></span>友情链接</a></li>
         </ul>
         <div class="feeds"> <a class="feed feed-xlweibo" href="" target="_blank"><i></i>新浪微博</a> <a class="feed feed-txweibo" href="" target="_blank"><i></i>腾讯微博</a> <a class="feed feed-rss" href="" target="_blank"><i></i>订阅本站</a> <a class="feed feed-weixin" data-toggle="popover" data-trigger="hover" title="微信扫一扫" data-html="true" data-content="<img src='images/weixin.jpg' alt=''>" href="javascript:;" target="_blank"><i></i>关注微信</a> </div>
         <div class="wall"><a href="readerWall.html" target="_blank">读者墙</a> | <a href="tags.html" target="_blank">标签云</a></div>

@@ -128,8 +128,6 @@ class ContentModel extends BaseModel
         if(empty($r['result'])){
             return false;
         }else{
-
-
             return $r['result'];
         }
     }
@@ -197,7 +195,7 @@ class ContentModel extends BaseModel
         }else{
             $sql = "select {$fields} from {$this->getTable()} as a {$join} $where  order by a.id desc limit {$start},{$end} ";
         }
-        echo $sql;
+        //echo $sql;
 
         $r = yield $this->mysql_pool->dbQueryBuilder
             ->coroutineSend('',$sql);

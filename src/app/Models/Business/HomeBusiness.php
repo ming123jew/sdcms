@@ -7,6 +7,7 @@
  * Desc: 添加&更新文章逻辑
  */
 namespace app\Models\Business;
+use app\Models\Data\ContentCommentModel;
 use app\Models\Data\ContentModel;
 use app\Models\Data\ContentHitsModel;
 use app\Models\Data\TagsModel;
@@ -19,6 +20,7 @@ class HomeBusiness extends BaseBusiness
     protected $ContentHitsModel;
     protected $CategoryModel;
     protected $TagsModel;
+    protected $ContentCommentModel;
 
 
     /**
@@ -68,7 +70,7 @@ class HomeBusiness extends BaseBusiness
     }
 
     /**
-     * 获取最新文章
+     * 获取最新文章，带分页
      * @param int $catid
      * @param int $limit
      * @param bool $cache
@@ -78,7 +80,7 @@ class HomeBusiness extends BaseBusiness
     public function get_new(int $catid=0,int $start=0,int $end=9,int $status=0,$fields='*',bool $cache=true,int $expire=24*3600)
     {
         $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
-        $d = yield $this->ContentModel->getNew(0,$start,$end);
+        $d = yield $this->ContentModel->getNew($catid,$start,$end);
         if($d!=false){
             return $d;
         }else{
@@ -102,13 +104,21 @@ class HomeBusiness extends BaseBusiness
     /**
      * 获取评论
      * @param int $catid
-     * @param int $limit
+     * @param int $start
+     * @param int $end
      * @param bool $cache
      * @param int $expire
+     * @return bool
      */
-    public function get_comment(int $catid=0,int $limit=8,bool $cache=true,int $expire=24*3600)
+    public function get_new_comment(int $catid=0,int $start=0,int $end=9,bool $cache=true,int $expire=24*3600)
     {
-
+        $this->ContentCommentModel =  $this->loader->model(ContentCommentModel::class,$this);
+        $d = yield $this->ContentCommentModel->get_new_comment($catid,$start,$end);
+        if($d!=false){
+            return $d;
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -124,6 +134,7 @@ class HomeBusiness extends BaseBusiness
     }
 
     /**
+     * 文章内页
      * 获取文章内容+点击+更新点击
      * @param int $content_id
      * @return bool
@@ -164,8 +175,6 @@ class HomeBusiness extends BaseBusiness
         $this->ContentHitsModel = $this->loader->model(ContentHitsModel::class,$this);
         $d_ContentHitsModel = yield $this->ContentHitsModel->updateHits($content_id,$d);
 
-        //f
-
         if($d!=false&&$d_ContentHitsModel!=false){
             return $d;
         }else{
@@ -173,13 +182,4 @@ class HomeBusiness extends BaseBusiness
         }
     }
 
-    public function get_article_prev()
-    {
-
-    }
-
-    public function get_article_next()
-    {
-
-    }
 }

@@ -6,10 +6,11 @@
  * Time: 下午3:11
  */
 
-namespace Server\Route;
+namespace app\Route;
 
 
 use Server\CoreBase\SwooleException;
+use Server\Route\IRoute;
 
 class HttpRoute implements IRoute
 {
@@ -45,7 +46,6 @@ class HttpRoute implements IRoute
      */
     public function handleClientRequest($request)
     {
-        //print_r($this->client_data);
         $this->client_data->path = $request->server['path_info'];
         $route = explode('/', $request->server['path_info']);
         $count = count($route);
@@ -58,15 +58,6 @@ class HttpRoute implements IRoute
         unset($route[$count - 1]);
         unset($route[0]);
         $this->client_data->controller_name = implode("\\", $route);
-
-
-        //自动以路由
-        if($this->client_data->controller_name==null){
-            $this->client_data->controller_name=='Home/Main';
-        }
-        if($this->client_data->method_name==null){
-            $this->client_data->method_name=='index';
-        }
     }
 
     /**
@@ -75,7 +66,8 @@ class HttpRoute implements IRoute
      */
     public function getControllerName()
     {
-
+        //echo $this->client_data->controller_name;
+        if($this->client_data->controller_name==null){ $this->client_data->controller_name='Home/Main';}
         return $this->client_data->controller_name;
     }
 
@@ -85,7 +77,8 @@ class HttpRoute implements IRoute
      */
     public function getMethodName()
     {
-        return $this->client_data->method_name;
+        if( $this->client_data->method_name==null ){ $this->client_data->method_name='index';}
+        return $this->client_data->method_name ;
     }
 
     public function getPath()
@@ -106,10 +99,11 @@ class HttpRoute implements IRoute
 
     public function errorHttpHandle(\Exception $e, $request, $response)
     {
+
         //重定向到404
-        $response->status(302);
-        $location = 'http://' . $request->header['host'] . "/" . '404';
-        $response->header('Location', $location);
+//        $response->status(302);
+//        $location = 'http://' . $request->header['host'] . "/" . 'Home/Main/index';
+//        $response->header('Location', $location);
         $response->end('');
     }
 }

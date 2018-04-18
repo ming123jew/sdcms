@@ -5,7 +5,9 @@
  * Date: 16-7-15
  * Time: 下午3:11
  */
-namespace Server\Route;
+namespace app\Route;
+use Server\Route\IRoute;
+
 class WsRout implements IRoute
 {
     private $client_data;

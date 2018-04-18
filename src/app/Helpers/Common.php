@@ -147,6 +147,7 @@ function get_cache($key,$type="data")
             yield CatCacheRpcProxy::getRpc()->offsetUnset($key);
             $result = false;
         }
+        httpEndFile(0);
     }else{
         $result = false;
     }
@@ -203,11 +204,25 @@ function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null)
         $totalPage = ceil($total / $pageSize);    //获取总页数
         $pageOffset = ($showPage - 1) / 2;    //页码偏移量
         $pageBanner = "";
-        $pageSelf = explode('?',$context->Uri)[0];
+        //$pageSelf = explode('?',$context->Uri)[0];
+
+        $return_url = function ($p,$context){
+            if(strpos($context->Uri,'p=')!==false)
+            {
+                return preg_replace('/p=([\d]+)/', 'p=' . $p, $context->Uri);
+            }else{
+
+                if(strpos($context->Uri,'?')!==false)
+                {
+                    return $context->Uri.'&p='.$p;
+                }else{
+                    return $context->Uri.'?p='.$p;
+                }
+            }
+        };
 
         $start = 1;    //开始页码
         $end = $totalPage;    //结束页码
-
         $pageBanner = <<<html
                             <div class="row DTTTFooter" style="margin-top: 25px;">
                                 <div class="col-sm-6">
@@ -228,8 +243,8 @@ html;
 //                                            <li class="next disabled"><a href="#">Next</a></li>
         if($page > 1){
 
-            $pageBanner .= "<li class='prev'><a href='".$pageSelf."?p=".($page - 1)."'>Prev</a></li>";
-            $pageBanner .= "<li class='prev'><a href='".$pageSelf."?p=1'>First</a></li>";
+            $pageBanner .= "<li class='prev'><a href='".$return_url(($page - 1),$context)."'>Prev</a></li>";
+            $pageBanner .= "<li class='prev'><a href='".$return_url(1,$context)."'>First</a></li>";
 
         }
         if($totalPage > $showPage){    //当总页数大于显示页数时
@@ -250,9 +265,9 @@ html;
         }
         for($i = $start ; $i <= $end ; $i++){    //循环出页码
             if($i == $page){
-                $pageBanner .= "<li class='active'><a href='#'>".$i."</a></li>";
+                $pageBanner .= "<li class='active'><a href='javascript:;'>".$i."</a></li>";
             }else{
-                $pageBanner .= "<li><a href='".$pageSelf."?p=".$i."'>".$i."</a></li>";
+                $pageBanner .= "<li><a href='".$return_url($i,$context)."'>".$i."</a></li>";
 
             }
 
@@ -261,8 +276,8 @@ html;
             $pageBanner .= "...";
         }
         if($page < $totalPage){
-            $pageBanner .= "<li class='next'><a href='".$pageSelf."?p=".($page + 1)."'>Next</a></li>";
-            $pageBanner .= "<li><a href='".$pageSelf."?p=".$totalPage."'>Last</a></li>";
+            $pageBanner .= "<li class='next'><a href='".$return_url(($page + 1),$context)."'>Next</a></li>";
+            $pageBanner .= "<li><a href='".$return_url($totalPage,$context)."'>Last</a></li>";
         }
         $pageBanner .=<<<html
                                         </ul>
@@ -439,9 +454,10 @@ function get_cattype_bymodelid($model_id)
  * 根据catid查找对应的栏目信息
  * @param int $catid
  * @param $context
- * @return bool|Generator
+ * @param string $alias 返回对应字段信息，默认是catname,如设置为*，则读取栏目所有信息
+ * @return bool|mixed
  */
-function get_catname_by_catid(int $catid,$context)
+function get_catname_by_catid(int $catid,$context,$alias='catname')
 {
     $cache_arr = [];
     $find = false;
@@ -474,9 +490,15 @@ function get_catname_by_catid(int $catid,$context)
         {
             if ($catid==$value['id'])
             {
-                $find = $value['catname'];
+                if($alias=='*')
+                {
+                    $find = $value;
+                }else{
+                    $find = $value[$alias];
+                }
             }
         }
     }
+
     return $find;
 }

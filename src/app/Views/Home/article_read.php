@@ -80,7 +80,7 @@
             <?php if(!empty($data['article']['keywords'])){ $arr_keywords=explode(' ',trim($data['article']['keywords']));?>
             <div class="tags news_tags">标签：
                 <?php foreach( $arr_keywords as $kk=>$vv){?>
-                <span data-toggle="tooltip" data-placement="bottom" title="查看关于 本站 的文章"><a href="#"><?php echo $vv;?></a></span>
+                <span data-toggle="tooltip" data-placement="bottom" title="查看关于 本站 的文章"><a href="javascript:;"><?php echo $vv;?></a></span>
                 <?php } ?>
             </div>
             <?php } ?>
@@ -187,6 +187,14 @@
             <h2 class="title"><strong>最新评论</strong></h2>
             <ul>
 
+                <?php foreach ($data['d_get_new_comment'] as $k=>$v){?>
+                    <li data-toggle="tooltip" data-placement="top" title="《<?php echo $v['title'];?>》">
+                        <a target="_blank" href="<?php echo url('','Article','read',['id'=>$v['content_id']]);?>">
+                            <span class="face"><img src="images/icon/icon.png" alt=""></span>
+                            <span class="text"><strong><?php echo $v['username'];?></strong> (<?php echo date('Y-m-d',$v['create_time']);?>) 说：<br /><?php echo $v['content'];?></span>
+                        </a>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
     </aside>
@@ -312,7 +320,7 @@
         $("#comment-form").submit(function(e){
             $.ajax({
                 type:"POST",
-                url:"<?php echo url('','Article','comment',['content_id'=>$data['article']['id']]);?>",
+                url:"<?php echo url('','Article','comment',['content_id'=>$data['article']['id'],'catid'=>$data['article']['catid']]);?>",
                 data:{"title":"<?php echo $data['article']['title']?>","username":$("#commentName").val(),"email":$("#commentEmail").val(),"content":$("#commentContent").val()},
                 cache:false, //不缓存此页面
                 success:function(json){

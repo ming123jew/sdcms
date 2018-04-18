@@ -5,9 +5,10 @@
  * Date: 16-7-15
  * Time: 下午3:11
  */
-namespace Server\Route;
+namespace app\Route;
 
 use Server\CoreBase\SwooleException;
+use Server\Route\IRoute;
 
 class TCPRoute implements IRoute
 {

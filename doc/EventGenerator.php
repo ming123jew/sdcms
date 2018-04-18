@@ -20,6 +20,5 @@ abstract class EventGenerator
         {
             $observer->update();
         }
-
     }
 }

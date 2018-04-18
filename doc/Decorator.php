@@ -26,7 +26,7 @@ class EchoText
     {
         //调用装饰器前置操作
         $this->beforeEcho();
-        echo "你好，我是装饰器。";
+        echo "hi,im decorator.";
         //调用装饰器后置操作
         $this->afterEcho();
     }

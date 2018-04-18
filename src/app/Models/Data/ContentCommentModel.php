@@ -43,16 +43,29 @@ class ContentCommentModel extends BaseModel
      * @param int $end
      * @return bool
      */
-    public function getAllByPage(int $start,int $end=10){
+    public function getAllByPage(int $content_id=0,int $start,int $end=10){
 
         $m = $this->loader->model('ContentModel',$this);
-        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
-            ->orderBy('a.id','desc')
-            ->select('a.*')
-            ->limit("{$start},{$end}")
-            ->coroutineSend();
-        //嵌入总记录
-        $count_arr = yield $this->mysql_pool->dbQueryBuilder->coroutineSend(null,"select count(0) as num from {$this->getTable()}");
+        if($content_id>0)
+        {
+            $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
+                ->orderBy('a.id','desc')
+                ->where('content_id',$content_id)
+                ->select('a.*')
+                ->limit("{$start},{$end}")
+                ->coroutineSend();
+            //嵌入总记录
+            $count_arr = yield $this->mysql_pool->dbQueryBuilder->coroutineSend(null,"select count(0) as num from {$this->getTable()} where content_id={$content_id}");
+        }else{
+            $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
+                ->orderBy('a.id','desc')
+                ->select('a.*')
+                ->limit("{$start},{$end}")
+                ->coroutineSend();
+            //嵌入总记录
+            $count_arr = yield $this->mysql_pool->dbQueryBuilder->coroutineSend(null,"select count(0) as num from {$this->getTable()}");
+        }
+
         $count = $count_arr['result'][0]['num'];
         if($count>$end){
             $r['num'] =$count;
@@ -64,6 +77,38 @@ class ContentCommentModel extends BaseModel
             return false;
         }else{
             return $r ;
+        }
+    }
+
+
+    /**
+     * 获取最新评论
+     * @param int $catid
+     * @param int $start
+     * @param int $end
+     * @return bool
+     */
+    public function get_new_comment(int $catid=0,int $start=0,int $end=10)
+    {
+        if($catid>0)
+        {
+            $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
+                ->orderBy('a.id','desc')
+                ->where('catid',$catid)
+                ->select('a.*')
+                ->limit("{$start},{$end}")
+                ->coroutineSend();
+        }else{
+            $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
+                ->orderBy('a.id','desc')
+                ->select('a.*')
+                ->limit("{$start},{$end}")
+                ->coroutineSend();
+        }
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r['result'] ;
         }
     }
 

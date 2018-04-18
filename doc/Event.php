@@ -13,13 +13,15 @@ class Event extends EventGenerator
         echo "Event\n";
     }
 }
+
+//Event触发triger，观测者1需要更新某操作
 class Observer1 implements Observer{
     function update(){
         echo "逻辑1\n";
     }
 }
 
-
+//Event触发triger，观测者2需要更新某操作
 class Observer2 implements Observer{
     function update(){
         echo "逻辑2\n";
