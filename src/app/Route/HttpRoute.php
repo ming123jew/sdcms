@@ -101,9 +101,9 @@ class HttpRoute implements IRoute
     {
 
         //重定向到404
-//        $response->status(302);
-//        $location = 'http://' . $request->header['host'] . "/" . 'Home/Main/index';
-//        $response->header('Location', $location);
+        $response->status(302);
+        $location = 'http://' . $request->header['host'] . "/" ;
+        $response->header('Location', $location);
         $response->end('');
     }
 }

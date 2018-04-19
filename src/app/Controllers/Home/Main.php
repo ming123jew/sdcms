@@ -56,12 +56,17 @@ class Main extends Base
         $d_get_new = yield $this->HomeBusiness->get_new(0,$start,$end);
         //[获取最新文章:end]
 
+        //[获取最新评论:start]
+        $d_get_new_comment = yield $this->HomeBusiness->get_new_comment();
+        //[获取最新评论:end]
+
         //print_r($d_get_new);
         //print_r($d_get_recommend);
         parent::templateData('d_slide',$d_slide);
         parent::templateData('d_get_recommend',$d_get_recommend);
         parent::templateData('d_get_new',$d_get_new['result']);
         parent::templateData('page_d_get_new',page_bar($d_get_new['num'],$p,10,5,$this));
+        parent::templateData('d_get_new_comment',$d_get_new_comment);
         $date = date('Y-m-d');
         parent::templateData('date',$date.' '.get_week($date));
         //web or app

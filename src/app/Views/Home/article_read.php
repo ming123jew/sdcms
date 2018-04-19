@@ -186,7 +186,6 @@
         <div class="sidebar-block comment">
             <h2 class="title"><strong>最新评论</strong></h2>
             <ul>
-
                 <?php foreach ($data['d_get_new_comment'] as $k=>$v){?>
                     <li data-toggle="tooltip" data-placement="top" title="《<?php echo $v['title'];?>》">
                         <a target="_blank" href="<?php echo url('','Article','read',['id'=>$v['content_id']]);?>">
