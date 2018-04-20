@@ -72,7 +72,10 @@ class HomeBusiness extends BaseBusiness
     /**
      * 获取最新文章，带分页
      * @param int $catid
-     * @param int $limit
+     * @param int $start
+     * @param int $end
+     * @param int $status
+     * @param string $fields
      * @param bool $cache
      * @param int $expire
      * @return bool

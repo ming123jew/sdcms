@@ -35,8 +35,6 @@ class UserModel extends BaseModel
     }
 
 
-
-
     /**
      * @param $data
      * @return bool | array
