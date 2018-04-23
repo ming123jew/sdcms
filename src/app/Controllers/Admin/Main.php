@@ -21,13 +21,26 @@ class Main extends Base
      * @var UserModel
      */
     protected $UserModel;
+
+    /**
+     * @var int
+     */
     protected $CookieExpire=10;
+
+    /**
+     * @var
+     */
     protected $MenuModel;
+
+    /**
+     * @var
+     */
     protected $RolePrivModel;
 
     /**
      * @param string $controller_name
      * @param string $method_name
+     * @throws \Exception
      */
     protected function initialization($controller_name, $method_name)
     {
@@ -150,7 +163,6 @@ class Main extends Base
     public function http_logout(){
         //销毁session
         session($this->AdminSessionField,null);
-
         $this->http_output->setCookie($this->AdminSessionField,'');
         parent::templateData('title','成功退出登录.');
         parent::templateData('message','成功退出登录.');
@@ -159,10 +171,7 @@ class Main extends Base
             $template = $this->loader->view('app::Admin/logout');
             $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
         });
-
         // 清除缓存数据
-
-
     }
 
     public function http_tis(){

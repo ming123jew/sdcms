@@ -128,11 +128,11 @@
                     <div class="comment-title">
                         <div class="form-group">
                             <label for="commentName">昵称：</label>
-                            <input type="text" name="commentName" class="form-control" id="commentName" placeholder="技术博客">
+                            <input type="text" name="commentName" class="form-control" id="commentName" placeholder="技术博客" value="<?php echo $data['user.username'];?>">
                         </div>
                         <div class="form-group">
                             <label for="commentEmail">邮箱：</label>
-                            <input type="email" name="commentEmail" class="form-control" id="commentEmail" placeholder="admin@xxxx.com">
+                            <input type="email" name="commentEmail" class="form-control" id="commentEmail" placeholder="xxx@xxxx.com" value="<?php echo $data['user.email'];?>">
                         </div>
                     </div>
                     <div class="comment-form">

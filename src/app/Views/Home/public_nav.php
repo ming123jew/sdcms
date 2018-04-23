@@ -22,7 +22,11 @@
             <a class="feed feed-rss" href="javascript:;" onclick="alert('建设中...')"><i></i>订阅本站</a>
             <a class="feed feed-weixin" data-toggle="popover" data-trigger="hover" title="微信扫一扫" data-html="true" data-content="<img src='images/weixin.jpg' alt=''>" href="javascript:;" target="_blank"><i></i>关注微信</a>
         </div>
-        <div class="wall" style="display: none;"><a href="javascript:;">读者墙</a> | <a href="javascript:;">标签云</a></div>
+        <?php if($data['user.isLogin']){?>
+        <div class="wall"><a href="javascript:;"><?php echo $data['user.username'];?></a> | <a href="<?php echo url('','User','logout');?>">退出</a></div>
+        <?php }else{ ?>
+        <div class="wall"><a href="<?php echo url('','User','login');?>">登录</a> | <a href="<?php echo url('','User','register');?>">注册</a></div>
+        <?php } ?>
     </div>
     <!--/超小屏幕不显示-->
     <div class="visible-xs header-xs"><!--超小屏幕可见-->

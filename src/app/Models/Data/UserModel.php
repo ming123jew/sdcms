@@ -34,7 +34,6 @@ class UserModel extends BaseModel
         }
     }
 
-
     /**
      * @param $data
      * @return bool | array
@@ -43,8 +42,9 @@ class UserModel extends BaseModel
         $val = yield $this->mysql_pool->dbQueryBuilder
             ->insert($this->prefix.$this->table)
             ->set('username',$data['username'])
-            ->set('password',$data[password])
+            ->set('password',$data['password'])
             ->set('email',$data['email'])
+            ->set('regtime',time())
             ->coroutineSend();
         if(empty($val['result'])){
             return false;
@@ -89,6 +89,4 @@ class UserModel extends BaseModel
         }
 
     }
-
-
 }

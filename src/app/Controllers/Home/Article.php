@@ -155,11 +155,19 @@ class Article extends Base
         $catid = intval( $this->http_input->postGet('catid') );
         if($this->http_input->getRequestMethod()=='POST' && $content_id>0)
         {
-            $uid = 0;
+            $session_user = $this->get_login_session();
+            if($session_user){
+                $uid = $session_user['id'];
+                $username =  $session_user['username'];
+                $email =  $session_user['email'];
+            }else{
+                $uid = 0;
+                $username = $this->http_input->postGet('username');
+                $email = $this->http_input->postGet('email');
+            }
+
             $title = $this->http_input->postGet('title');
             $content = $this->http_input->postGet('content');
-            $username = $this->http_input->postGet('username');
-            $email = $this->http_input->postGet('email');
             $data = [
                 'content_id'=>$content_id,
                 'content'=>strip_tags($content),

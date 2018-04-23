@@ -14,6 +14,25 @@ class Base extends \app\Controllers\BaseController
      */
     public $HtmlUrl = '';
 
+    /**
+     * @var string
+     */
+    public $HomeSessionField = '__SESSION__HOME__';//session
+
+    /**
+     * @var array
+     */
+    public $HomeNotAuthAction = ['login','tis'];
+
+    /**
+     * @var string
+     */
+    public $HomeUploadsConfig = '';
+
+    /**
+     * @var int
+     */
+    public $CookieExpire=10;
 
     /**
      * @param string $controller_name
@@ -32,18 +51,51 @@ class Base extends \app\Controllers\BaseController
         $this->HtmlUrl = $configs_config[$configs_config['active']]['home']['static_url'];
 
         parent::templateData('HTML_URL',$this->HtmlUrl);
+
+        self::check_login();
     }
 
     /**
-     * @desc 装置模板数据
+     * 装置模板数据
      * @param $key
      * @param $value
-     * @return array
+     * @return array|void
      */
     protected function templateData($key,$value)
     {
         $arr = [$key=>$value];
         $this->TemplateData = array_merge($this->TemplateData,$arr);
+    }
+
+
+    /**
+     * 判断是否登录
+     * @return bool
+     */
+    protected function check_login(){
+        $s =  session($this->HomeSessionField);
+        if($s){
+            parent::templateData('user.isLogin',true);
+            parent::templateData('user.username',$s['username']);
+            parent::templateData('user.email',$s['email']);
+            return true;
+        }else{
+            parent::templateData('user.isLogin',false);
+            return false;
+        }
+    }
+
+    /**
+     * 返回登录用户SESSION信息
+     * @return array | bool
+     */
+    protected function get_login_session(){
+        $s =   session($this->HomeSessionField);
+        if($s){
+            return $s;
+        }else{
+            return false;
+        }
     }
 
     /**
