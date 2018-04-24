@@ -30,8 +30,7 @@ class Session
     /**
      * session初始化
      * @param array $config
-     * @return void
-     * @throws \think\Exception
+     * @throws \Exception
      */
     public static function init(array $config = [])
     {
@@ -50,7 +49,6 @@ class Session
                 'auto_start'     => true,
                 'expire'=>  $configs_session[$configs_session['active']]['expire'],
             ];
-
         }
         //print_r($config);
         //ini_set('session.save_path','/home/wwwroot/SD/sess/');

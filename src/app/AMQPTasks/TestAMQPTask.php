@@ -11,6 +11,7 @@ namespace app\AMQPTasks;
 use PhpAmqpLib\Exception\AMQPBasicCancelException;
 use PhpAmqpLib\Message\AMQPMessage;
 use Server\Components\AMQPTaskSystem\AMQPTask;
+use Server\Components\Process\ProcessManager;
 
 //创建作业任务
 class TestAMQPTask extends AMQPTask
@@ -36,6 +37,8 @@ class TestAMQPTask extends AMQPTask
         //file_put_contents('/home/wwwroot/sdcms/a.txt',var_export($body,true), FILE_APPEND);
         //file_put_contents('/home/wwwroot/sdcms/c.txt','aa');
         var_dump($body);
+        //echo get_instance()->workerId."\n";
+        echo "work-over."."\n";
         $this->ack();
     }
 
