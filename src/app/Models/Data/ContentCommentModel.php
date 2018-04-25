@@ -72,7 +72,6 @@ class ContentCommentModel extends BaseModel
         }else{
             $r['num'] = $end;
         }
-
         if(empty($r['result'])){
             return false;
         }else{

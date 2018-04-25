@@ -87,7 +87,7 @@ class ContentModel extends BaseModel
     }
 
     /**
-     * 读取文章内容+文章点击
+     * 读取文章内容
      * @param int $id
      * @return bool
      */

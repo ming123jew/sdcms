@@ -81,6 +81,8 @@ class Base extends \app\Controllers\BaseController
             return true;
         }else{
             parent::templateData('user.isLogin',false);
+            parent::templateData('user.username','');
+            parent::templateData('user.email','');
             return false;
         }
     }

@@ -147,7 +147,6 @@ class HomeBusiness extends BaseBusiness
         $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
         //获取内容
         $d = yield $this->ContentModel->getArticle($content_id);
-
         //获取上下篇
         $d['prev'] = '最前一篇';
         $d['next'] = '最后一篇';
@@ -173,7 +172,6 @@ class HomeBusiness extends BaseBusiness
                 }
             }
         }
-
         //更新点击
         $this->ContentHitsModel = $this->loader->model(ContentHitsModel::class,$this);
         $d_ContentHitsModel = yield $this->ContentHitsModel->updateHits($content_id,$d);

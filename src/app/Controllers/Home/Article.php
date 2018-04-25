@@ -78,7 +78,6 @@ class Article extends Base
         {
             //获取栏目最新信息
             $category = yield get_catname_by_catid($catid,$this,'*');
-
             $p = intval( $this->http_input->postGet('p') );
             if($p == 0) {$p = 1;}
             $end = 10;
@@ -87,20 +86,16 @@ class Article extends Base
             //[获取分类最新文章:start]
             $d_get_new = yield $this->HomeBusiness->get_new($catid,$start,$end);
             //[获取分类最新文章:end]
-//print_r($d_get_new);
             //[获取推荐:start]
             $d_get_recommend = yield $this->HomeBusiness->get_recommend();
             //[获取推荐:end]
-
             //[获取最新评论:start]
             $d_get_new_comment = yield $this->HomeBusiness->get_new_comment();
             //[获取最新评论:end]
 
             parent::templateData('category',$category);
-
             parent::templateData('d_get_new',$d_get_new['result']);
             parent::templateData('page_d_get_new',page_bar($d_get_new['num'],$p,10,5,$this));
-
             parent::templateData('d_get_recommend',$d_get_recommend);
             parent::templateData('d_get_new_comment',$d_get_new_comment);
 
@@ -184,14 +179,8 @@ class Article extends Base
             }else{
                 $this->ContentCommentModel = $this->loader->model(ContentCommentModel::class,$this);
                 $r = yield $this->ContentCommentModel->insertMultiple(array_keys($data),array_values($data));
-                if($r)
-                {
-                    parent::httpOutputEnd('评论成功.','评论失败',$r);
-                }else{
-                    parent::httpOutputEnd('评论成功.','评论失败',$r);
-                }
+                parent::httpOutputEnd('评论成功.','评论失败',$r);
             }
-
         }else{
             $this->httpOutputTis('非法请求.');
         }

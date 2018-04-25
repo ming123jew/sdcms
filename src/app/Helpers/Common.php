@@ -203,9 +203,6 @@ function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null)
     if($total&&$context){
         $totalPage = ceil($total / $pageSize);    //获取总页数
         $pageOffset = ($showPage - 1) / 2;    //页码偏移量
-        $pageBanner = "";
-        //$pageSelf = explode('?',$context->Uri)[0];
-
         $return_url = function ($p,$context){
             if(strpos($context->Uri,'p=')!==false)
             {
@@ -220,7 +217,6 @@ function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null)
                 }
             }
         };
-
         $start = 1;    //开始页码
         $end = $totalPage;    //结束页码
         $pageBanner = <<<html
@@ -234,18 +230,9 @@ function page_bar($total,$page,$pageSize=10,$showPage=5,$context=null)
                                     <div class="dataTables_paginate paging_bootstrap" id="simpledatatable_paginate">
                                         <ul class="pagination">
 html;
-//        <li class="prev"><a href="#">Prev</a></li>
-//                                            <li><a href="#">1</a></li>
-//                                            <li><a href="#">2</a></li>
-//                                            <li><a href="#">3</a></li>
-//                                            <li><a href="#">4</a></li>
-//                                            <li class="active"><a href="#">5</a></li>
-//                                            <li class="next disabled"><a href="#">Next</a></li>
         if($page > 1){
-
             $pageBanner .= "<li class='prev'><a href='".$return_url(($page - 1),$context)."'>Prev</a></li>";
             $pageBanner .= "<li class='prev'><a href='".$return_url(1,$context)."'>First</a></li>";
-
         }
         if($totalPage > $showPage){    //当总页数大于显示页数时
             if($page > $pageOffset + 1){    //当当前页大于页码偏移量+1时，也就是当页码为4时 开始页码1替换为...
@@ -270,7 +257,6 @@ html;
                 $pageBanner .= "<li><a href='".$return_url($i,$context)."'>".$i."</a></li>";
 
             }
-
         }
         if($totalPage > $showPage && $totalPage > $page + $pageOffset){    //当总页数大于页码显示页数时 且总页数大于当前页+偏移量
             $pageBanner .= "...";

@@ -1,6 +1,7 @@
 <?php
 namespace app;
 
+use app\Process\SpiderTaskProcess;
 use PhpAmqpLib\Message\AMQPMessage;
 use Server\Asyn\AMQP\AMQP;
 use Server\Components\Process\ProcessManager;
@@ -66,7 +67,10 @@ class AppServer extends SwooleDistributedServer
         {
             ProcessManager::getInstance()->addProcess(MyAMQPTaskProcess::class,true,$i);
         }
-
+        for ($i=0;$i<5;$i++)
+        {
+            ProcessManager::getInstance()->addProcess(SpiderTaskProcess::class,true,$i);
+        }
     }
 
     /**

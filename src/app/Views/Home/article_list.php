@@ -130,12 +130,17 @@
             </ul>
         </div>
         <div class="sidebar-block comment">
-            <h2 class="title"><strong>最新评论</strong></h2>
+            <h2 class="title" style=""><strong>最新评论</strong></h2>
             <ul>
-
-                <li data-toggle="tooltip" data-placement="top" title="站长的评论"><a target="_blank" href=""><span class="face"><img src="images/icon/icon.png" alt=""></span> <span class="text"><strong>个人技术博客站长</strong> (2015-10-18) 说：<br />
-          欢迎来到个人技术博客技术博客，在这里可以看到网站前端和后端的技术等 ...</span></a></li>
-
+                <?php foreach ($data['d_get_new_comment'] as $k=>$v){?>
+                    <li data-toggle="tooltip" data-placement="top" title="《<?php echo $v['title'];?>》">
+                        <a target="_blank" href="<?php echo url('','Article','read',['id'=>$v['content_id']]);?>">
+                            <span class="face"><img src="images/icon/icon.png" alt=""></span>
+                            <span class="text"><strong><?php echo $v['username'];?></strong> (<?php echo date('Y-m-d',$v['create_time']);?>) 说：<br />
+                                <?php echo $v['content'];?></span>
+                        </a>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
     </aside>

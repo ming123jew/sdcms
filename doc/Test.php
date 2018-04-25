@@ -140,3 +140,5 @@ function test(){
     preg_match_all('|<label name="em_weixinhao">(.*?)<\/label>|is',$ok,$m);
     var_dump($m);
 }
+
+
