@@ -190,3 +190,6 @@ class b extends a{
         echo "aa";
     }
 }
+
+
+

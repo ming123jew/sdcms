@@ -14,11 +14,12 @@ use Server\CoreBase\ChildProxy;
  */
 class Base extends \app\Controllers\BaseController
 {
-    protected $SimpleHtmlDom;
+    public $SimpleHtmlDom;
     protected $AMQPClent;
     protected $AMQPMessage;
     protected $AMQPMessage_exchange = 'amqp-spider-cache';
     protected $WeixinSougouHttpClient;
+    protected $MpWeixinHttpClient;
 
     protected $agent = [
         "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
@@ -61,10 +62,14 @@ class Base extends \app\Controllers\BaseController
     {
         parent::__construct($proxy);
         get_instance()->addAsynPool('WeixinSougouHttpClient',new HttpClientPool($this->config,'http://weixin.sogou.com/'));
+        get_instance()->addAsynPool('MpWeixinHttpClient',new HttpClientPool($this->config,'https://mp.weixin.qq.com/'));
         $this->WeixinSougouHttpClient =  get_instance()->getAsynPool('WeixinSougouHttpClient');
+        $this->MpWeixinHttpClient =  get_instance()->getAsynPool('MpWeixinHttpClient');
         $this->SimpleHtmlDom =new SimpleHtmlDom();
         $this->AMQPMessage =  new AMQPMessage('', ['content_type' => 'text/plain', 'delivery_mode' => 2]);
         $this->AMQPClent =  get_instance()->getAsynPool('AMQP');
+        $this->referer = empty($referer)?'http://weixin.sogou.com/' : $referer;
+        $this->host    = empty($host)?'weixin.sogou.com' : $host;
 
     }
     public function initialization($controller_name, $method_name)

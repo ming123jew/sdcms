@@ -9,6 +9,7 @@
 namespace app\AMQPTasks;
 
 use app\Controllers\Spider\AnalyseUrl;
+use GuzzleHttp\Pool;
 use PhpAmqpLib\Exception\AMQPBasicCancelException;
 use PhpAmqpLib\Message\AMQPMessage;
 use Server\Components\AMQPTaskSystem\AMQPTask;
@@ -43,7 +44,7 @@ class SpiderAMQPTask extends AMQPTask
         //echo get_instance()->workerId."\n";
 
         try{
-            $ref = new AnalyseUrl();
+            $ref = \Server\Memory\Pool::getInstance()->get(AnalyseUrl::class);
             $ref->handle($ref,$handler['action'],$handler['url']);
             echo "work-over."."\n";
             $this->ack();

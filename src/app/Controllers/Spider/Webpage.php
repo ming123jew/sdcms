@@ -31,20 +31,9 @@ class Webpage extends Base
     public function http_get_url()
     {
         $gzh = $this->http_input->postGet('wx');
-        $ip= self::_ip();
-        //$this->WeixinSougouHttpClient = get_instance()->getAsynPool('WeixinSougouHttpClient');
-        $response = yield $this->WeixinSougouHttpClient->httpClient
-            ->addHeader('CURLOPT_USERAGENT',self::_agent())
-            ->addHeader('CLIENT-IP',$ip)
-            ->addHeader('X-FORWARDED-FOR',$ip)
-            ->addHeader('CURLOPT_REFERER',$this->referer)
-            ->coroutineExecute("/weixin?type=1&query={$gzh}&ie=utf8&_sug_=y&_sug_type_=1");
-        //print_r($this->WeixinSougouHttpClient->httpClient->toArray());
-        //print_r($response);
+        $url = 'https://www.sanwen8.cn/sanwen/';
 
-        $this->SimpleHtmlDom->load($response['body']);
-        //sogou_vr_11002301_box_0 标识
-        $url = self::_htmlTransform( $this->SimpleHtmlDom->find('li[id=sogou_vr_11002301_box_0]',0)->find('a',0)->href );
+
 
         //投递一个任务
         $channel = $this->AMQPClent->channel();
@@ -53,15 +42,34 @@ class Webpage extends Base
         //$msg = new AMQPMessage($this->AMQPMessage, ['content_type' => 'text/plain', 'delivery_mode' => 2]); //生成消息  //, ['content_type' => 'text/plain', 'delivery_mode' => 2]
         $channel->basic_publish($this->AMQPMessage,$this->AMQPMessage_exchange); //推送消息到某个交换机
         $channel->close();
-        parent::httpOutputTis($url);
+        parent::httpOutputTis('ok');
     }
 
+    function curl_string ($url,$user_agent,$proxy_ip="",$proxy_port=""){
+        $ip= self::_ip();
+        $ch = curl_init();
+        curl_setopt ($ch, CURLOPT_PROXYAUTH, CURLAUTH_BASIC); //代理认证模式
+        curl_setopt ($ch, CURLOPT_PROXY, $proxy_ip); //代理服务器地址
+        curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port); //代理服务器端口
+        //curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+        curl_setopt ($ch, CURLOPT_URL, $url);
+        curl_setopt ($ch, CURLOPT_USERAGENT, $user_agent);
+        //curl_setopt ($ch, CURLOPT_COOKIEJAR, "d:\cookies.txt");
+        curl_setopt ($ch, CURLOPT_HEADER, 1);
+        curl_setopt ($ch, CURLOPT_HTTPHEADER, array('CLIENT-IP:'.$ip, 'X-FORWARDED-FOR:'.$ip));  //此处可以改为任意假IP
+        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt ($ch, CURLOPT_TIMEOUT, 120);
 
+        $result = curl_exec ($ch);
+        curl_close($ch);
+        return $result;
+    }
     private function _http($url)
     {
         $ch = curl_init($url);
         $options = [
-            CURLOPT_USERAGENT => $this->agent,
+            CURLOPT_USERAGENT => self::_agent(),
             CURLOPT_REFERER => $this->referer,
         ];
         curl_setopt_array($ch, $options);
