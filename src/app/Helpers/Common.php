@@ -488,3 +488,44 @@ function get_catname_by_catid(int $catid,$context,$alias='catname')
 
     return $find;
 }
+
+
+function http_pool($url,$params){
+    $url_array=parse_url($url);
+    //print_r($url_array);
+    $scheme = $url_array['scheme'].'://';
+    $host=$url_array['host'];
+    $url_port = $url_array['port'] ?? 80;
+    $path = $url_array['path'];
+    $query = isset($url_array['query'])&&!empty($url_array['query']) ? '?'.$url_array['query']:'';
+//        $cli = new \swoole_http_client($scheme.$host, $url_port);
+//        $cli->setHeaders(['User-Agent' => 'swoole','Referer'=>$Referer,'Set-Cookie'=>$SetCookie]);
+//        $cli->get($path.$query, function ($cli) {
+//
+//            print_r($cli->body);
+//            return  $cli->body;
+//        });
+
+    //同步版本
+//        $ci = new HttpClientPool( get_instance()->config,$scheme.$host);
+//        $ci->httpClient->setHeaders(['User-Agent' => 'swoole','Referer'=>$Referer,'Set-Cookie'=>$SetCookie])->execute($path.$query,function ($data){
+//           var_dump($data);
+//        });
+
+
+
+    $ci = new \Server\Asyn\HttpClient\HttpClientPool( get_instance()->config,$scheme.$host);
+    if($params){
+        print_r($params);
+        $data = yield $ci->httpClient
+            ->setHeaders(['User-Agent' => 'swoole'])
+            ->coroutineExecute($path.$query);
+    }else{
+        $data = yield $ci->httpClient
+            ->setHeaders(['User-Agent' => 'swoole'])
+            ->coroutineExecute($path.$query);
+    }
+
+    $data['baseurl'] = $ci->baseUrl;
+    return $data;
+}

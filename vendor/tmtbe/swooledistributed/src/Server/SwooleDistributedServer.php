@@ -509,7 +509,7 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
     public function addAsynPool($name, $pool)
     {
         if (array_key_exists($name, $this->asynPools)) {
-            throw  new SwooleException('pool key is exists!');
+            throw  new SwooleException($name.'pool key is exists!');
         }
         $this->asynPools[$name] = $pool;
     }

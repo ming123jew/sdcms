@@ -12,68 +12,18 @@ namespace app\Controllers\Spider;
 use app\Controllers\Spider\Interfaces\ISpiderService;
 use app\Controllers\Spider\Interfaces\ISpiderServiceFamily;
 use app\Helpers\Simplehtmldom\SimpleHtmlDom;
-use PhpAmqpLib\Message\AMQPMessage;
 
-class AnalyseUrl extends Analyse {
+class AnalyseContent extends Analyse {
 
     public $htmlDom;
     public $findHtml;
     public $response;
-    protected $AMQPMessage;
-    protected $AMQPMessage_exchange = 'amqp-spider-cache';
-    protected $WeixinSougouHttpClient;
 
-    // Example
-    //$html = str_get_html("<div>foo <b>bar</b></div>");
-    //$e = $html->find("div", 0);
-    //
-    //echo $e->tag; // Returns: " div"
-    //echo $e->outertext; // Returns: " <div>foo <b>bar</b></div>"
-    //echo $e->innertext; // Returns: " foo <b>bar</b>"
-    //echo $e->plaintext; // Returns: " foo bar"
-
-    //获取连接
-    public function getUrlList(...$argv){
-        //print_r($argv[0]);
-        //curl方式获取内容
-        //$response =  self::_http($argv[0],self::_agent());
-        //swoole方式获取内容，支持高并发+协程
-        $this->response = yield self::_http_pool($argv[0]);
-        //print_r($this->response);
-        //$t1 = microtime(true);
-        if($this->response['statusCode']==200){
-            $this->htmlDom = $this->SimpleHtmlDom->load($this->response['body']);
-            $family = new ISpiderServiceFamily();
-            //链接检测器
-            $family->addDecorator(new IAnalyseUrl());
-
-            $family->before($this);
-            $family->after($this);
-        }
-//        echo "\nstarttime:".$t1."\n";
-//        print_r(self::getTitle());
-//        $t2 = microtime(true);
-//        echo "\nendtime:".$t2."\n";
-//        echo "\nsum:".($t2-$t1)."\n";
-//        echo "\nmem".memory_get_usage() ."\n";
-        print_r($this->findHtml);
-        //获取到的列表再次投递到任务表，进行获取文章操作
-        yield self::_http_pool('http://118.89.26.188:8081/Spider/Webpage/get_content',':8081',['params'=>$this->findHtml]);
-
-        //var_dump($this->AMQPClent);
-//        $channel = $this->AMQPClent->channel();
-//        foreach ($this->findHtml as $key=>$value){
-//            //投递一个任务
-//            $msgBody = json_encode(["url" => $value['url'],'callBackClass'=>'AnalyseContent','action'=>'getContent']);
-//            $this->AMQPMessage->setBody($msgBody);
-//            //$msg = new AMQPMessage($this->AMQPMessage, ['content_type' => 'text/plain', 'delivery_mode' => 2]); //生成消息  //, ['content_type' => 'text/plain', 'delivery_mode' => 2]
-//            $channel->basic_publish($this->AMQPMessage,$this->AMQPMessage_exchange); //推送消息到某个交换机
-//        }
-//        $channel->close();
-        //将结果返回给任务管理器,是否完成
-        $this->isComplete = true;//
-        return $this;
+    public function getContent(){
+        var_dump("a");
     }
+
+
 
     public function getBaseUrl(){
         return $this->response['baseurl'];
@@ -96,7 +46,7 @@ class AnalyseUrl extends Analyse {
 }
 
 
-class IAnalyseUrl implements ISpiderService{
+class IAnalyseContent implements ISpiderService{
     public function before($context)
     {
         // TODO: Implement before() method.

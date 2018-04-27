@@ -48,7 +48,6 @@ class AppServer extends SwooleDistributedServer
     public function initAsynPools($workerId)
     {
         parent::initAsynPools($workerId);
-
         $this->addAsynPool('AMQP',new AMQP('localhost',5672,'guest','guest'));
 
     }
