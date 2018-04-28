@@ -8,9 +8,9 @@
 
 namespace app\AMQPTasks;
 
-use app\Controllers\Spider\AnalyseUrl;
 use PhpAmqpLib\Message\AMQPMessage;
 use Server\Components\AMQPTaskSystem\AMQPTask;
+use Server\Components\Process\ProcessManager;
 
 
 //创建作业任务
@@ -42,14 +42,14 @@ class SpiderAMQPTask extends AMQPTask
         //echo get_instance()->workerId."\n";
         $handler = (json_decode($body));
         try{
-            $ref = \Server\Memory\Pool::getInstance()->get(AnalyseUrl::class);
-            $res = yield $ref->handle($ref,$handler->action,$handler->url);
+            $ref = \Server\Memory\Pool::getInstance()->get($handler->callBackClass);
+            $res = yield $ref->handle([$ref,$handler->action],['url'=>$handler->url,'match'=>$handler->match,'params'=>$handler->params]);
 
             if($res->isComplete==true){
-                echo "work-over."."\n";
+                echo $res->httpStatusCode."work-over."."\n";
                 $this->ack();
             }else{
-                echo $res->respose['statusCode']."work not over."."\n";
+                echo $res->httpStatusCode."work not over."."\n";
                 $this->reject(true);
             }
 

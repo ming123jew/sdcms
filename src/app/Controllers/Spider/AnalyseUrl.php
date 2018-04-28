@@ -16,13 +16,9 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 class AnalyseUrl extends Analyse {
 
-    public $htmlDom;
-    public $findHtml;
-    public $response;
     protected $AMQPMessage;
     protected $AMQPMessage_exchange = 'amqp-spider-cache';
     protected $WeixinSougouHttpClient;
-
     // Example
     //$html = str_get_html("<div>foo <b>bar</b></div>");
     //$e = $html->find("div", 0);
@@ -38,10 +34,12 @@ class AnalyseUrl extends Analyse {
         //curl方式获取内容
         //$response =  self::_http($argv[0],self::_agent());
         //swoole方式获取内容，支持高并发+协程
-        $this->response = yield self::_http_pool($argv[0]);
+        $this->response = yield self::_http_pool($argv[0]['url']);
+        $this->match = $argv[0]['match'];
         //print_r($this->response);
         //$t1 = microtime(true);
         if($this->response['statusCode']==200){
+            $this->httpStatusCode = 200;
             $this->htmlDom = $this->SimpleHtmlDom->load($this->response['body']);
             $family = new ISpiderServiceFamily();
             //链接检测器
@@ -49,6 +47,8 @@ class AnalyseUrl extends Analyse {
 
             $family->before($this);
             $family->after($this);
+        }else{
+            $this->httpStatusCode = $this->response['statusCode'];
         }
 //        echo "\nstarttime:".$t1."\n";
 //        print_r(self::getTitle());
@@ -56,20 +56,12 @@ class AnalyseUrl extends Analyse {
 //        echo "\nendtime:".$t2."\n";
 //        echo "\nsum:".($t2-$t1)."\n";
 //        echo "\nmem".memory_get_usage() ."\n";
-        print_r($this->findHtml);
+        //print_r($this->findHtml);
         //获取到的列表再次投递到任务表，进行获取文章操作
-        yield self::_http_pool('http://118.89.26.188:8081/Spider/Webpage/get_content',':8081',['params'=>$this->findHtml]);
+        yield self::_http_pool('http://118.89.26.188:8081/Spider/Webpage/get_content',['params'=>$this->findHtml],':8081');
+        //无法获取到AMQP池，因此通过http进行分配任务
+        //get_instance()->getAsynPool('AMQP');
 
-        //var_dump($this->AMQPClent);
-//        $channel = $this->AMQPClent->channel();
-//        foreach ($this->findHtml as $key=>$value){
-//            //投递一个任务
-//            $msgBody = json_encode(["url" => $value['url'],'callBackClass'=>'AnalyseContent','action'=>'getContent']);
-//            $this->AMQPMessage->setBody($msgBody);
-//            //$msg = new AMQPMessage($this->AMQPMessage, ['content_type' => 'text/plain', 'delivery_mode' => 2]); //生成消息  //, ['content_type' => 'text/plain', 'delivery_mode' => 2]
-//            $channel->basic_publish($this->AMQPMessage,$this->AMQPMessage_exchange); //推送消息到某个交换机
-//        }
-//        $channel->close();
         //将结果返回给任务管理器,是否完成
         $this->isComplete = true;//
         return $this;
@@ -112,14 +104,15 @@ class IAnalyseUrl implements ISpiderService{
 //        }
 
         //根据元素匹配
-        $gz_array = [
-            'div .alist li',//规则1
-            'li h3 a',//规则2
-            /*'#/<a .*?>.*?<\/a>/#',*/
-
-        ];
+//        $gz_array = [
+//            'div .alist li',//规则1
+//            'li h3 a',//规则2
+/*            '#/<a .*?>.*?<\/a>/#',*/
+//
+//        ];
+        $gz_array = $context->match;
         $last = end($gz_array);
-        $find = self::match_find($gz_array,$context->htmlDom,$last);
+        $find = self::match_find($gz_array,$context->htmlDom,$last,$context);
 
         //根据规则匹配返回给findHtml
         $context->findHtml = ($find);
@@ -133,7 +126,7 @@ class IAnalyseUrl implements ISpiderService{
      * @param $last
      * @return array
      */
-    public function match_find($gz_array,$html,$last){
+    public function match_find($gz_array,$html,$last,$context=''){
         $find = [];
         foreach ($gz_array as $key=>$value){
             //如果是正则，则进行正则匹配，否则进行元素匹配
@@ -156,7 +149,7 @@ class IAnalyseUrl implements ISpiderService{
                     for ($n = 0; $n < count($out[0]); $n++) {
                         $e .= $out[0][$n];
                     }
-                    self::match_find($gz_array, $e, $last);
+                    self::match_find($gz_array, $e, $last,$context);
                 }
             }else{
                 //判断是否是dom
@@ -167,14 +160,14 @@ class IAnalyseUrl implements ISpiderService{
                 if ($last==$value){
                     $i=0;
                     foreach ($html->find($value) as $ee){
-                        $find[$i]['url'] = $ee->href;
+                        $find[$i]['url'] = strpos('http',$ee->href)!==false ?  $ee->href : $context->getBaseUrl().$ee->href;
                         $find[$i]['title'] = $ee->innertext;
                         $i++;
                     }
                 }else{
                     array_shift($gz_array);
                     foreach ($html->find($value) as $e){
-                        self::match_find($gz_array,$e,$last);
+                        self::match_find($gz_array,$e,$last,$context);
                     }
                 }
             }
@@ -197,17 +190,6 @@ class IAnalyseUrl implements ISpiderService{
     }
 }
 
-class  IAnalyseBody implements ISpiderService{
-    public function before($context)
-    {
-        // TODO: Implement before() method.
-
-    }
-    public function after($context)
-    {
-        // TODO: Implement after() method.
-    }
-}
 
 
 

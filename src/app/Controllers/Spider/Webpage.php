@@ -2,7 +2,9 @@
 
 namespace app\Controllers\Spider;
 
+use Server\Components\CatCache\CatCacheRpcProxy;
 use Server\Components\Event\EventDispatcher;
+use Server\Components\TimerTask\Timer;
 
 /**
  * Created by PhpStorm.
@@ -28,30 +30,76 @@ class Webpage extends Base
 
     public function http_get_url()
     {
-        $gzh = $this->http_input->postGet('wx');
+        //抓取的URL
         $url = 'https://www.sanwen8.cn/sanwen/';
+        //匹配规则
+        $match = [
+            'div .alist li',//规则1
+            'li h3 a',//规则2
+            /*'#/<a .*?>.*?<\/a>/#',*/
+        ];
 
         //投递一个任务
         $channel = $this->AMQPClent->channel();
-        $msgBody = json_encode(["url" => $url,'callBackClass'=>'AnalyseUrl','action'=>'getUrlList']);
+        $msgBody = json_encode([
+            'url'=> $url,
+            'match'=>$match,
+            'params'=>[],
+            'callBackClass'=>\app\Controllers\Spider\AnalyseUrl::class,//必须带/路径，pool才能找到class
+            'action'=>'getUrlList']);
         $this->AMQPMessage->setBody($msgBody);
         //$msg = new AMQPMessage($this->AMQPMessage, ['content_type' => 'text/plain', 'delivery_mode' => 2]); //生成消息  //, ['content_type' => 'text/plain', 'delivery_mode' => 2]
         $channel->basic_publish($this->AMQPMessage,$this->AMQPMessage_exchange); //推送消息到某个交换机
-        $channel->close();
+
         parent::httpOutputTis('ok');
     }
 
     public function http_get_content(){
+        //抓取数组 [ ['title'=>'','url'=>''],['title'=>'','url'=>''],['title'=>'','url'=>''] ]
         $params = $this->http_input->postGet('params');
         file_put_contents('/home/wwwroot/sdcms/aaa',var_export($params,TRUE));
         print_r("post");
+
+
+        //抓取的URL
+        $url = 'https://www.sanwen8.cn/sanwen/';
+        //匹配规则
+        $match = [
+            'div .alist li',//规则1
+            'li h3 a',//规则2
+            /*'#/<a .*?>.*?<\/a>/#',*/
+        ];
+
         //投递一个任务
-//        $channel = $this->AMQPClent->channel();
-//        $msgBody = json_encode(["url" => $url,'callBackClass'=>'AnalyseContent','action'=>'getContent']);
-//        $this->AMQPMessage->setBody($msgBody);
-//        //$msg = new AMQPMessage($this->AMQPMessage, ['content_type' => 'text/plain', 'delivery_mode' => 2]); //生成消息  //, ['content_type' => 'text/plain', 'delivery_mode' => 2]
-//        $channel->basic_publish($this->AMQPMessage,$this->AMQPMessage_exchange); //推送消息到某个交换机
-//        $channel->close();
+        $channel = $this->AMQPClent->channel();
+        $context = $this;
+        $end_params = end($params);
+
+        foreach ($params as $key=>$value){
+
+            \swoole_timer_after(3000, function ()use($value,$match,$end_params,$channel,$context) {
+                echo "after 3000ms.\n";
+                if($value==$end_params){
+                    $msgBody = json_encode([
+                        'url' => $value['url'],
+                        'match'=>$match,
+                        'params'=>['channel'=>$channel],
+                        'callBackClass'=>\app\Controllers\Spider\AnalyseContent::class,
+                        'action'=>'getContent']);
+                }else{
+                    $msgBody = json_encode([
+                        'url' => $value['url'],
+                        'match'=>$match,
+                        'params'=>[],
+                        'callBackClass'=>\app\Controllers\Spider\AnalyseContent::class,
+                        'action'=>'getContent']);
+                }
+
+                $context->AMQPMessage->setBody($msgBody);
+                $channel->basic_publish($context->AMQPMessage,$context->AMQPMessage_exchange); //推送消息到某个交换机
+            });
+        }
+        //print_r($channel);
         parent::httpOutputTis('ok');
     }
 

@@ -14,8 +14,21 @@ use Server\CoreBase\ChildProxy;
 
 class Analyse
 {
+    public $htmlDom;//simple_html_dom实例
+    public $findHtml;//找到的内容
+    public $response;//内容数组，key包含 body statusCode 等
+    public $match;//规则
+    /**
+     * 抓取返回的状态
+     * @var bool
+     */
+    public $httpStatusCode = false;
+    /**
+     * 任务是否完成
+     * @var bool
+     */
+    public $isComplete = false;
     protected $SimpleHtmlDom;
-
     protected $agent = [
         "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
         "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)",
@@ -35,19 +48,18 @@ class Analyse
         "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52",
     ];
 
-    /**
-     * 任务是否完成
-     * @var bool
-     */
-    public $isComplete = false;
+
 
     public function __construct()
     {
         $this->SimpleHtmlDom =new SimpleHtmlDom();
+
+
+
     }
 
-    public function handle($class,string $s,...$argv){
-        return yield call_user_func(array($class,$s),...$argv);
+    public function handle(array $class_action,...$argv){
+        return yield call_user_func($class_action,...$argv);
     }
 
     protected function _http($url,$agent)
@@ -63,9 +75,10 @@ class Analyse
         curl_setopt($ch, CURLOPT_TIMEOUT, 60);
         $output = curl_exec($ch);
         return $output;
+
     }
 
-    protected function _http_pool($url,$url_port='',$params=[],$UserAgent="",$Referer="",$SetCookie=""){
+    protected function _http_pool($url,$params=[],$url_port='',$UserAgent="",$Referer="",$SetCookie=""){
         if(empty($UserAgent)){
             $UserAgent = self::_agent();
         }
@@ -92,7 +105,7 @@ class Analyse
         //协程版本
         $ci = new HttpClientPool( get_instance()->config,$scheme.$host.$url_port);
         if($params){
-            print_r($params);
+            //print_r($params);
             $ci->httpClient->setData($params);
             $ci->httpClient->setMethod('POST');
             $ci->httpClient->setHeaders(['User-Agent' => 'swoole','Referer'=>$Referer,'Set-Cookie'=>$SetCookie]);
