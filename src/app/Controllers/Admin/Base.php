@@ -12,6 +12,11 @@ use app\Tasks\WebCache;
 class Base extends \app\Controllers\BaseController
 {
     /**
+     * @var int
+     */
+    protected $CookieExpire=3600*1;
+
+    /**
      * @var string
      */
     public $HtmlUrl = '';
@@ -47,6 +52,7 @@ class Base extends \app\Controllers\BaseController
         }else{
             $this->HtmlUrl = $configs_config[$configs_config['active']]['home']['static_url'];
         }
+        unset($configs,$configs_config);
         parent::templateData('HTML_URL',$this->HtmlUrl);
 
         //测试 绕过登录
@@ -54,7 +60,6 @@ class Base extends \app\Controllers\BaseController
         //$session_data['id'] = 1;
         //$session_data['roleid'] = 1;
         //session($this->AdminSessionField,$session_data);
-
 
         //如未登录  && 不是admin/main/login  admin/main/tis 则跳转到登录
         if( !in_array(strtolower($this->ActionName),$this->AdminNotAuthAction) && !self::check_login() ){
@@ -100,6 +105,7 @@ class Base extends \app\Controllers\BaseController
          $login_session = self::get_login_session();
          $role_id = $login_session['roleid'];
          $user = $login_session['username'];
+         unset($login_session);
          //1为超级管理员，直接跳过
          if($role_id == 1) return true;
          //搞不清楚为啥无法使用协程 无法放到initialization 使用
@@ -142,7 +148,7 @@ class Base extends \app\Controllers\BaseController
                  }
              }
          }
-
+         unset($role_arr,$key,$value);
          if(!$can){
              //parent::httpOutputTis('你没有权限操作，m：'.$this->ModuleName.'，c：'.$this->ControllerName.'，a：'.$this->ActionName.'。',false);
              print_r('你没有权限操作，m：'.$this->ModuleName.'，c：'.$this->ControllerName.'，a：'.$this->ActionName.'。',false);
@@ -160,6 +166,8 @@ class Base extends \app\Controllers\BaseController
         if($s){
             parent::templateData('username',$s['username']);
             parent::templateData('email',$s['email']);
+            $this->http_output->setCookie('__'.md5($this->AdminSessionField).'__',$cookie_data = md5(implode('-',$s)),$this->CookieExpire);
+            unset($s);
             return true;
         }else{
             return false;

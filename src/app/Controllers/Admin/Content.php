@@ -24,6 +24,9 @@ class Content extends Base
     protected $ContentHitsModel;
     protected $CategoryModel;
     protected $TagsModel;
+
+
+
     /**
      * @param string $controller_name
      * @param string $method_name
@@ -47,25 +50,23 @@ class Content extends Base
             ];
             $this->http_output->end(json_encode($end),false);
         }else{
-            $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
-            $p = intval( $this->http_input->postGet('p') );
-            if($p == 0) {$p = 1;}
-            $end = 10;
-            $start = ($p-1)*$end;
-            $r = yield $this->ContentModel->getAllByPage($start,$end);
+            $this->Model['ContentModel'] =  $this->loader->model(ContentModel::class,$this);
+            $this->Data['p'] = intval( $this->http_input->postGet('p') );
+            if($this->Data['p'] == 0) {$this->Data['p'] = 1;}
+            $this->Data['end'] = 10;
+            $this->Data['start'] = ($this->Data['p']-1)*$this->Data['end'];
+            $this->Data['ContentModel'] = yield  $this->Model['ContentModel']->getAllByPage($this->Data['start'],$this->Data['end']);
 
-            if($r['result'])
+            if($this->Data['ContentModel']['result'])
             {
-                foreach ($r['result'] as $n=> $v)
+                foreach ($this->Data['ContentModel']['result'] as $n=> $v)
                 {
-                    $r['result'][$n]['str_manage'] = (yield check_role('Admin', 'Content', 'content_edit', $this)) ? '<a href="' . url('Admin', 'Content', 'content_edit', ["id" => $v['id']]) . '">编辑</a> |' : '';
-                    $r['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Content', 'content_delete', $this)) ? '<a  onclick="content_delete(' . $v['id'] . ')" href="javascript:;">删除</a>' : '';
+                    $this->Data['ContentModel']['result'][$n]['str_manage'] = (yield check_role('Admin', 'Content', 'content_edit', $this)) ? '<a href="' . url('Admin', 'Content', 'content_edit', ["id" => $v['id']]) . '">编辑</a> |' : '';
+                    $this->Data['ContentModel']['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Content', 'content_delete', $this)) ? '<a  onclick="content_delete(' . $v['id'] . ')" href="javascript:;">删除</a>' : '';
                 }
             }
-
-            parent::templateData('list',$r['result']);
-            parent::templateData('page',page_bar($r['num'],$p,10,5,$this));
-
+            parent::templateData('list',$this->Data['ContentModel']['result']);
+            parent::templateData('page',page_bar($this->Data['ContentModel']['num'],$this->Data['p'],10,5,$this));
             //parent::templateData('test',1);
             //unset($r);
             //web or app
@@ -274,6 +275,7 @@ class Content extends Base
     private function _check_title(){
 
     }
+
 
 
 

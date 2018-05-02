@@ -18,25 +18,7 @@ use app\Tasks\WebCache;
  */
 class Main extends Base
 {
-    /**
-     * @var UserModel
-     */
-    protected $UserModel;
 
-    /**
-     * @var int
-     */
-    protected $CookieExpire=10;
-
-    /**
-     * @var
-     */
-    protected $MenuModel;
-
-    /**
-     * @var
-     */
-    protected $RolePrivModel;
 
     /**
      * @param string $controller_name
@@ -68,21 +50,21 @@ class Main extends Base
      */
     public function http_ajaxgetmenu(){
         $login_session = self::get_login_session();
-        $role_id = $login_session['roleid'];
-        $all = unserialize(parent::get_cache_role_menu_byid($role_id));
+        $this->Data['role_id'] = $login_session['roleid'];
+        $this->Data['http_ajaxgetmenu'] = unserialize(parent::get_cache_role_menu_byid($this->Data['role_id']));
         //缓存不存在，则进行数据库读取
-        if(!$all){
-            $all = yield self::_getRoleMenu($role_id);
+        if(! $this->Data['http_ajaxgetmenu']){
+            $this->Data['http_ajaxgetmenu'] = yield self::_getRoleMenu($this->Data['role_id']);
             print_r('not cache.');
         }
-
         $end = [
             'status' => 1,
             'code'=>200,
             'message'=>'login fail.',
-            'data'=>$all
+            'data'=> $this->Data['http_ajaxgetmenu']
         ];
         $this->http_output->setHeader('Content-Type','application/json');
+        unset($login_session);
         $this->http_output->end(json_encode($end),false);
         //print_r($all);
     }
@@ -96,12 +78,11 @@ class Main extends Base
     public function http_login(){
 
         if($this->http_input->getRequestMethod()=='POST'){
-
-            $this->UserModel = $this->loader->model(UserModel::class,$this);
-            $result = yield $this->UserModel->getOneUserByUsernameAndPassword($this->http_input->post('username'),$this->http_input->post('password'));
-            print_r($result);
+            $this->Model['UserModel'] = $this->loader->model(UserModel::class,$this);
+            $this->Data['UserModel'] = yield $this->Model['UserModel']->getOneUserByUsernameAndPassword($this->http_input->post('username'),$this->http_input->post('password'));
+            print_r($this->Data['UserModel']);
             //验证失败
-            if(empty($result)){
+            if(empty($this->Data['UserModel'])){
                 $end = [
                     'status' => 0,
                     'code'=>200,
@@ -109,10 +90,10 @@ class Main extends Base
                 ];
             }else{
 
-                if($result){
+                if($this->Data['UserModel']){
                     //储存到SESSION - memory
-                    unset($result['password']);
-                    $session_data = $result;
+                    unset($this->Data['UserModel']['password']);
+                    $session_data = $this->Data['UserModel'];
                     session($this->AdminSessionField,$session_data);//print_r($session_data);
                     $cookie_data = md5(implode('-',$session_data));
                     //echo $cookie_data;exit(0);
@@ -120,17 +101,17 @@ class Main extends Base
 
                     //查询权限，并存到Cache
                     $role_id = $session_data['roleid'];
-                    $this->RolePrivModel = $this->loader->model(RolePrivModel::class,$this);
-                    $d_model_rolepriv = yield  $this->RolePrivModel->getByRoleId($role_id);
+                    $this->Model['RolePrivModel'] = $this->loader->model(RolePrivModel::class,$this);
+                    $this->Data['RolePrivModel'] = yield  $this->Model['RolePrivModel']->getByRoleId($role_id);
                     //cache存在并发内存泄漏,不再使用
                     //$cache = Cache::getCache('WebCache');
                    // $cache->addMap($this->AdminCacheRoleIdDataField.$role_id,serialize($d_model_rolepriv));
-                    yield set_cache($this->AdminCacheRoleIdDataField.$role_id,serialize($d_model_rolepriv));
+                    yield set_cache($this->AdminCacheRoleIdDataField.$role_id,serialize($this->Data['RolePrivModel']));
 
                     //获取角色菜单，并存到cache
-                    $role_menu = yield self::_getRoleMenu($role_id);
+                    $this->Data['role_menu'] = yield self::_getRoleMenu($role_id);
                     //$cache->addMap($this->AdminCacheRoleIdMenuField.$role_id,serialize($role_menu));
-                    yield set_cache($this->AdminCacheRoleIdMenuField.$role_id,serialize($role_menu));
+                    yield set_cache($this->AdminCacheRoleIdMenuField.$role_id,serialize($this->Data['role_menu']));
 
                     $end = [
                         'token'=>$cookie_data,
@@ -147,7 +128,7 @@ class Main extends Base
                 }
 
             }
-
+            unset($session_data,$cookie_data,$role_id);
             $this->http_output->end(json_encode($end),false);
 
         }else{
@@ -196,7 +177,6 @@ class Main extends Base
             'a'=>$a,
             'b'=>$b
         ];
-
         $this->http_output->end($end,false);
     }
 
@@ -206,41 +186,31 @@ class Main extends Base
      */
     private function _getRoleMenu($role_id){
 
-        $this->MenuModel  = $this->loader->model(MenuModel::class,$this);
-        $all = yield $this->MenuModel->getAll($role_id);
+        $this->Model['MenuModel']  = $this->loader->model(MenuModel::class,$this);
+        $this->Data['MenuModel'] = yield $this->Model['MenuModel']->getAll($role_id);
 
         //处理数据添加url属性
-        foreach ($all as $key=>$value){
-
+        foreach ( $this->Data['MenuModel'] as $key=>$value){
             if($value['a']=='#'){
-                $all[$key]['url'] = 'javascript:;';
+                $this->Data['MenuModel'][$key]['url'] = 'javascript:;';
             }else{
-                $all[$key]['url'] = url($value['m'],$value['c'],$value['a'],$value['url_param']);
+                $this->Data['MenuModel'][$key]['url'] = url($value['m'],$value['c'],$value['a'],$value['url_param']);
             }
         }
         //获取子级菜单
-        $tree = new Tree();
-        $tree->init($all);
+        $this->Model['Tree'] = new Tree();
+        $this->Model['Tree']->init( $this->Data['MenuModel']);
         $subset = [];
-        foreach ($all as $key2=>$value2){
-            $subset = $tree->get_child($value2['id']);
+        foreach ( $this->Data['MenuModel'] as $key2=>$value2){
+            $subset = $this->Model['Tree']->get_child($value2['id']);
             if($subset){
-                $all[$key2]['subset'] = array_values($subset);
+                $this->Data['MenuModel'][$key2]['subset'] = array_values($subset);
             }else{
-                $all[$key2]['subset'] = $subset;
+                $this->Data['MenuModel'][$key2]['subset'] = $subset;
             }
-
         }
-        return $all;
+        unset($subset,$key,$value,$key2,$value2);
+        return $this->Data['MenuModel'];
     }
-    /**
-     * 销毁操作
-     */
-    public function destroy()
-    {
-
-
-    }
-
 
 }

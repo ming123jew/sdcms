@@ -17,7 +17,6 @@ class Role  extends Base{
     protected $RolePrivModel;
     protected $MenuModel;
 
-
     /**
      * @param string $controller_name
      * @param string $method_name
