@@ -177,7 +177,7 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">跳转：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input style="position: initial;opacity: inherit;" name="info[isgourl]" type="checkbox" id="isgourl" onclick="rusegourl();" <?php if($data['d_content_model']['gourl']){?>checked="checked"<?php } ?>>
+                                                                    <input style="position: initial;opacity: inherit;" name="info[isgourl]" type="checkbox" id="isgourl" onclick="rusegourl();" <?php if(isset($data['d_content_model']['gourl'])&&$data['d_content_model']['gourl']){?>checked="checked"<?php } ?>>
                                                                     <input class="form-control" id="gourl" name="info[gourl]" type="text" value=""  <?php if(empty($data['d_content_model']['gourl'])){?>disabled="disabled"<?php } ?>/>
                                                                 </div>
                                                             </div>
@@ -192,9 +192,9 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">推荐：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input style="position: initial;opacity: inherit;" name="info[flag][]" value="p" type="checkbox"  <?php if(strpos($data['d_content_model']['flag'],'p')!==false){?>checked="checked"<?php } ?>>幻灯&nbsp;&nbsp;
-                                                                    <input style="position: initial;opacity: inherit;" name="info[flag][]" value="t" type="checkbox" <?php if(strpos($data['d_content_model']['flag'],'t')){?>checked="checked"<?php } ?>>头条&nbsp;&nbsp;
-                                                                    <input style="position: initial;opacity: inherit;" name="info[flag][]" value="r" type="checkbox"  <?php if(strpos($data['d_content_model']['flag'],'r')){?>checked="checked"<?php } ?>>推荐&nbsp;&nbsp;
+                                                                    <input style="position: initial;opacity: inherit;" name="info[flag][]" value="p" type="checkbox"  <?php if(isset($data['d_content_model']['flag'])&&strpos($data['d_content_model']['flag'],'p')!==false){?>checked="checked"<?php } ?>>幻灯&nbsp;&nbsp;
+                                                                    <input style="position: initial;opacity: inherit;" name="info[flag][]" value="t" type="checkbox" <?php if(isset($data['d_content_model']['flag'])&&strpos($data['d_content_model']['flag'],'t')){?>checked="checked"<?php } ?>>头条&nbsp;&nbsp;
+                                                                    <input style="position: initial;opacity: inherit;" name="info[flag][]" value="r" type="checkbox"  <?php if(isset($data['d_content_model']['flag'])&&strpos($data['d_content_model']['flag'],'r')){?>checked="checked"<?php } ?>>推荐&nbsp;&nbsp;
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">

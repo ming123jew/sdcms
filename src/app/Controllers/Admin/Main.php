@@ -5,6 +5,7 @@ use app\Helpers\Tree;
 use app\Models\Data\UserModel;
 use app\Models\Data\RolePrivModel;
 use app\Models\Data\MenuModel;
+use Server\Components\CatCache\CatCacheRpcProxy;
 use Server\Memory\Cache;
 use app\Tasks\WebCache;
 
@@ -121,12 +122,15 @@ class Main extends Base
                     $role_id = $session_data['roleid'];
                     $this->RolePrivModel = $this->loader->model(RolePrivModel::class,$this);
                     $d_model_rolepriv = yield  $this->RolePrivModel->getByRoleId($role_id);
-                    $cache = Cache::getCache('WebCache');
-                    $cache->addMap($this->AdminCacheRoleIdDataField.$role_id,serialize($d_model_rolepriv));
+                    //cache存在并发内存泄漏,不再使用
+                    //$cache = Cache::getCache('WebCache');
+                   // $cache->addMap($this->AdminCacheRoleIdDataField.$role_id,serialize($d_model_rolepriv));
+                    yield set_cache($this->AdminCacheRoleIdDataField.$role_id,serialize($d_model_rolepriv));
 
                     //获取角色菜单，并存到cache
                     $role_menu = yield self::_getRoleMenu($role_id);
-                    $cache->addMap($this->AdminCacheRoleIdMenuField.$role_id,serialize($role_menu));
+                    //$cache->addMap($this->AdminCacheRoleIdMenuField.$role_id,serialize($role_menu));
+                    yield set_cache($this->AdminCacheRoleIdMenuField.$role_id,serialize($role_menu));
 
                     $end = [
                         'token'=>$cookie_data,

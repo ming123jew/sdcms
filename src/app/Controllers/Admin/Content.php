@@ -66,7 +66,8 @@ class Content extends Base
             parent::templateData('list',$r['result']);
             parent::templateData('page',page_bar($r['num'],$p,10,5,$this));
 
-            parent::templateData('test',1);
+            //parent::templateData('test',1);
+            //unset($r);
             //web or app
             parent::webOrApp(function (){
                 $template = $this->loader->view('app::Admin/content_list');

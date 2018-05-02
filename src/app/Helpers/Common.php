@@ -139,7 +139,7 @@ function get_cache($key,$type="data")
     $result = yield CatCacheRpcProxy::getRpc()->offsetExists($key);
     if($result)
     {
-        $result =  yield CatCacheRpcProxy::getRpc()[$key];
+        $result =  yield CatCacheRpcProxy::getRpc()->offsetGet($key);
         //判断是否过期
         //print_r($result);
         if(time() - $result['create_time']>$result['expire_time'])
@@ -147,7 +147,7 @@ function get_cache($key,$type="data")
             yield CatCacheRpcProxy::getRpc()->offsetUnset($key);
             $result = false;
         }
-        httpEndFile(0);
+
     }else{
         $result = false;
     }
@@ -320,16 +320,21 @@ function check_role($m,$c,$a,$context,$param=[])
 {
     $login_info = session('__SESSION__ADMIN__');
     //print_r($login_info);
-
     $role_id = $login_info['roleid'];
-    $cache = Cache::getCache('WebCache');
-    $role_id_priv =  unserialize($cache->getOneMap('__ROLEID__DATA__ADMIN__'.$role_id));
+    //cache存在内存泄漏
+    //$cache = Cache::getCache('WebCache');
+    //$role_id_priv =  unserialize($cache->getOneMap('__ROLEID__DATA__ADMIN__'.$role_id));
+    //$role_id_priv = yield unserialize(get_cache('__ROLEID__DATA__ADMIN__'.$role_id));
+    //var_dump($role_id_priv);
+    $role_id_priv = false;
     if(!$role_id_priv)
     {
         //数据库查找
         $model = get_instance()->loader->model(\app\Models\RolePrivModel::class,$context);
         $r =  yield $model->authRole($role_id,$m,$c,$a);
         //print_r('check_role from db \n;');
+        unset($model);
+        unset($lock);
         if(!($r))
         {
             return false;
@@ -337,7 +342,7 @@ function check_role($m,$c,$a,$context,$param=[])
            return true;
         }
     }else{
-        //print_r('check_role from cache \n;');
+        //print_r("check_role from cache \n");
         //从缓存种查找
         $find = false;
         if(is_array($role_id_priv)&&!empty($role_id_priv))
@@ -347,14 +352,13 @@ function check_role($m,$c,$a,$context,$param=[])
                 if($m==$value['m']&&$c==$value['c']&&$a==$value['a'])
                 {
                     $find = true;
-                }else{
-                    continue;
                 }
             }
         }
         return $find;
     }
     //print_r($role_id_priv);
+    unset($role_id_priv);
     return false;
 }
 

@@ -47,6 +47,7 @@ class SpiderAMQPTask extends AMQPTask
 
             if($res->isComplete==true){
                 echo $res->httpStatusCode."work-over."."\n";
+                file_put_contents('',$res->body);
                 $this->ack();
             }else{
                 echo $res->httpStatusCode."work not over."."\n";

@@ -36,7 +36,7 @@ class WebCache extends Task
                 return $this->map[$key];
             }
         }else{
-            return null;
+            return false;
         }
 
     }

@@ -40,7 +40,7 @@ class Webpage extends Base
         ];
 
         //投递一个任务
-        $channel = $this->AMQPClent->channel();
+        $channel = $this->AMQPChannel;
         $msgBody = json_encode([
             'url'=> $url,
             'match'=>$match,
@@ -71,7 +71,7 @@ class Webpage extends Base
         ];
 
         //投递一个任务
-        $channel = $this->AMQPClent->channel();
+        $channel = $this->AMQPChannel;
         $context = $this;
         $end_params = end($params);
 

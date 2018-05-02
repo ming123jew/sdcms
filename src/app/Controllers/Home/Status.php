@@ -27,6 +27,7 @@ class Status extends Base
         $cache = Cache::getCache('WsCache');
         $key = 'get_log';
         $cache->addMap($key,md5(1));
+        unset($cache);
         //web or app
         parent::webOrApp(function (){
             $template = $this->loader->view('app::Home/status');
@@ -76,6 +77,8 @@ class Status extends Base
             $end = ['type' => 'getlog','fd'=>$this->fd,'message'=>$message];
         }
         //$end = ['type' => 'getlog','fd'=>$this->fd,'message'=>($message)];
+        unset($cache);
+        unset($message);
         $this->send($end);
     }
     public function update()
@@ -184,6 +187,13 @@ class Status extends Base
         }
         fclose($fp);
         return $lines;
+    }
+
+    protected function tail2($file,$num){
+
+         \swoole_async_read($file,function ($fileName, $content){
+           var_dump($fileName,$content);
+        });
     }
 
 

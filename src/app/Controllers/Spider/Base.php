@@ -18,6 +18,7 @@ class Base extends \app\Controllers\BaseController
     protected $AMQPClent;
     protected $AMQPMessage;
     protected $AMQPMessage_exchange = 'amqp-spider-cache';
+    protected $AMQPChannel;
     protected $WeixinSougouHttpClient;
     protected $MpWeixinHttpClient;
 
@@ -68,6 +69,7 @@ class Base extends \app\Controllers\BaseController
         $this->SimpleHtmlDom =new SimpleHtmlDom();
         $this->AMQPMessage =  new AMQPMessage('', ['content_type' => 'text/plain', 'delivery_mode' => 2]);
         $this->AMQPClent =  get_instance()->getAsynPool('AMQP');
+        $this->AMQPChannel = $this->AMQPClent->channel();
         $this->referer = empty($referer)?'http://weixin.sogou.com/' : $referer;
         $this->host    = empty($host)?'weixin.sogou.com' : $host;
 

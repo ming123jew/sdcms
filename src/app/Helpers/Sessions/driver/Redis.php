@@ -22,7 +22,7 @@ class Redis extends SessionHandler
         'port'         => 6379, // redis端口
         'password'     => '', // 密码
         'select'       => 0, // 操作库
-        'expire'       => 3600, // 有效期(秒)
+        'expire'       => 3600*24, // 有效期(秒)
         'timeout'      => 0, // 超时时间(秒)
         'persistent'   => true, // 是否长连接
         'session_name' => '', // sessionkey前缀
@@ -31,15 +31,15 @@ class Redis extends SessionHandler
     public function __construct($config = [])
     {
         $this->config = array_merge($this->config, $config);
+        print_r( $this->config);
     }
 
     /**
      * 打开Session
-     * @access public
      * @param string $savePath
-     * @param mixed  $sessName
+     * @param string $sessName
      * @return bool
-     * @throws Exception
+     * @throws \Exception
      */
     public function open($savePath, $sessName)
     {
@@ -85,7 +85,7 @@ class Redis extends SessionHandler
     public function read($sessID)
     {
 
-        return (string) $this->handler->get($this->config['session_name'] . $sessID);
+        return unserialize( (string) $this->handler->get($this->config['session_name'] . $sessID) );
     }
 
     /**
@@ -98,9 +98,9 @@ class Redis extends SessionHandler
     public function write($sessID, $sessData)
     {
         if ($this->config['expire'] > 0) {
-            return $this->handler->setex($this->config['session_name'] . $sessID, $this->config['expire'], $sessData);
+            return $this->handler->setex($this->config['session_name'] . $sessID, $this->config['expire'], serialize($sessData));
         } else {
-            return $this->handler->set($this->config['session_name'] . $sessID, $sessData);
+            return $this->handler->set($this->config['session_name'] . $sessID, serialize($sessData));
         }
     }
 
@@ -121,8 +121,22 @@ class Redis extends SessionHandler
      * @param string $sessMaxLifeTime
      * @return bool
      */
-    public function gc($sessMaxLifeTime)
+    public function gc($sessMaxLifeTime,$prefix='')
     {
+        //取出所有的 带有指定前缀的键
+        $keys = $this->handler->keys($prefix.'*');
+        $now =time(); //取得现在的时间
+        foreach($keys as $key){
+            //取得当前key的最后更新时间
+            $last_time = $this->handler->hGet($key,'last_time');
+            /*
+             * 查看当前时间和最后的更新时间的时间差是否超过最大生命周期
+             */
+            if(($now - $last_time) > $sessMaxLifeTime){
+                //超过了最大生命周期时间 则删除该key
+                $this->handler->del($key);
+            }
+        }
         return true;
     }
 }

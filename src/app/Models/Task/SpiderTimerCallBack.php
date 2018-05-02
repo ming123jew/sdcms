@@ -23,6 +23,6 @@ class SpiderTimerCallBack extends BaseModel
     public function Test($value,$token){
         var_dump($value,$token);
 
-        TimerCallBack::ack($token);
+        //TimerCallBack::ack($token);
     }
 }
