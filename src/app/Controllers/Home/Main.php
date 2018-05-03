@@ -34,7 +34,7 @@ class Main extends Base
     protected function initialization($controller_name, $method_name)
     {
         parent::initialization($controller_name, $method_name);
-        $this->BaseModel = $this->loader->model('BaseModel', $this);
+        $this->Model['BaseModel'] = $this->loader->model('BaseModel', $this);
     }
 
     public function http_index(){
@@ -43,21 +43,21 @@ class Main extends Base
         $end = 10;
         $start = ($p-1)*$end;
 
-        $this->HomeBusiness = $this->loader->model(HomeBusiness::class,$this);
+        $this->Model['HomeBusiness'] = $this->loader->model(HomeBusiness::class,$this);
         //[获取幻灯:start]
-        $d_slide = yield $this->HomeBusiness->get_slide();
+        $d_slide = yield $this->Model['HomeBusiness']->get_slide();
         //[获取幻灯:end]
 
         //[获取推荐:start]
-        $d_get_recommend = yield $this->HomeBusiness->get_recommend();
+        $d_get_recommend = yield $this->Model['HomeBusiness']->get_recommend();
         //[获取推荐:end]
 
         //[获取最新文章:start]
-        $d_get_new = yield $this->HomeBusiness->get_new(0,$start,$end);
+        $d_get_new = yield $this->Model['HomeBusiness']->get_new(0,$start,$end);
         //[获取最新文章:end]
 
         //[获取最新评论:start]
-        $d_get_new_comment = yield $this->HomeBusiness->get_new_comment();
+        $d_get_new_comment = yield $this->Model['HomeBusiness']->get_new_comment();
         //[获取最新评论:end]
 
         //print_r($d_get_new);
@@ -69,6 +69,7 @@ class Main extends Base
         parent::templateData('d_get_new_comment',$d_get_new_comment);
         $date = date('Y-m-d');
         parent::templateData('date',$date.' '.get_week($date));
+        unset($p,$end,$start,$d_slide,$d_get_recommend,$d_get_new,$d_get_new_comment,$date);
         //web or app
         parent::webOrApp(function (){
             $template = $this->loader->view('app::Home/index');
@@ -117,7 +118,7 @@ class Main extends Base
 
         $endData = [
             // 'reis_result'=>$redis_result,
-            'BaseModel'=>$this->BaseModel->test(),
+            'BaseModel'=>$this->Model['BaseModel']->test(),
             'UserModel'=>$isExist,
             //'jsskd'=>self::_getJsSdk(),
             'StatsModel'=>$val,

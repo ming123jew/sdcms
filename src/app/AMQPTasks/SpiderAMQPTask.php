@@ -44,10 +44,9 @@ class SpiderAMQPTask extends AMQPTask
         try{
             $ref = \Server\Memory\Pool::getInstance()->get($handler->callBackClass);
             $res = yield $ref->handle([$ref,$handler->action],['url'=>$handler->url,'match'=>$handler->match,'params'=>$handler->params]);
-
             if($res->isComplete==true){
                 echo $res->httpStatusCode."work-over."."\n";
-                file_put_contents('',$res->body);
+                //file_put_contents('',$res->body);
                 $this->ack();
             }else{
                 echo $res->httpStatusCode."work not over."."\n";
@@ -55,10 +54,14 @@ class SpiderAMQPTask extends AMQPTask
             }
 
         }catch (\Exception $e){
+
             print_r($e->getMessage());
             $this->reject(true);
         }
+        unset($body,$handler,$ref,$res);
     }
+
+
 }
 
 

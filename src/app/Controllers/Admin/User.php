@@ -11,12 +11,10 @@ use app\Models\Data\UserModel;
  */
 class User  extends Base{
 
-    protected $UserModel;
-
-
     /**
      * @param string $controller_name
      * @param string $method_name
+     * @throws \Exception
      */
     protected function initialization($controller_name, $method_name)
     {
@@ -36,18 +34,19 @@ class User  extends Base{
             ];
             $this->http_output->end(json_encode($end),false);
         }else{
-            $this->UserModel = $this->loader->model(UserModel::class,$this);
-            $d_user_model = yield $this->UserModel->getAll();
+            $this->Model['UserModel'] = $this->loader->model(UserModel::class,$this);
+            $this->Data['UserModel'] = yield $this->Model['UserModel']->getAll();
 
             //增加管理操作
-            foreach ($d_user_model as $key=>$value){
+            foreach ($this->Data['UserModel'] as $key=>$value){
 
-                $d_user_model[$key]['str_manage'] = (yield check_role('Admin','User','user_edit',$this)) ?'<a href="'.url('Admin','User','role_edit',["id" => $value['id']]).'">编辑</a> |':'';
-                $d_user_model[$key]['str_manage'] .= (yield check_role('Admin','User','user_delete',$this)) ?'<a  onclick="role_delete('.$value['id'].')" href="javascript:;">删除</a>':'';
-                $d_user_model[$key]['role'] = yield get_role_byid($value['roleid'],$this);//角色权限表所有数据 缓存标识
+                $this->Data['UserModel'][$key]['str_manage'] = (yield check_role('Admin','User','user_edit',$this)) ?'<a href="'.url('Admin','User','role_edit',["id" => $value['id']]).'">编辑</a> |':'';
+                $this->Data['UserModel'][$key]['str_manage'] .= (yield check_role('Admin','User','user_delete',$this)) ?'<a  onclick="role_delete('.$value['id'].')" href="javascript:;">删除</a>':'';
+                $this->Data['UserModel'][$key]['role'] = yield get_role_byid($value['roleid'],$this);//角色权限表所有数据 缓存标识
 
             }
-            parent::templateData('allrole',$d_user_model);
+            parent::templateData('allrole',$this->Data['UserModel']);
+            unset($key,$value);
             //web or app
             parent::webOrApp(function (){
                 $template = $this->loader->view('app::Admin/user_lists');

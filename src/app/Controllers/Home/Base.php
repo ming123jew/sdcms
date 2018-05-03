@@ -51,7 +51,7 @@ class Base extends \app\Controllers\BaseController
         $this->HtmlUrl = $configs_config[$configs_config['active']]['home']['static_url'];
 
         parent::templateData('HTML_URL',$this->HtmlUrl);
-
+        unset($configs,$configs_config);
         self::check_login();
     }
 
@@ -65,6 +65,7 @@ class Base extends \app\Controllers\BaseController
     {
         $arr = [$key=>$value];
         $this->TemplateData = array_merge($this->TemplateData,$arr);
+        unset($arr,$key,$value);
     }
 
 
@@ -78,6 +79,7 @@ class Base extends \app\Controllers\BaseController
             parent::templateData('user.isLogin',true);
             parent::templateData('user.username',$s['username']);
             parent::templateData('user.email',$s['email']);
+            unset($s);
             return true;
         }else{
             parent::templateData('user.isLogin',false);
@@ -96,6 +98,7 @@ class Base extends \app\Controllers\BaseController
         if($s){
             return $s;
         }else{
+            unset($s);
             return false;
         }
     }

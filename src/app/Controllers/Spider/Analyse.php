@@ -53,9 +53,6 @@ class Analyse
     public function __construct()
     {
         $this->SimpleHtmlDom =new SimpleHtmlDom();
-
-
-
     }
 
     public function handle(array $class_action,...$argv){
@@ -117,6 +114,7 @@ class Analyse
         }
 
         $data['baseurl'] = $ci->baseUrl;
+        unset($url,$params,$url_port,$UserAgent,$Referer,$SetCookie,$url_array,$scheme,$host,$path,$query,$ci);
         return $data;
     }
 
@@ -183,8 +181,10 @@ class Analyse
             }
         }
         if(!empty($tag)){
+            unset($data,$matches);
             return $meta[$tag];
         }else{
+            unset($data,$tag,$matches);
             return $meta;
         }
     }
@@ -192,6 +192,7 @@ class Analyse
     public function __destruct()
     {
         // TODO: Implement __destruct() method.
+        //print_r("__destruct");
         $this->SimpleHtmlDom->clear();//清空SimpleHtmlDom
     }
 

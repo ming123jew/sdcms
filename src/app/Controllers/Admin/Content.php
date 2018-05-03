@@ -18,18 +18,11 @@ use app\Models\Business\CategoryBusiness;
 
 class Content extends Base
 {
-    protected $ContentModel;
-    protected $ContentBusiness;
-    protected $CategoryBusiness;
-    protected $ContentHitsModel;
-    protected $CategoryModel;
-    protected $TagsModel;
-
-
 
     /**
      * @param string $controller_name
      * @param string $method_name
+     * @throws \Exception
      */
     protected function initialization($controller_name, $method_name)
     {
@@ -70,6 +63,7 @@ class Content extends Base
             //parent::templateData('test',1);
             //unset($r);
             //web or app
+            unset($n,$v);
             parent::webOrApp(function (){
                 $template = $this->loader->view('app::Admin/content_list');
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
@@ -127,12 +121,14 @@ class Content extends Base
             }
 
             //[--start::添加文章{业务逻辑}--]
-            $this->ContentBusiness = $this->loader->model(ContentBusiness::class,$this);
-            $r = yield $this->ContentBusiness->content_add($data['info']);
+            $this->Model['ContentBusiness'] = $this->loader->model(ContentBusiness::class,$this);
+            $r = yield $this->Model['ContentBusiness']->content_add($data['info']);
             if($r)
             {
+                unset($data,$login_session);
                 parent::httpOutputEnd('内容添加成功.','内容添加失败.',$r);
             }else{
+                unset($data,$login_session,$r);
                 parent::httpOutputTis('ContentModel添加请求失败.');
             }
             //[--end::添加文章{业务逻辑}--]
@@ -141,13 +137,13 @@ class Content extends Base
             //显示添加内容页面
             $parent_id  =  $this->http_input->postGet('parent_id') ?? 0;
             //显示分类
-            $this->CategoryBusiness =  $this->loader->model(CategoryBusiness::class,$this);
-            $selectCategorys= yield  $this->CategoryBusiness->get_category_by_parentid(intval($parent_id));
+            $this->Model['CategoryBusiness'] =  $this->loader->model(CategoryBusiness::class,$this);
+            $selectCategorys= yield  $this->Model['CategoryBusiness']->get_category_by_parentid(intval($parent_id));
 
             parent::templateData('selectCategorys',$selectCategorys);
-            parent::templateData('test',1);
             parent::templateData('token',token('__CONTENT_ADD__'));
             parent::templateData('d_content_model',[]);
+            unset($parent_id,$selectCategorys);
             //web or app
             parent::webOrApp(function (){
                 $template = $this->loader->view('app::Admin/content_add_and_edit');
@@ -205,34 +201,38 @@ class Content extends Base
             unset($data['info']['oldcatid']);
 
             //[--start::更新文章{业务逻辑}--]
-            $this->ContentBusiness = $this->loader->model(ContentBusiness::class,$this);
-            $r = yield $this->ContentBusiness->content_edit($id,$data['info'],$oldcatid);
+            $this->Model['ContentBusiness'] = $this->loader->model(ContentBusiness::class,$this);
+            $r = yield $this->Model['ContentBusiness']->content_edit($id,$data['info'],$oldcatid);
             if($r)
             {
+                unset($data,$id,$oldcatid,$login_session);
                 parent::httpOutputEnd('内容更新成功.','内容更新失败.',$r);
             }else{
+                unset($data,$id,$oldcatid,$login_session,$r);
                 parent::httpOutputTis('ContentModel编辑请求失败.');
             }
             //[--end::更新文章{业务逻辑}--]
         }else{
             $id = $this->http_input->get('id');
-            $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
-            $d = yield $this->ContentModel->getById($id);
+            $this->Model['ContentModel'] =  $this->loader->model(ContentModel::class,$this);
+            $d = yield $this->Model['ContentModel']->getById($id);
 
             if($id && $d)
             {
                 //自动选择分类
-                $this->CategoryBusiness =  $this->loader->model(CategoryBusiness::class,$this);
-                $selectCategorys= yield  $this->CategoryBusiness->get_category_by_parentid(intval($d['catid']));
+                $this->Model['CategoryBusiness'] =  $this->loader->model(CategoryBusiness::class,$this);
+                $selectCategorys= yield  $this->Model['CategoryBusiness']->get_category_by_parentid(intval($d['catid']));
                 //$d['body'] = htmlspecialchars_decode($d['body']);
                 parent::templateData('d_content_model',$d);
                 parent::templateData('selectCategorys',$selectCategorys);
                 parent::templateData('token',token('__CONTENT_EDIT__'));
+                unset($id,$d,$selectCategorys);
                 parent::webOrApp(function (){
                     $template = $this->loader->view('app::Admin/content_add_and_edit');
                     $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
                 });
             }else{
+                unset($id,$d);
                 $this->http_output->setHeader('Content-type','text/html;charset=utf-8');
                 $this->http_output->end('参数错误');
             }
@@ -248,21 +248,24 @@ class Content extends Base
         {
             //查找对应文章，验证是否存在
             $id = $this->http_input->postGet('id');
-            $this->ContentModel =  $this->loader->model(ContentModel::class,$this);
-            $d = yield $this->ContentModel->getById(intval($id));
+            $this->Model['ContentModel'] =  $this->loader->model(ContentModel::class,$this);
+            $d = yield $this->Model['ContentModel']->getById(intval($id));
             if($id && $d)
             {
                 //[--start::删除文章{业务逻辑}--]
-                $this->ContentBusiness = $this->loader->model(ContentBusiness::class,$this);
-                $r = yield $this->ContentBusiness->delete_by_id_and_catid($id,$d['catid']);
+                $this->Model['ContentBusiness'] = $this->loader->model(ContentBusiness::class,$this);
+                $r = yield $this->Model['ContentBusiness']->delete_by_id_and_catid($id,$d['catid']);
                 if($r)
                 {
+                    unset($id,$d);
                     parent::httpOutputEnd('文章删除成功.','文章删除失败.',$r);
                 }else{
+                    unset($id,$d,$r);
                     parent::httpOutputTis('ContentBusiness请求失败.');
                 }
                 //[--end::删除文章{业务逻辑}--]
             }else{
+                unset($id,$d);
                 parent::httpOutputTis('id参数错误，或数据不存在.');
             }
         }else{

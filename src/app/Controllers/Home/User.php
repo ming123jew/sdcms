@@ -16,15 +16,9 @@ use Server\CoreBase\ChildProxy;
 class User extends Base
 {
 
-    protected $HomeBusiness;
-    protected $ContentHitsModel;
-    protected $ContentCommentModel;
-
     protected function initialization($controller_name, $method_name)
     {
         parent::initialization($controller_name, $method_name);
-
-
     }
 
     /**
@@ -46,6 +40,7 @@ class User extends Base
                 if($value&&$value['status']==0){$tis = $value['message'];}
             }
             if($tis){
+                unset($family,$result,$key,$value);
                 parent::httpOutputTis($tis);
             }else{
                 //调用数据访问层
@@ -58,8 +53,10 @@ class User extends Base
                     if($value&&$value['status']==0){$tis = $value['message'];}
                 }
                 if($tis){
+                    unset($family,$result,$key,$value);
                     parent::httpOutputTis($tis);
                 }else{
+                    unset($family,$result,$key,$value);
                     parent::httpOutputEnd('登录成功.','登录失败.',true);
                 }
             }
@@ -88,6 +85,7 @@ class User extends Base
                 if($value&&$value['status']==0){$tis = $value['message'];}
             }
             if($tis){
+                unset($family,$result,$key,$value);
                 parent::httpOutputTis($tis);
             }else{
                 //注册成功后
@@ -98,8 +96,10 @@ class User extends Base
                     if($value&&$value['status']==0){$tis = $value['message'];}
                 }
                 if($tis){
+                    unset($family,$result,$key,$value);
                     parent::httpOutputTis($tis);
                 }else{
+                    unset($family,$result,$key,$value);
                     parent::httpOutputEnd('注册成功.','注册失败.',true);
                 }
             }
@@ -238,6 +238,7 @@ class Register implements IUserService{
                 print_r($result);
             }
         }
+        //unset($username,$password,$email,$checkmail,$context,$had);
         return $result;
     }
 

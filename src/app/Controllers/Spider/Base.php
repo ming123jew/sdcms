@@ -62,10 +62,10 @@ class Base extends \app\Controllers\BaseController
     public function __construct(string $proxy = ChildProxy::class)
     {
         parent::__construct($proxy);
-        get_instance()->addAsynPool('WeixinSougouHttpClient',new HttpClientPool($this->config,'http://weixin.sogou.com/'));
-        get_instance()->addAsynPool('MpWeixinHttpClient',new HttpClientPool($this->config,'https://mp.weixin.qq.com/'));
-        $this->WeixinSougouHttpClient =  get_instance()->getAsynPool('WeixinSougouHttpClient');
-        $this->MpWeixinHttpClient =  get_instance()->getAsynPool('MpWeixinHttpClient');
+        //get_instance()->addAsynPool('WeixinSougouHttpClient',new HttpClientPool($this->config,'http://weixin.sogou.com/'));
+        //get_instance()->addAsynPool('MpWeixinHttpClient',new HttpClientPool($this->config,'https://mp.weixin.qq.com/'));
+        //$this->WeixinSougouHttpClient =  get_instance()->getAsynPool('WeixinSougouHttpClient');
+        //$this->MpWeixinHttpClient =  get_instance()->getAsynPool('MpWeixinHttpClient');
         $this->SimpleHtmlDom =new SimpleHtmlDom();
         $this->AMQPMessage =  new AMQPMessage('', ['content_type' => 'text/plain', 'delivery_mode' => 2]);
         $this->AMQPClent =  get_instance()->getAsynPool('AMQP');

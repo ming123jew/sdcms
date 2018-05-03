@@ -81,6 +81,7 @@ class Base extends \app\Controllers\BaseController
     {
         $arr = [$key=>$value];
         $this->TemplateData = array_merge($this->TemplateData,$arr);
+        unset($arr,$key,$value);
     }
 
     /**

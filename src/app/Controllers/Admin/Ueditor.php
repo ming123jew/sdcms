@@ -19,6 +19,7 @@ class Ueditor extends Base{
     /**
      * @param string $controller_name
      * @param string $method_name
+     * @throws \Exception
      */
     protected function initialization($controller_name, $method_name)
     {
@@ -86,17 +87,18 @@ class Ueditor extends Base{
         $callback = $this->http_input->get('callback');
         if ($callback) {
             if (preg_match("/^[\w_]+$/", $callback)) {
+                unset($CONFIG,$action,$callback);
                 $this->http_output->end( htmlspecialchars($_GET["callback"]) . '(' . $result . ')' ) ;
             } else {
+                unset($CONFIG,$action,$callback,$_GET,$result);
                 $this->http_output->end( json_encode(array(
                     'state'=> 'callback参数不合法'
                 )) );
             }
         } else {
+            unset($CONFIG,$action,$callback,$_GET);
             $this->http_output->end($result) ;
         }
-
-
     }
 
 
@@ -176,6 +178,7 @@ class Ueditor extends Base{
 //        }
 
         /* 返回数据 */
+        unset($base64,$action,$config,$fieldName,$up,$thumb,$CONFIG);
         return json_encode($info);
     }
 
@@ -239,9 +242,8 @@ class Ueditor extends Base{
             "start" => $start,
             "total" => count($files)
         ));
-
+        unset($CONFIG,$action,$allowFiles,$listSize,$path,$size,$start,$end,$rootPath,$files,$len,$list);
         return $result;
-
     }
 
     /**
@@ -272,6 +274,7 @@ class Ueditor extends Base{
                 }
             }
         }
+        unset($path, $allowFiles, $handle, $file,$rootPath,$path2);
         return $files;
     }
 
@@ -328,7 +331,7 @@ class Ueditor extends Base{
 //            }
         }
         print_r($list);
-
+        unset($CONFIG,$config,$fieldName,$source,$imgUrl,$item,$info);
         /* 返回抓取数据 */
         return json_encode(array(
             'state'=> count($list) ? 'SUCCESS':'ERROR',

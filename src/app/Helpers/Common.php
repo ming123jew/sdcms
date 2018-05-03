@@ -45,10 +45,11 @@ function session($name, $value = '', $prefix = null)
 
 /**
  * 生成url{全局助手函数}
- * @param $module       module
- * @param $controller   controller
- * @param $method
+ * @param string $module
+ * @param string $controller
+ * @param string $action
  * @param string $params
+ * @return string
  */
 function url($module='',$controller='',$action='', $params='')
 {
@@ -87,16 +88,18 @@ function url($module='',$controller='',$action='', $params='')
 
     $url = $host.substr($url,0,-1);
     $end = $url;
+    unset($module,$controller,$action,$params,$host,$key,$value,$url);
     return  $end;
 
 }
 
 /**
  * 生成请求令牌{全局助手函数}
- * @access public
- * @param string $name 令牌名称
- * @param mixed  $type 令牌生成方法
- * @return string
+ * @param string $name
+ * @param string $type
+ * @param bool $is_ajax
+ * @return mixed
+ * @throws Exception
  */
 function token($name = '__token__', $type = 'md5', $is_ajax=false)
 {
@@ -107,6 +110,7 @@ function token($name = '__token__', $type = 'md5', $is_ajax=false)
         header($name . ': ' . $token);
     }
     Session::set($name, $token);
+    unset($name,$type,$is_ajax);
     return $token;
 }
 
@@ -125,6 +129,7 @@ function set_cache($key,$value,$expire=24*3600)
         'create_time'=>time(),
         'expire_time'=>$expire
     ];
+    unset($value,$expire);
     yield CatCacheRpcProxy::getRpc()->offsetSet($key,$data);
 }
 
@@ -147,7 +152,6 @@ function get_cache($key,$type="data")
             yield CatCacheRpcProxy::getRpc()->offsetUnset($key);
             $result = false;
         }
-
     }else{
         $result = false;
     }
@@ -155,6 +159,7 @@ function get_cache($key,$type="data")
     {
         return $result[$type];
     }else{
+        unset($type);
         return $result;
     }
 
@@ -186,6 +191,7 @@ function get_week($date){
     //自定义星期数组
     $weekArr=array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
     //获取数字对应的星期
+    unset($date,$date_str,$arr,$year,$month,$day,$hour,$strap);
     return $weekArr[$number_wk];
 }
 
@@ -272,8 +278,10 @@ html;
                                 <div style="display: none;"></div>
                             </div>
 html;
+        unset($total,$page,$pageSize,$showPage,$context,$totalPage,$pageOffset,$return_url,$start,$end,$i,$p);
         return  $pageBanner;
     }else{
+        unset($total,$page,$pageSize,$showPage,$context);
         return '';
     }
 
@@ -304,6 +312,7 @@ function http_post_url($remote_server, array $params)
     curl_setopt($ch, CURLOPT_POST, 1);//设置为POST方式
     $data = curl_exec($ch);
     curl_close($ch);
+    unset($remote_server,$params,$ch,$key,$val,$post_string);
     return $data;
 }
 
@@ -333,12 +342,13 @@ function check_role($m,$c,$a,$context,$param=[])
         $model = get_instance()->loader->model(\app\Models\RolePrivModel::class,$context);
         $r =  yield $model->authRole($role_id,$m,$c,$a);
         //print_r('check_role from db \n;');
-        unset($model);
-        unset($lock);
+
         if(!($r))
         {
+            unset($m,$c,$a,$context,$param,$login_info,$role_id,$role_id_priv,$model,$r);
             return false;
         }else{
+            unset($m,$c,$a,$context,$param,$login_info,$role_id,$role_id_priv,$model,$r);
            return true;
         }
     }else{
@@ -355,10 +365,11 @@ function check_role($m,$c,$a,$context,$param=[])
                 }
             }
         }
+        unset($m,$c,$a,$context,$param,$login_info,$role_id,$role_id_priv,$key,$value);
         return $find;
     }
     //print_r($role_id_priv);
-    unset($role_id_priv);
+    unset($m,$c,$a,$context,$param,$login_info,$role_id,$role_id_priv);
     return false;
 }
 
@@ -398,6 +409,7 @@ function get_role_byid($roleid,$context,$flag='__CACHE_ROLE__')
                 continue;
             }
         }
+        unset($roleid,$context,$flag,$cache,$d,$all_role,$m,$d,$key,$value);
         return $find;
     }
     return false;
@@ -418,6 +430,7 @@ function get_modelname_bymodelid($model_id)
         case 2:
             $return = "";break;
     }
+    unset($model_id);
     return $return;
 }
 
@@ -436,6 +449,7 @@ function get_cattype_bymodelid($model_id)
         default :
             $return = "单页";break;
     }
+    unset($model_id);
     return $return;
 }
 
@@ -490,46 +504,6 @@ function get_catname_by_catid(int $catid,$context,$alias='catname')
         }
     }
 
+    unset($catid,$context,$alias,$cache_arr,$key,$value,$model,$r);
     return $find;
-}
-
-
-function http_pool($url,$params){
-    $url_array=parse_url($url);
-    //print_r($url_array);
-    $scheme = $url_array['scheme'].'://';
-    $host=$url_array['host'];
-    $url_port = $url_array['port'] ?? 80;
-    $path = $url_array['path'];
-    $query = isset($url_array['query'])&&!empty($url_array['query']) ? '?'.$url_array['query']:'';
-//        $cli = new \swoole_http_client($scheme.$host, $url_port);
-//        $cli->setHeaders(['User-Agent' => 'swoole','Referer'=>$Referer,'Set-Cookie'=>$SetCookie]);
-//        $cli->get($path.$query, function ($cli) {
-//
-//            print_r($cli->body);
-//            return  $cli->body;
-//        });
-
-    //同步版本
-//        $ci = new HttpClientPool( get_instance()->config,$scheme.$host);
-//        $ci->httpClient->setHeaders(['User-Agent' => 'swoole','Referer'=>$Referer,'Set-Cookie'=>$SetCookie])->execute($path.$query,function ($data){
-//           var_dump($data);
-//        });
-
-
-
-    $ci = new \Server\Asyn\HttpClient\HttpClientPool( get_instance()->config,$scheme.$host);
-    if($params){
-        print_r($params);
-        $data = yield $ci->httpClient
-            ->setHeaders(['User-Agent' => 'swoole'])
-            ->coroutineExecute($path.$query);
-    }else{
-        $data = yield $ci->httpClient
-            ->setHeaders(['User-Agent' => 'swoole'])
-            ->coroutineExecute($path.$query);
-    }
-
-    $data['baseurl'] = $ci->baseUrl;
-    return $data;
 }

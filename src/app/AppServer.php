@@ -49,7 +49,6 @@ class AppServer extends SwooleDistributedServer
     {
         parent::initAsynPools($workerId);
         $this->addAsynPool('AMQP',new AMQP('localhost',5672,'guest','guest'));
-
     }
 
     /**
@@ -62,11 +61,11 @@ class AppServer extends SwooleDistributedServer
         ProcessManager::getInstance()->addProcess(MyProcess::class);
 
         //ProcessManager::getInstance()->addProcess(MyProcess::class,true,1);
-        for ($i=0;$i<5;$i++)
+        for ($i=0;$i<1;$i++)
         {
             ProcessManager::getInstance()->addProcess(MyAMQPTaskProcess::class,true,$i);
         }
-        for ($i=0;$i<5;$i++)
+        for ($i=0;$i<2;$i++)
         {
             ProcessManager::getInstance()->addProcess(SpiderTaskProcess::class,true,$i);
         }

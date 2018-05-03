@@ -81,6 +81,7 @@ class Tree
                 $number++;
             }
         }
+        unset($parent_id,$nstr,$number,$child,$total,$id,$value,$j,$k,$adds,$sid,$nbsp,$str_group,$selected,$spacer);
         return $this->ret;
     }
 
@@ -111,6 +112,7 @@ class Tree
             }
 
         }
+        unset($id,$nstr,$child,$level,$text,$k,$v,$oo);
         return $this->html;
     }
 
@@ -127,6 +129,7 @@ class Tree
                     $newarr[$id] = $a;
             }
         }
+        unset($a,$id,$a);
         return $newarr ? $newarr : false;
     }
 
@@ -143,6 +146,7 @@ class Tree
         foreach ($array as $key => $value) {
             if ($value['id']==$id){
                 if($value['parent_id']==0){
+                    unset($array,$key,$value,$id);
                     return  $i;break;
                 }else{
                     $i++;
@@ -150,7 +154,6 @@ class Tree
                 }
             }
         }
-
     }
 
 }

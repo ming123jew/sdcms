@@ -132,6 +132,7 @@ class BaseController extends Controller
     protected function templateData($key,$value){
         $arr = [$key=>$value];
         $this->TemplateData = array_merge($this->TemplateData,$arr);
+        unset($arr,$key,$value);
     }
 
     protected function resetTempateData(){
@@ -196,9 +197,11 @@ class BaseController extends Controller
         $jsonp = $this->http_input->postGet('jsonpcallback');//get接收jsonp自动生成的函数名
         if($jsonp)
         {
+            unset($success_message,$fail_message,$result);
             $this->http_output->setHeader('Content-Type','application/json');
             $this->http_output->end($jsonp.'(' .json_encode($end).')',$gzip);
         }else{
+            unset($success_message,$fail_message,$result,$jsonp);
             $this->http_output->setHeader('Content-Type','application/json');
             $this->http_output->end(json_encode($end),$gzip);
         }
@@ -218,8 +221,10 @@ class BaseController extends Controller
         ];
         $this->http_output->setHeader('Content-Type','application/json');
         if($json_encode){
+            unset($message,$json,$json_encode);
             $this->http_output->end(json_encode($end),$gzip);
         }else{
+            unset($message,$json,$json_encode);
             $this->http_output->end(($end),$gzip);
         }
 

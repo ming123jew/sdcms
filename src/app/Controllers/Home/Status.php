@@ -21,13 +21,11 @@ class Status extends Base
 
     public function http_index(){
 
-        parent::templateData('test',1);
-
         //初始化页面  清除缓存
         $cache = Cache::getCache('WsCache');
         $key = 'get_log';
         $cache->addMap($key,md5(1));
-        unset($cache);
+        unset($key,$cache);
         //web or app
         parent::webOrApp(function (){
             $template = $this->loader->view('app::Home/status');
@@ -77,8 +75,8 @@ class Status extends Base
             $end = ['type' => 'getlog','fd'=>$this->fd,'message'=>$message];
         }
         //$end = ['type' => 'getlog','fd'=>$this->fd,'message'=>($message)];
-        unset($cache);
-        unset($message);
+
+        unset($log_file,$message,$cache,$key,$md5);
         $this->send($end);
     }
     public function update()
@@ -148,7 +146,6 @@ class Status extends Base
         $string = str_replace(array('[',']'),array('<b>[',']</b>'),$string);
         //给[error]加红色
         $string = str_replace(array('<b>[ERROR]</b>'),array('<b style="color:#b53636;">[ERROR]</b>'),$string);
-
         //给[时间]加分隔
         $patten = "/^\d{4}[\-](0?[1-9]|1[012])[\-](0?[1-9]|[12][0-9]|3[01])(\s+(0?[0-9]|1[0-9]|2[0-3])\:(0?[0-9]|[1-5][0-9])\:(0?[0-9]|[1-5][0-9]))?$/";//未实现
 
@@ -186,6 +183,7 @@ class Status extends Base
             $num--;
         }
         fclose($fp);
+        unset($fp,$pos,$eof,$head,$num);
         return $lines;
     }
 
