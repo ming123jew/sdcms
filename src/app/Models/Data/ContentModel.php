@@ -145,7 +145,7 @@ class ContentModel extends BaseModel
     public function getByFlag(string $flag='p',int $start=0,int $end=9,int $catid=0,int $status=0,$fields='*')
     {
         //FIND_IN_SET();
-        $m = $this->loader->model('ContentHitsModel',$this);
+        $m = $this->loader->model(ContentHitsModel::class,$this);
         if($catid!=0){
             $sql = "select {$fields} from {$this->getTable()} a left join  {$m->getTable()} b on a.id=b.content_id  where a.catid={$catid} and FIND_IN_SET('{$flag}',a.flag) and a.status={$status} order by a.id desc limit {$start},{$end} ";
         }else{
@@ -186,7 +186,7 @@ class ContentModel extends BaseModel
                 $where = "";
             }
         }
-        $m = $this->loader->model('ContentHitsModel',$this);
+        $m = $this->loader->model(ContentHitsModel::class,$this);
         $join = " left join {$m->getTable()} as b on a.id=b.content_id ";
         //FIND_IN_SET();
         if($catid!=0){

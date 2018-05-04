@@ -34,7 +34,7 @@ class Main extends Base
     protected function initialization($controller_name, $method_name)
     {
         parent::initialization($controller_name, $method_name);
-        $this->Model['BaseModel'] = $this->loader->model('BaseModel', $this);
+        //$this->Model['BaseModel'] = $this->loader->model('BaseModel', $this);
     }
 
     public function http_index(){

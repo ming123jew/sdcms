@@ -36,6 +36,7 @@ Purchase: http://wrapbootstrap.com
             line-height: 38px;
         }
     </style>
+    <?php $this->insert('app::Home/head',['data'=>$data]) ?>
 </head>
 <!--Head Ends-->
 <!--Body-->

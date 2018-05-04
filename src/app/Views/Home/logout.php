@@ -43,6 +43,7 @@ Purchase: http://wrapbootstrap.com
 
     <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
     <script src="assets/js/skins.min.js"></script>
+    <?php $this->insert('app::Home/head',['data'=>$data]) ?>
 </head>
 <!--Head Ends-->
 <!--Body-->

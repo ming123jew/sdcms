@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50635
 File Encoding         : 65001
 
-Date: 2018-04-18 18:01:45
+Date: 2018-05-04 15:57:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -46,7 +46,7 @@ CREATE TABLE `sd_admin_menu` (
 -- ----------------------------
 -- Records of sd_admin_menu
 -- ----------------------------
-INSERT INTO `sd_admin_menu` VALUES ('1', '0', 'Admin', 'System', '#', '', '0', '1', '系统设置', 'menu-icon glyphicon glyphicon-tasks', '', '0', null, '0', null, null, null);
+INSERT INTO `sd_admin_menu` VALUES ('1', '0', 'Admin', 'System', '##', '', '0', '1', '系统设置', 'menu-icon glyphicon glyphicon-tasks', '', '0', null, '0', null, null, '');
 INSERT INTO `sd_admin_menu` VALUES ('2', '1', 'Admin', 'System', 'config', '', '0', '1', '基本设置', null, '', '0', null, '0', null, null, null);
 INSERT INTO `sd_admin_menu` VALUES ('3', '1', 'Admin', 'System', 'menu', '', '0', '1', '后台菜单', null, '', '0', null, '0', null, null, null);
 INSERT INTO `sd_admin_menu` VALUES ('4', '0', 'Admin', 'User', '#', '', '0', '1', '用户管理', 'menu-icon fa fa-user', '', '0', null, '0', null, null, 'User,Role');
@@ -116,7 +116,7 @@ CREATE TABLE `sd_admin_role_priv` (
 -- ----------------------------
 -- Records of sd_admin_role_priv
 -- ----------------------------
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '1', 'Admin', 'System', '#', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '1', 'Admin', 'System', '##', '');
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '2', 'Admin', 'System', 'config', '');
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '3', 'Admin', 'System', 'menu', '');
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '9', 'Admin', 'System', 'menu_add', '');
@@ -502,7 +502,7 @@ INSERT INTO `sd_content` VALUES ('16', '2', 'golang安装与运行环境', '', '
 INSERT INTO `sd_content` VALUES ('17', '2', 'golang环境变量', '', '', '', 'ming', '1523843534', '1523843534', '0', '', '<h1>2.2 Go 环境变量</h1><p>Go 开发环境依赖于一些操作系统环境变量，你最好在安装 Go 之间就已经设置好他们。如果你使用的是 Windows 的话，你完全不用进行手动设置，Go 将被默认安装在目录 <code>c:/go</code> 下。这里列举几个最为重要的环境变量：</p><ul class=\" list-paddingleft-2\"><li><p>$GOROOT 表示 Go 在你的电脑上的安装位置，它的值一般都是 <code>$HOME/go</code>，当然，你也可以安装在别的地方。</p></li><li><p>$GOARCH 表示目标机器的处理器架构，它的值可以是 386、amd64 或 arm。</p></li><li><p>$GOOS 表示目标机器的操作系统，它的值可以是 darwin、freebsd、linux 或 windows。</p></li><li><p>$GOBIN 表示编译器和链接器的安装位置，默认是 <code>$GOROOT/bin</code>，如果你使用的是 Go 1.0.3 及以后的版本，一般情况下你可以将它的值设置为空，Go 将会使用前面提到的默认值。</p></li></ul><p>目标机器是指你打算运行你的 Go 应用程序的机器。</p><p>Go 编译器支持交叉编译，也就是说你可以在一台机器上构建运行在具有不同操作系统和处理器架构上运行的应用程序，也就是说编写源代码的机器可以和目标机器有完全不同的特性（操作系统与处理器架构）。</p><p>为了区分本地机器和目标机器，你可以使用 <code>$GOHOSTOS</code> 和 <code>$GOHOSTARCH</code> 设置目标机器的参数，这两个变量只有在进行交叉编译的时候才会用到，如果你不进行显示设置，他们的值会和本地机器（<code>$GOOS</code> 和 <code>$GOARCH</code>）一样。</p><ul class=\" list-paddingleft-2\"><li><p>$GOPATH 默认采用和 <code>$GOROOT</code> 一样的值，但从 Go 1.1 版本开始，你必须修改为其它路径。它可以包含多个包含 Go 语言源码文件、包文件和可执行文件的路径，而这些路径下又必须分别包含三个规定的目录：<code>src</code>、<code>pkg</code> 和 <code>bin</code>，这三个目录分别用于存放源码文件、包文件和可执行文件。</p></li><li><p>$GOARM 专门针对基于 arm 架构的处理器，它的值可以是 5 或 6，默认为 6。</p></li><li><p>$GOMAXPROCS 用于设置应用程序可使用的处理器个数与核数，详见第 14.1.3 节。</p></li></ul><p>在接下来的章节中，我们将会讨论如何在 Linux、Mac OS X 和 Windows 上安装 Go 语言。在 FreeBSD 上的安装和 Linux 非常类似。开发团队正在尝试将 Go 语言移植到其它例如 OpenBSD、DragonFlyBSD、NetBSD、Plan 9、Haiku 和 Solaris 操作系统上，你可以在这个页面找到最近的动态：<a href=\"http://go-lang.cat-v.org/os-ports\">Go Porting Efforts</a>。</p><p><br/></p>', '本站', 'r');
 INSERT INTO `sd_content` VALUES ('18', '2', '热修改mysql数据库pt-online-schema-change 的使用详解', '/uploads/images/20180412/thumb_1523517121309408.jpg', 'mysql', '', 'ming', '1523956382', '1523956382', '0', '', '&lt;p&gt;由于周五公司团建的关系所以此篇推迟了抱歉。&lt;/p&gt;&lt;p&gt;首先不得不在该篇里面梳理一个数据库热增加删除字段表的工具pt-online-schema-change这个工具在前面我的博文 《&lt;a class=&quot;link-post-title&quot; href=&quot;http://www.cnblogs.com/piperck/p/5083433.html&quot;&gt;关于utf8mb4的学习了解笔记&lt;/a&gt;》里面有提到过，他是一个online的ddl(data definition language)工具。由于mysql 的ddl语句在执行的时候会锁表，在数据量大的情况下锁表就会严重影响正常的数据写入。&lt;/p&gt;&lt;p&gt;既然都说到这里了，也总结一下我在网上查到的innodb在ddl的时候所执行的操作：&lt;/p&gt;&lt;p&gt;1. 按照原始表(original_table)的表结构和ddl语句，新建一个不可见的临时表(temporary_table)&lt;/p&gt;&lt;p&gt;2. 在原表上面加上WRITE LOCK,阻塞所有的更新操作(insert、delete、update等操作)&lt;/p&gt;&lt;p&gt;3. 执行insert into tmp_table select * from original_table&lt;/p&gt;&lt;p&gt;4. rename original_table和tmp_table,最后drop original_table&lt;/p&gt;&lt;p&gt;5. 最后释放掉write lock&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;通过以上的步骤我们可以很容易的发现，这样操作在表锁定的情况是只能查询，不能写入。为了解决这个问题所以PERCONA公司推出了一个不会阻塞的工具pt-online-schema-change。&lt;/p&gt;&lt;p&gt;这里不得不再次介绍一下pt-online-schema-change是怎么做到在不阻塞写入的情况下改动数据库的：&lt;/p&gt;&lt;p&gt;1. 首先创建一个和你要执行的alter操作的表一样的空的表结构。&lt;/p&gt;&lt;p&gt;2. 执行我们赋予的表结构的修改，然后copy原表中的数据到新表里面。&lt;/p&gt;&lt;p&gt;3. 在原表上创建一个触发器在数据copy的过程中，将原表的更新数据的操作全部更新到新的表中来。 这里特别注意一下，如果原表中已经定义了触发器那么工具就不能工作了。&lt;/p&gt;&lt;p&gt;4. copy完成之后，用rename table 新表代替原表，默认删除原表。&lt;/p&gt;&lt;p&gt;了解了原理之后，理解起来就似乎不那么困难了。感觉这些问题也并不是什么高大上的问题了。下面看看具体使用&lt;/p&gt;&lt;pre&gt;pt-online-schema-change h=ip_address,u=user_name,D=database,t=table --alter &quot;add column shop_id int(11) DEFAULT NULL &quot; --set-vars --lock-wait-timeout=3 --ask-pass --execute&lt;/pre&gt;&lt;p&gt;以上就是大致语法，这里来介绍几个参数：&lt;/p&gt;&lt;p&gt;--set-vars:&lt;/p&gt;&lt;ul class=&quot;option list-paddingleft-2&quot;&gt;&lt;li&gt;&lt;p&gt;type: string; default: wait_timeout=10000&lt;/p&gt;&lt;p&gt;Set these MySQL variables. Immediately after connecting to MySQL, this string will be appended to SET and executed.&lt;/p&gt;&lt;p&gt;字符串类型，在链接到mysql之后立即设置mysql变量，这个变量会给展示这些设置和执行。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;ul class=&quot;option list-paddingleft-2&quot;&gt;&lt;li&gt;&lt;p&gt;&lt;tt&gt;--lock-wait-timeout：&lt;/tt&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;ul class=&quot;option list-paddingleft-2&quot;&gt;&lt;li&gt;&lt;p&gt;type: int; default: 1&lt;/p&gt;&lt;p&gt;Set the session value of &lt;tt&gt;innodb_lock_wait_timeout&lt;/tt&gt;. This option helps guard against long lock waits if the data-copy queries become slow for some reason. Setting this option dynamically requires the InnoDB plugin, so this works only on newer InnoDB and MySQL versions. If the setting’s current value is greater than the specified value, and the tool cannot set the value as desired, then it prints a warning. If the tool cannot set the value but the current value is less than or equal to the desired value, there is no error.&lt;/p&gt;&lt;p&gt;类型int，默认值是1秒&lt;/p&gt;&lt;p&gt;设置一个session值为innodb_lock_wait_timeout.这个选项帮助你防止一个长时间的锁等待，这种情况一般会发生在比如说数据拷贝的时候，变得非常慢。设置这个选项需要innodb的插件，所以要innodb引擎和mysql比较新。如果设置的这个值比需要的值大，而且这个工具不能设置为一个需要值的话，就会报出warning。反之如果工具不能设置这个值，但是这个值又比所需要的值小的话，就不会发生什么。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;--ask-for:&lt;/p&gt;&lt;p&gt;在连接数据库的时候提示输入密码。&lt;/p&gt;&lt;p&gt;--execute参数&lt;/p&gt;&lt;p&gt;只有加了这个参数，才会去真正执行添加触发器拷贝数据等一系列操作。&lt;/p&gt;&lt;p&gt;其他想要了解更加相信的信息可以访问这个文档&lt;a href=&quot;https://www.percona.com/doc/percona-toolkit/2.1/pt-online-schema-change.html&quot;&gt;https://www.percona.com/doc/percona-toolkit/2.1/pt-online-schema-change.html&lt;/a&gt; 这是官方文档，基本上疑问都可以从这里得到解答。&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;以上。&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;', '本站', 'p,r');
 INSERT INTO `sd_content` VALUES ('19', '2', 'MYSQL性能优化之分库分表与不停机修改mysql表结构', '/uploads/images/20180412/thumb_1523517109971640.jpg', 'mysql 分库 分表 ', '', 'ming', '1523951235', '1523951235', '0', '', '&lt;p&gt;MYSQL性能优化之分库分表与不停机修改mysql表结构，需要的朋友可以参考下&lt;br/&gt;&lt;br/&gt;*1、分库分表*&lt;br/&gt;&lt;br/&gt;很明显，一个主表（也就是很重要的表，例如用户表）无限制的增长势必严重影响&lt;br/&gt;性能，分库与分表是一个很不错的解决途径，也就是性能优化途径，现在的案例是&lt;br/&gt;我们有一个1000多万条记录的用户表members,查询起来非常之慢，同事的做法是将&lt;br/&gt;其散列到100个表中，分别从members0到members99，然后根据mid分发记录到这些&lt;br/&gt;表中，牛逼的代码大概是这样子：&lt;br/&gt;&lt;br/&gt;&amp;lt;?php&lt;br/&gt;for($i=0;$i&lt; 100; $i   ){&lt;br/&gt;//echo &quot;CREATE TABLE db2.members{$i} LIKE db1.members&lt;br/&gt;&quot;;&lt;br/&gt;echo &quot;INSERT INTO members{$i} SELECT * FROM members WHERE&lt;br/&gt;mid0={$i}&lt;br/&gt;&quot;;&lt;br/&gt;}&lt;br/&gt;?&amp;gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;*2、不停机修改mysql表结构*&lt;br/&gt;&lt;br/&gt;同样还是members表，前期设计的表结构不尽合理，随着数据库不断运行，其冗余&lt;br/&gt;数据也是增长巨大，同事使用了下面的方法来处理：&lt;br/&gt;&lt;br/&gt;先创建一个临时表：&lt;br/&gt;/*创建临时表*/&lt;br/&gt;CREATE TABLE members_tmp LIKE members&lt;br/&gt;&lt;br/&gt;然后修改members_tmp的表结构为新结构，接着使用上面那个for循环来导出数据，&lt;br/&gt;因为1000万的数据一次性导出是不对的，mid是主键，一个区间一个区间的导，基&lt;br/&gt;本是一次导出5万条吧，这里略去了。&lt;br/&gt;接着重命名将新表替换上去：&lt;br/&gt;&lt;br/&gt;/*这是个颇为经典的语句哈*/&lt;br/&gt;RENAME TABLE members TO members_bak,members_tmp TO members;&lt;br/&gt;&lt;br/&gt;就是这样，基本可以做到无损失，无需停机更新表结构，但实际上RENAME期间表是&lt;br/&gt;被锁死的，所以选择在线少的时候操作是一个技巧。经过这个操作，使得原先8G多&lt;br/&gt;的表，一下子变成了2G多。&lt;br/&gt;&lt;br/&gt;另外还讲到了mysql中float字段类型的时候出现的诡异现象，就是在pma(phpmyadmin)中看到的&lt;br/&gt;数字根本不能作为条件来查询。&lt;/p&gt;', '本站', 'p');
-INSERT INTO `sd_content` VALUES ('20', '2', 'PHP 装饰器模式', '', 'PHP 装饰器 模式', '', 'ming', '1523956274', '1523956274', '0', '', '&lt;p&gt;1.装饰器模式（Decorator），可以动态地添加修改类的功能&lt;br/&gt;2.一个类提供了一项功能，如果要在修改并添加额外的功能，传统的编程模式，需要写一个子类继承它，并重新实现类的方法&lt;br/&gt;3.使用装饰器模式，仅需在运行时添加一个装饰器对象即可实现，可以实现最大的灵活性&lt;/p&gt;&lt;pre class=&quot;brush:php;toolbar:false;&quot;&gt;&amp;lt;?php\r\n\r\n/**\r\n * 输出一个字符串\r\n * 装饰器动态添加功能\r\n * Class EchoText\r\n */\r\nclass EchoText\r\n{\r\n    protected $decorator = [];\r\n\r\n    public function Index()\r\n    {\r\n        //调用装饰器前置操作\r\n        $this-&gt;beforeEcho();\r\n        echo &quot;你好，我是装饰器。&quot;;\r\n        //调用装饰器后置操作\r\n        $this-&gt;afterEcho();\r\n    }\r\n\r\n    //增加装饰器\r\n    public function addDecorator(Decorator $decorator)\r\n    {\r\n        $this-&gt;decorator[] = $decorator;\r\n    }\r\n\r\n    //执行装饰器前置操作 先进先出原则\r\n    protected function beforeEcho()\r\n    {\r\n        foreach ($this-&gt;decorator as $decorator)\r\n            $decorator-&gt;before();\r\n    }\r\n\r\n    //执行装饰器后置操作 先进后出原则\r\n    protected function afterEcho()\r\n    {\r\n        $tmp = array_reverse($this-&gt;decorator);\r\n        foreach ($tmp as $decorator)\r\n            $decorator-&gt;after();\r\n    }\r\n}\r\n\r\n\r\n/**\r\n * 装饰器接口\r\n * Class Decorator\r\n */\r\ninterface Decorator\r\n{\r\n    public function before();\r\n\r\n    public function after();\r\n}\r\n\r\n/**\r\n * 颜色装饰器实现\r\n * Class ColorDecorator\r\n */\r\nclass ColorDecorator implements Decorator\r\n{\r\n    protected $color;\r\n\r\n    public function __construct($color)\r\n    {\r\n        $this-&gt;color = $color;\r\n    }\r\n\r\n    public function before()\r\n    {\r\n        echo &quot;accc{$this-&gt;color}&quot;;\r\n    }\r\n\r\n    public function after()\r\n    {\r\n        echo &quot;abc&quot;;\r\n    }\r\n}\r\n\r\n//实例化输出类\r\n$echo = new EchoText();\r\n//增加装饰器\r\n$echo-&gt;addDecorator(new ColorDecorator(&#039;red&#039;));\r\n//增加装饰器\r\n$echo-&gt;addDecorator(new SizeDecorator(&#039;22&#039;));\r\n//输出\r\n$echo-&gt;Index();&lt;/pre&gt;&lt;p&gt;&lt;span class=&quot;cnblogs_code_copy&quot;&gt;&lt;a title=&quot;复制代码&quot;&gt;&lt;/a&gt;&lt;/span&gt;&lt;br/&gt;&lt;/p&gt;', '本站', '');
+INSERT INTO `sd_content` VALUES ('20', '2', 'PHP 装饰器模式', '/uploads/images/20180503/thumb_1525331034509435.jpg', 'PHP 装饰器 模式', '', 'ming', '1525331101', '1525331101', '0', '', '&lt;p&gt;1.装饰器模式（Decorator），可以动态地添加修改类的功能&lt;br/&gt;2.一个类提供了一项功能，如果要在修改并添加额外的功能，传统的编程模式，需要写一个子类继承它，并重新实现类的方法&lt;br/&gt;3.使用装饰器模式，仅需在运行时添加一个装饰器对象即可实现，可以实现最大的灵活性&lt;/p&gt;&lt;pre class=&quot;brush:php;toolbar:false;&quot;&gt;&amp;lt;?php\r\n\r\n/**\r\n * 输出一个字符串\r\n * 装饰器动态添加功能\r\n * Class EchoText\r\n */\r\nclass EchoText\r\n{\r\n    protected $decorator = [];\r\n\r\n    public function Index()\r\n    {\r\n        //调用装饰器前置操作\r\n        $this-&gt;beforeEcho();\r\n        echo &quot;你好，我是装饰器。&quot;;\r\n        //调用装饰器后置操作\r\n        $this-&gt;afterEcho();\r\n    }\r\n\r\n    //增加装饰器\r\n    public function addDecorator(Decorator $decorator)\r\n    {\r\n        $this-&gt;decorator[] = $decorator;\r\n    }\r\n\r\n    //执行装饰器前置操作 先进先出原则\r\n    protected function beforeEcho()\r\n    {\r\n        foreach ($this-&gt;decorator as $decorator)\r\n            $decorator-&gt;before();\r\n    }\r\n\r\n    //执行装饰器后置操作 先进后出原则\r\n    protected function afterEcho()\r\n    {\r\n        $tmp = array_reverse($this-&gt;decorator);\r\n        foreach ($tmp as $decorator)\r\n            $decorator-&gt;after();\r\n    }\r\n}\r\n\r\n\r\n/**\r\n * 装饰器接口\r\n * Class Decorator\r\n */\r\ninterface Decorator\r\n{\r\n    public function before();\r\n\r\n    public function after();\r\n}\r\n\r\n/**\r\n * 颜色装饰器实现\r\n * Class ColorDecorator\r\n */\r\nclass ColorDecorator implements Decorator\r\n{\r\n    protected $color;\r\n\r\n    public function __construct($color)\r\n    {\r\n        $this-&gt;color = $color;\r\n    }\r\n\r\n    public function before()\r\n    {\r\n        echo &quot;accc{$this-&gt;color}&quot;;\r\n    }\r\n\r\n    public function after()\r\n    {\r\n        echo &quot;abc&quot;;\r\n    }\r\n}\r\n\r\n//实例化输出类\r\n$echo = new EchoText();\r\n//增加装饰器\r\n$echo-&gt;addDecorator(new ColorDecorator(&#039;red&#039;));\r\n//增加装饰器\r\n$echo-&gt;addDecorator(new SizeDecorator(&#039;22&#039;));\r\n//输出\r\n$echo-&gt;Index()&lt;/pre&gt;&lt;p&gt;&lt;span class=&quot;cnblogs_code_copy&quot;&gt;&lt;a title=&quot;复制代码&quot;&gt;&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;', '本站', '');
 
 -- ----------------------------
 -- Table structure for `sd_content_comment`
@@ -521,7 +521,7 @@ CREATE TABLE `sd_content_comment` (
   `catid` int(11) NOT NULL,
   `status` tinyint(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_content_comment
@@ -532,6 +532,7 @@ INSERT INTO `sd_content_comment` VALUES ('3', '18', '1523872211', '9999999999999
 INSERT INTO `sd_content_comment` VALUES ('4', '18', '1523872249', '胜多负少的', 'ming', '0', null, '热修改mysql数据库pt-online-schema-change 的使用详解', 'ming@qq.com', '0', '0');
 INSERT INTO `sd_content_comment` VALUES ('5', '18', '1523872251', '胜多负少的', 'ming', '0', null, '热修改mysql数据库pt-online-schema-change 的使用详解', 'ming@qq.com', '0', '0');
 INSERT INTO `sd_content_comment` VALUES ('8', '20', '1523957204', '内容不错\n有没有其他模式的例子~', 'mingk', '0', null, 'PHP 装饰器模式', 'ming@qq.com', '0', '0');
+INSERT INTO `sd_content_comment` VALUES ('9', '20', '1524475179', '性能分表。。', 'ming23', '0', null, 'PHP 装饰器模式', '799871365@qq.com', '2', '0');
 
 -- ----------------------------
 -- Table structure for `sd_content_hits`
@@ -552,26 +553,26 @@ CREATE TABLE `sd_content_hits` (
 -- ----------------------------
 -- Records of sd_content_hits
 -- ----------------------------
-INSERT INTO `sd_content_hits` VALUES ('1', '1', '0', '0', '0', '0', '0', '1520585025', '0');
+INSERT INTO `sd_content_hits` VALUES ('1', '1', '2', '0', '2', '2', '2', '1525270099', '0');
 INSERT INTO `sd_content_hits` VALUES ('2', '1', '0', '0', '0', '0', '0', '1520585093', '0');
 INSERT INTO `sd_content_hits` VALUES ('3', '1', '0', '0', '0', '0', '0', '1520585238', '0');
 INSERT INTO `sd_content_hits` VALUES ('4', '1', '0', '0', '0', '0', '0', '1520819382', '0');
-INSERT INTO `sd_content_hits` VALUES ('5', '2', '15', '14', '1', '15', '15', '1523946670', '1');
+INSERT INTO `sd_content_hits` VALUES ('5', '2', '16', '14', '1', '1', '1', '1525265218', '2');
 INSERT INTO `sd_content_hits` VALUES ('6', '1', '0', '0', '0', '0', '0', '1522392308', '0');
-INSERT INTO `sd_content_hits` VALUES ('7', '1', '3', '0', '3', '3', '3', '1524045277', '0');
+INSERT INTO `sd_content_hits` VALUES ('7', '1', '5', '0', '2', '2', '5', '1524994964', '0');
 INSERT INTO `sd_content_hits` VALUES ('8', '1', '5', '0', '5', '5', '5', '1523591119', '0');
 INSERT INTO `sd_content_hits` VALUES ('9', '1', '2', '0', '2', '2', '2', '1523958187', '0');
 INSERT INTO `sd_content_hits` VALUES ('10', '1', '2', '0', '2', '2', '2', '1523958169', '0');
-INSERT INTO `sd_content_hits` VALUES ('11', '1', '0', '0', '0', '0', '0', '1523431705', '0');
-INSERT INTO `sd_content_hits` VALUES ('12', '1', '0', '0', '0', '0', '0', '1523432173', '0');
-INSERT INTO `sd_content_hits` VALUES ('13', '1', '0', '0', '0', '0', '0', '1523432314', '0');
-INSERT INTO `sd_content_hits` VALUES ('14', '1', '0', '0', '0', '0', '0', '1523432467', '0');
+INSERT INTO `sd_content_hits` VALUES ('11', '1', '6', '0', '6', '6', '6', '1524222525', '0');
+INSERT INTO `sd_content_hits` VALUES ('12', '1', '12', '0', '2', '2', '2', '1525265267', '0');
+INSERT INTO `sd_content_hits` VALUES ('13', '1', '1348', '0', '5', '1327', '1327', '1525409718', '1');
+INSERT INTO `sd_content_hits` VALUES ('14', '1', '43', '0', '35', '35', '35', '1525276539', '0');
 INSERT INTO `sd_content_hits` VALUES ('15', '2', '2', '0', '2', '2', '2', '1523863694', '0');
 INSERT INTO `sd_content_hits` VALUES ('16', '2', '2', '0', '2', '2', '2', '1523863762', '0');
-INSERT INTO `sd_content_hits` VALUES ('17', '2', '5', '2', '3', '5', '5', '1523957846', '0');
-INSERT INTO `sd_content_hits` VALUES ('18', '2', '24', '1', '10', '24', '24', '1524038271', '1');
-INSERT INTO `sd_content_hits` VALUES ('19', '2', '907', '21', '5', '96', '907', '1524020672', '3');
-INSERT INTO `sd_content_hits` VALUES ('20', '2', '37', '28', '9', '37', '37', '1524045670', '2');
+INSERT INTO `sd_content_hits` VALUES ('17', '2', '8', '2', '3', '3', '3', '1525269934', '1');
+INSERT INTO `sd_content_hits` VALUES ('18', '2', '29', '3', '2', '5', '5', '1525335961', '1');
+INSERT INTO `sd_content_hits` VALUES ('19', '2', '1675', '20', '735', '766', '766', '1525420674', '3');
+INSERT INTO `sd_content_hits` VALUES ('20', '2', '68', '4', '15', '15', '15', '1525273982', '2');
 
 -- ----------------------------
 -- Table structure for `sd_log`
@@ -5597,7 +5598,7 @@ CREATE TABLE `sd_tags` (
   `content_id` int(11) NOT NULL,
   `ucwords` char(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_tags
@@ -5624,9 +5625,6 @@ INSERT INTO `sd_tags` VALUES ('99', 'mysql', '19', '');
 INSERT INTO `sd_tags` VALUES ('100', '分库', '19', 'F');
 INSERT INTO `sd_tags` VALUES ('101', '分表', '19', 'F');
 INSERT INTO `sd_tags` VALUES ('102', '', '19', '');
-INSERT INTO `sd_tags` VALUES ('130', 'PHP', '20', '');
-INSERT INTO `sd_tags` VALUES ('131', '装饰器', '20', 'Z');
-INSERT INTO `sd_tags` VALUES ('132', '模式', '20', 'M');
 INSERT INTO `sd_tags` VALUES ('134', 'mysql', '18', '');
 INSERT INTO `sd_tags` VALUES ('138', 'golang', '15', '');
 INSERT INTO `sd_tags` VALUES ('139', '特性', '15', 'T');
@@ -5639,6 +5637,9 @@ INSERT INTO `sd_tags` VALUES ('147', '岁月', '11', 'S');
 INSERT INTO `sd_tags` VALUES ('148', '爱', '10', 'A');
 INSERT INTO `sd_tags` VALUES ('149', '繁花', '10', 'F');
 INSERT INTO `sd_tags` VALUES ('150', '春天', '10', 'C');
+INSERT INTO `sd_tags` VALUES ('157', 'PHP', '20', '');
+INSERT INTO `sd_tags` VALUES ('158', '装饰器', '20', 'Z');
+INSERT INTO `sd_tags` VALUES ('159', '模式', '20', 'M');
 
 -- ----------------------------
 -- Table structure for `sd_task_log`
@@ -5672,7 +5673,7 @@ CREATE TABLE `sd_user` (
   `email` varchar(60) NOT NULL,
   `roleid` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_user
@@ -5681,6 +5682,7 @@ INSERT INTO `sd_user` VALUES ('1', 'ming', '123456', '0', '1', '0', 'ming@163.co
 INSERT INTO `sd_user` VALUES ('2', 'ming2', '123456', '0', '1', '0', 'ming2@163.com', '0');
 INSERT INTO `sd_user` VALUES ('3', 'ming3', '123456', '0', '1', '0', 'ming3@163.com', '0');
 INSERT INTO `sd_user` VALUES ('4', 'ming4', '123456', '0', '1', '0', 'ming4@163.com', '0');
+INSERT INTO `sd_user` VALUES ('6', 'ming23', '123456', '1524474021', '1', '0', '799871365@qq.com', '0');
 
 -- ----------------------------
 -- Table structure for `sd_wx_user`

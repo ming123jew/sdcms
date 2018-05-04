@@ -35,6 +35,9 @@ Purchase: http://wrapbootstrap.com
 
     <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
     <script src="assets/js/skins.min.js"></script>
+    <script>
+        window.location.href='<?php echo url('','Content','content_list');?>';
+    </script>
 </head>
 <!-- /Head -->
 <!-- Body -->

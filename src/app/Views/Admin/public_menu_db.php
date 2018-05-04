@@ -187,63 +187,66 @@
         }
     }
     var html = '';
-    Ajax.post("<?php echo url('Admin','Main','ajaxgetmenu');?>",{},function (json) {
-        var json = eval('('+json+')');
-        if(json.status==1){
-            var jsonData = json.data;
-            var one_active = '';
-            var two_active = '';
-            var controller = '<?php echo ucwords($data['__C__']); ?>';
-            var controller2 = '<?php echo strtolower($data['__C__']); ?>';//子菜单模糊查找，包含了其字样 则active
-            var action = '<?php echo ($data['__A__']); ?>';
-            for(var i = 0; i < jsonData.length; i++){
-                //一级目录
+    window.onload = function (ev) {
+        $.post("<?php echo url('Admin','Main','ajaxgetmenu');?>",{},function (json) {
+            //var json = eval('('+json+')');
+            if(json.status==1){
+                var jsonData = json.data;
+                var one_active = '';
+                var two_active = '';
+                var controller = '<?php echo ucwords($data['__C__']); ?>';
+                var controller2 = '<?php echo strtolower($data['__C__']); ?>';//子菜单模糊查找，包含了其字样 则active
+                var action = '<?php echo ($data['__A__']); ?>';
+                for(var i = 0; i < jsonData.length; i++){
+                    //一级目录
 
-                if(jsonData[i].a=='#'){
+                    if(jsonData[i].a=='#'){
 
-                    //查看是否设置了菜单多控制器分类
-                    if(jsonData[i].cc){
-                        if(jsonData[i].cc.split(',').contains(controller)){one_active='class = "active open"'; }else{one_active='';}
-                    }else{
-                        if(jsonData[i].c==controller){one_active='class = "active open"'; }else{one_active='';}
-                    }
-                    html +='<li '+one_active+'>';
-                    html += '<a href="'+jsonData[i].url+'" class="menu-dropdown">';
-                    html +='<i class="'+jsonData[i].icon+'"></i>';
-                    html +='<span class="menu-text"> '+jsonData[i].name+' </span>';
-                    html +='<i class="menu-expand"></i>';
-                    html +='</a>';
-                    //console.log(jsonData[i].subset)
-                    var subset = jsonData[i].subset;
-                    //console.log(subset.length);
-                    //判断是否有子菜单
-                    if(subset.length>0){
-                        html +='<ul class="submenu">';
-                        for (var n=0; n<subset.length;n++){
-                            if(action==subset[n].a){
-                                two_active='class = "active"';
-                            }else if( subset[n].a.indexOf(controller2)!=-1 ){
-                                two_active='class = "active"';
-                            }else{
-                                two_active='';
-                            }
-                            html +='<li '+two_active+'>';
-                            html +='<a href="'+subset[n].url+'">';
-                            html +='<span class="menu-text">'+subset[n].name+'</span>';
-                            html +='</a>';
+                        //查看是否设置了菜单多控制器分类
+                        if(jsonData[i].cc){
+                            if(jsonData[i].cc.split(',').contains(controller)){one_active='class = "active open"'; }else{one_active='';}
+                        }else{
+                            if(jsonData[i].c==controller){one_active='class = "active open"'; }else{one_active='';}
                         }
-                        html +='</ul>';
+                        html +='<li '+one_active+'>';
+                        html += '<a href="'+jsonData[i].url+'" class="menu-dropdown">';
+                        html +='<i class="'+jsonData[i].icon+'"></i>';
+                        html +='<span class="menu-text"> '+jsonData[i].name+' </span>';
+                        html +='<i class="menu-expand"></i>';
+                        html +='</a>';
+                        //console.log(jsonData[i].subset)
+                        var subset = jsonData[i].subset;
+                        //console.log(subset.length);
+                        //判断是否有子菜单
+                        if(subset.length>0){
+                            html +='<ul class="submenu">';
+                            for (var n=0; n<subset.length;n++){
+                                if(action==subset[n].a){
+                                    two_active='class = "active"';
+                                }else if( subset[n].a.indexOf(controller2)!=-1 ){
+                                    two_active='class = "active"';
+                                }else{
+                                    two_active='';
+                                }
+                                html +='<li '+two_active+'>';
+                                html +='<a href="'+subset[n].url+'">';
+                                html +='<span class="menu-text">'+subset[n].name+'</span>';
+                                html +='</a>';
+                            }
+                            html +='</ul>';
+                        }
+
+                        html +='</li>';
                     }
 
-                    html +='</li>';
                 }
-
+                console.log(html);
+                document.getElementById('menu').innerHTML = html;
+            }else{
+                console.log(json.status)
             }
-            console.log(html);
-            document.getElementById('menu').innerHTML = html;
-        }else{
-            console.log(json.status)
-        }
 
-    });
+        });
+    }
+
 </script>
