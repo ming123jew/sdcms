@@ -74,7 +74,6 @@ class Base extends \app\Controllers\BaseController
      * @return bool
      */
     protected function check_login(){
-        print_r("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         $obj = new \stdClass();
         $obj->http_output = $this->http_output;
         $obj->http_input = $this->http_input;
@@ -98,7 +97,10 @@ class Base extends \app\Controllers\BaseController
      * @return array | bool
      */
     protected function get_login_session(){
-        $s =   session($this->HomeSessionField);
+        $obj = new \stdClass();
+        $obj->http_output = $this->http_output;
+        $obj->http_input = $this->http_input;
+        $s =  sessions($obj,$this->HomeSessionField);
         if($s){
             return $s;
         }else{
@@ -113,14 +115,6 @@ class Base extends \app\Controllers\BaseController
     public function defaultMethod()
     {
         $this->redirectController('Home/Main','login');
-    }
-
-    /**
-     * @return \swoole_http_request
-     */
-    public function getRequest(): \swoole_http_request
-    {
-        return $this->request;
     }
 
 

@@ -28,11 +28,11 @@ class Sessions
     {
         if(self::$t)
         {
-            echo "\nloading:session-> sessions creating.\n";
+            echo "\nloading:session-> sessions had create.\n";
             self::$context = $context;
             return self::$t;
         }else{
-            echo "\nloading:session-> sessions had create.\n";
+            echo "\nloading:session-> sessions creating.\n";
             self::$t = new Sessions($context);
             self::$context = $context;
             return self::$t;
@@ -162,8 +162,8 @@ class Sessions
     }
 
     public function Get($key,$prefix=null){
-        print_r("\n{$key}");
-        print_r($_SESSION);
+        //print_r("\n{$key}");
+        //print_r($_SESSION);
         if($prefix){
             $key = $key.$prefix;
         }
