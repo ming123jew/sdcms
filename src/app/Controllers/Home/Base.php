@@ -32,7 +32,7 @@ class Base extends \app\Controllers\BaseController
     /**
      * @var int
      */
-    public $CookieExpire=10;
+    public $CookieExpire=3600*24;
 
     /**
      * @param string $controller_name
@@ -74,7 +74,11 @@ class Base extends \app\Controllers\BaseController
      * @return bool
      */
     protected function check_login(){
-        $s =  session($this->HomeSessionField);
+        print_r("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        $obj = new \stdClass();
+        $obj->http_output = $this->http_output;
+        $obj->http_input = $this->http_input;
+        $s =  sessions($obj,$this->HomeSessionField);
         if($s){
             parent::templateData('user.isLogin',true);
             parent::templateData('user.username',$s['username']);
@@ -111,6 +115,13 @@ class Base extends \app\Controllers\BaseController
         $this->redirectController('Home/Main','login');
     }
 
+    /**
+     * @return \swoole_http_request
+     */
+    public function getRequest(): \swoole_http_request
+    {
+        return $this->request;
+    }
 
 
 }

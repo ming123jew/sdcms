@@ -31,7 +31,7 @@ class Redis extends SessionHandler
     public function __construct($config = [])
     {
         $this->config = array_merge($this->config, $config);
-        print_r( $this->config);
+        //print_r( $this->config);
     }
 
     /**
@@ -138,5 +138,11 @@ class Redis extends SessionHandler
             }
         }
         return true;
+    }
+
+    public function getAllKeys($prefix=''){
+        //取出所有的 带有指定前缀的键
+        $keys = $this->handler->keys($prefix.'*');
+        print_r($keys);
     }
 }

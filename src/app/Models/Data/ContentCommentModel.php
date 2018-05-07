@@ -45,7 +45,7 @@ class ContentCommentModel extends BaseModel
      */
     public function getAllByPage(int $content_id=0,int $start,int $end=10){
 
-        $m = $this->loader->model('ContentModel',$this);
+        $m = $this->loader->model(ContentModel::class,$this);
         if($content_id>0)
         {
             $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')

@@ -34,10 +34,11 @@ class Main extends Base
     protected function initialization($controller_name, $method_name)
     {
         parent::initialization($controller_name, $method_name);
-        //$this->Model['BaseModel'] = $this->loader->model('BaseModel', $this);
+        $this->Model['BaseModel'] = $this->loader->model(BaseModel::class, $this);
     }
 
     public function http_index(){
+
         $p = intval( $this->http_input->postGet('p') );
         if($p == 0) {$p = 1;}
         $end = 10;
@@ -106,10 +107,10 @@ class Main extends Base
          $redisCoroutine = $this->redis_pool->getCoroutine()->get('test');
          $redis_result = yield $redisCoroutine;*/
 
-        $UserModel = $this->loader->model('UserModel',$this);
+        $UserModel = $this->loader->model(UserModel::class,$this);
         $isExist = yield $UserModel->isExistUser('ming');
 
-        $StatsModel = $this->loader->model('StatsModel',$this);
+        $StatsModel = $this->loader->model(StatsModel::class,$this);
         $date = date('Ymd',time());
         $val = yield $StatsModel->updateOrInsert($date,'click');
 
@@ -233,4 +234,13 @@ class Main extends Base
         $this->http_output->end($r,false);
     }
 
+
+    public function http_test_sessions(){
+        sessions($this,'ABC','fuck');
+        $this->http_output->end("ok");
+    }
+    public function http_test_sessions2(){
+        $session = (sessions($this,'ABC'));
+        $this->http_output->end($session);
+    }
 }

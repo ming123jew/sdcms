@@ -16,7 +16,7 @@ function Test()
 }
 
 /**
- * Session管理
+ * Session管理 | 旧版
  * @param string|array  $name session名称，如果为数组表示进行session设置
  * @param mixed         $value session值
  * @param string        $prefix 前缀
@@ -40,6 +40,30 @@ function session($name, $value = '', $prefix = null)
     } else {
         // 设置
         return Session::set($name, $value, $prefix);
+    }
+}
+
+function sessions($context,$name, $value = '', $prefix = null){
+
+    if($context==''){
+        return false;
+    }else{
+        $sessions = \app\Helpers\Sessions\Sessions::getInstance($context);
+        //$sessions = new app\Helpers\Sessions\Sessions($context);
+        $sessions->Start();
+        if($value===''){
+            // 判断或获取
+            $return = 0 === strpos($name, '?') ? $sessions->Has($name,$prefix) : $sessions->Get($name,$prefix);
+        }elseif (is_null($value)) {
+            // 删除
+            $return = $sessions->Del($name,$prefix);
+        } else {
+            // 设置
+            $return = $sessions->Set($name,$value,$prefix);
+        }
+        $sessions->Save();
+        //print_r($sessions->getAllKeys());
+        return $return;
     }
 }
 
@@ -194,6 +218,8 @@ function get_week($date){
     unset($date,$date_str,$arr,$year,$month,$day,$hour,$strap);
     return $weekArr[$number_wk];
 }
+
+
 
 /**
  * 分页工具条

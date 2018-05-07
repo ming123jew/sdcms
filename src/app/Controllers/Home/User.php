@@ -10,6 +10,7 @@ namespace app\Controllers\Home;
 
 
 use app\Controllers\Home\Interfaces\IUserService;
+use app\Helpers\Sessions\Session;
 use app\Models\Data\UserModel;
 use Server\CoreBase\ChildProxy;
 
@@ -26,6 +27,7 @@ class User extends Base
      */
     public function http_login()
     {
+
         if($this->http_input->getRequestMethod()=='POST'){
             $family = new IUserServiceFamily();
             //权限装饰器
@@ -159,10 +161,8 @@ class Check implements IUserService {
                 $result = array_merge($result,['status'=>1,'message'=>'验证成功.']);
                 //写入session
                 $session_data = $result;
-                session($context->HomeSessionField,$session_data);//print_r($session_data);
-                $cookie_data = md5(implode('-',$session_data));
-                //echo $cookie_data;exit(0);
-                $context->http_output->setCookie($context->HomeSessionField,$cookie_data,$context->CookieExpire);
+                sessions($context,$context->HomeSessionField,$session_data);//print_r($session_data);
+
             }else{
                 $result = ['status'=>0,'message'=>'用户名/密码错误.'];
             }

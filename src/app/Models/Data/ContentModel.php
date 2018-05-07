@@ -45,7 +45,7 @@ class ContentModel extends BaseModel
      */
     public function getAllByPage(int $start,int $end=10){
 
-        $m = $this->loader->model('ContentHitsModel',$this);
+        $m = $this->loader->model(ContentHitsModel::class,$this);
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
             ->join($m->getTable(),'a.id=b.content_id','left join','b')
             ->orderBy('a.id','desc')
@@ -93,7 +93,7 @@ class ContentModel extends BaseModel
      */
     public function getArticle(int $id)
     {
-        $m = $this->loader->model('ContentHitsModel',$this);
+        $m = $this->loader->model(ContentHitsModel::class,$this);
         $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table,'a')
             ->join($m->getTable(),'a.id=b.content_id','left join','b')
             ->where('a.id',$id)

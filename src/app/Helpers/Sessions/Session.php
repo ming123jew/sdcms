@@ -12,6 +12,7 @@ class Session
 {
     protected static $prefix = '';
     protected static $init   = null;
+    protected static $session_id;
 
     /**
      * 设置或者获取session作用域（前缀）
@@ -254,9 +255,15 @@ class Session
      * @param bool $delete 是否删除关联会话文件
      * @return void
      */
-    private static function regenerate($delete = false)
+    public static function session_id($id=null)
     {
+        echo session_regenerate_id(true);
         //session_regenerate_id($delete);
+        if($id==null){
+            return self::$session_id;
+        }else{
+            self::$session_id = $id;
+        }
     }
 
     /**
@@ -268,4 +275,6 @@ class Session
         // 暂停session
         self::$init = false;
     }
+
+
 }
