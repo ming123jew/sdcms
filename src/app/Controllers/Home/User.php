@@ -118,9 +118,7 @@ class User extends Base
      */
     public function http_logout(){
         //销毁session
-        session($this->HomeSessionField,null);
-
-        $this->http_output->setCookie($this->HomeSessionField,'');
+        sessions($this,$this->HomeSessionField,null);
         parent::templateData('title','成功退出登录.');
         parent::templateData('message','成功退出登录.');
         parent::templateData('gourl',$this->Host);

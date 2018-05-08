@@ -78,6 +78,38 @@ class Main extends Base
         });
     }
 
+    public function http_about(){
+        $this->Model['HomeBusiness'] = $this->loader->model(HomeBusiness::class,$this);
+        $this->Data['d_get_recommend']  = yield $this->Model['HomeBusiness']->get_recommend();
+        $this->Data['d_get_new_comment']  = yield $this->Model['HomeBusiness']->get_new_comment();
+        parent::templateData('d_get_recommend',$this->Data['d_get_recommend']);
+        parent::templateData('d_get_new_comment',$this->Data['d_get_new_comment']);
+        $this->Data['date'] = date('Y-m-d');
+        $this->Data['week'] = get_week($this->Data['date']);
+        parent::templateData('date',$this->Data['date'].' '. $this->Data['week']);
+        //web or app
+        parent::webOrApp(function (){
+            $template = $this->loader->view('app::Home/about');
+            $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+        });
+    }
+
+    public function http_link(){
+        $this->Model['HomeBusiness'] = $this->loader->model(HomeBusiness::class,$this);
+        $this->Data['d_get_recommend']  = yield $this->Model['HomeBusiness']->get_recommend();
+        $this->Data['d_get_new_comment']  = yield $this->Model['HomeBusiness']->get_new_comment();
+        parent::templateData('d_get_recommend',$this->Data['d_get_recommend']);
+        parent::templateData('d_get_new_comment',$this->Data['d_get_new_comment']);
+        $this->Data['date'] = date('Y-m-d');
+        $this->Data['week'] = get_week($this->Data['date']);
+        parent::templateData('date',$this->Data['date'].' '. $this->Data['week']);
+        //web or app
+        parent::webOrApp(function (){
+            $template = $this->loader->view('app::Home/link');
+            $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
+        });
+    }
+
     public function http_hello(){
 
         $return = [

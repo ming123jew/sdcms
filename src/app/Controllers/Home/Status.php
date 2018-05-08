@@ -53,7 +53,6 @@ class Status extends BaseController{
         $this->http_output->end(unserialize($cache->getOneMap('__ROLE_ID__ADMIN__'.$role_id)));
     }
 
-
     public function connect()
     {
         $uid = time();

@@ -143,7 +143,7 @@ class Sessions
         $session_key = $this->prefix . $this->session_id;
         // 如果没有设置SESSION,则不保存,防止覆盖
         if(empty($_SESSION)) {
-            return false;
+            $_SESSION=[];
         }
         //echo "\nend:".$this->session_id;
         return $this->driver->write($session_key,serialize($_SESSION));
@@ -180,8 +180,11 @@ class Sessions
         if($prefix){
             $key = $key.$prefix;
         }
-        if($this->Has($key)) {
+        if($this->Has($key,$prefix)) {
+            print_r("/nhere/n");
+            $_SESSION[$key] = null;
             unset($_SESSION[$key]);
+            print_r($_SESSION);
             return true;
         }
         return false;

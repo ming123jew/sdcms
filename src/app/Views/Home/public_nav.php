@@ -13,8 +13,8 @@
             <li class="active"><a href="<?php echo $data['__HOST__'];?>"><span class="glyphicon glyphicon-home"></span>网站首页</a></li>
             <li><a href="<?php echo url('','Article','list',['id'=>1])?>"><span class="glyphicon glyphicon-erase"></span>诗意人生</a></li>
             <li><a href="<?php echo url('','Article','list',['id'=>2])?>"><span class="glyphicon glyphicon-inbox"></span>编程指南</a></li>
-            <li><a href="<?php echo url('','Article','page',['id'=>1])?>"><span class="glyphicon glyphicon-user"></span>关于我们</a></li>
-            <li><a href="<?php echo url('','Article','page',['id'=>2])?>"><span class="glyphicon glyphicon-tags"></span>友情链接</a></li>
+            <li><a href="<?php echo url('','Main','about',['id'=>1])?>"><span class="glyphicon glyphicon-user"></span>关于我们</a></li>
+            <li><a href="<?php echo url('','Main','link',['id'=>2])?>"><span class="glyphicon glyphicon-tags"></span>友情链接</a></li>
         </ul>
         <div class="feeds">
             <a class="feed feed-xlweibo" href="https://weibo.com/ming123jew" target="_blank"><i></i>新浪微博</a>
