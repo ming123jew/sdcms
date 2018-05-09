@@ -22,6 +22,7 @@ class AnalyseContent extends Analyse {
         //将结果返回给任务管理器,是否完成
         $this->isComplete = true;//
         $this->httpStatusCode = 200;
+        //print_r($this);
         return $this;
     }
 

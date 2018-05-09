@@ -164,6 +164,11 @@ abstract class AsynPool implements IAsynPool
      */
     abstract public function getSync();
 
+
+    public function getClientCount(){
+        return $this->client_count;
+    }
+
     /**
      * 销毁,返回需要迁移的命令
      * @param array $migrate
