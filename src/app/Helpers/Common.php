@@ -219,6 +219,63 @@ function get_week($date){
     return $weekArr[$number_wk];
 }
 
+/**
+ * 锁操作
+ * @param string $type  file|sync_mutex|redis
+ * @param $callback     锁获取成功进行的操作
+ * @param $callback2    锁获取失败进行的操作
+ * @return Generator
+ */
+function lock($type="file",$callback,$callback2){
+    //检测是否有sync扩展
+    if($type=='sync_mutex'&&!class_exists('SyncMutex')){
+        $type = 'redis';
+    }
+    switch ($type){
+        case 'file':
+            $fp = fopen(BIN_DIR.'/lock', "w+");
+            if(is_file(BIN_DIR.'/lock')&&flock($fp,LOCK_EX | LOCK_NB)) {
+                echo BIN_DIR.'/lock';
+                //..处理订单
+                call_user_func($callback);
+                yield sleepCoroutine(5000);
+                flock($fp,LOCK_UN);
+                fclose($fp);
+                //print_r("unlock ok.");
+            } else {
+                call_user_func($callback2);
+            }
+            break;
+        case 'sync_mutex':
+            $mutex = new SyncMutex("lock");
+            $res = $mutex->lock(0);
+            if ($res){
+                //echo "\nprocess  successfully got the mutex \n";
+                call_user_func($callback);
+                //模拟
+                yield sleepCoroutine(5000);
+                $mutex->unlock();
+                //print_r("unlock ok.");
+            }else{
+                //echo "\nprocess  unable to lock mutex. \n";
+                call_user_func($callback2);
+            }
+            break;
+
+        case 'redis':
+            $lock = yield get_instance()->redis_pool->getCoroutine()->set('lock',1,'NX','EX',3600);
+            if($lock){
+                call_user_func($callback);
+                //模拟
+                yield sleepCoroutine(5000);
+                yield  get_instance()->redis_pool->getCoroutine()->del('lock');
+                //print_r("unlock ok.");
+            }else{
+                call_user_func($callback2);
+            }
+            break;
+    }
+}
 
 
 /**

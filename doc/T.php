@@ -13,22 +13,21 @@ class T
     }
 
 }
-$i = 0;
-while ($i<100){
-    $fp = fopen("F:\\2017_web_sys\\123.207.0.104_sd_2017\\doc\\lock.txt", "w+");
-    if(flock($fp,LOCK_EX | LOCK_NB)) {
-        //..处理订单
-        //echo "ok";
-        //b在进行更改库存的时候 进行判断，如存在空库存则回滚
-        echo "ok";
-        flock($fp,LOCK_UN);
-        fclose($fp);
-    } else {
-        echo "no";
-    }
-    $i++;
-
-}
+//$i = 0;
+//while ($i<100){
+//    $fp = fopen("F:\\2017_web_sys\\123.207.0.104_sd_2017\\doc\\lock.txt", "w+");
+//    if(flock($fp,LOCK_EX | LOCK_NB)) {
+//        //..处理订单
+//        //echo "ok";
+//        //b在进行更改库存的时候 进行判断，如存在空库存则回滚
+//        echo "ok";
+//        flock($fp,LOCK_UN);
+//        fclose($fp);
+//    } else {
+//        echo "no";
+//    }
+//    $i++;
+//}
 //
 //$pid_file = "F:\\2017_web_sys\\123.207.0.104_sd_2017\\doc\\lock.txt";
 //$pid ="d";
@@ -189,6 +188,17 @@ class b extends a{
     public function aa(){
         echo "aa";
     }
+}
+
+
+$mutex = new SyncMutex("UniqueName");
+$res = $mutex->lock(2000);
+//sleep(5);
+if (!$res){
+    echo "\nprocess  unable to lock mutex. \n";
+}else{
+    echo "\nprocess  successfully got the mutex \n";
+    $mutex->unlock();
 }
 
 

@@ -28,11 +28,11 @@ class Sessions
     {
         if(self::$t)
         {
-            echo "\nloading:session-> sessions had create.\n";
+            //echo "\nloading:session-> sessions had create.\n";
             self::$context = $context;
             return self::$t;
         }else{
-            echo "\nloading:session-> sessions creating.\n";
+            //echo "\nloading:session-> sessions creating.\n";
             self::$t = new Sessions($context);
             self::$context = $context;
             return self::$t;
@@ -103,7 +103,7 @@ class Sessions
                 if(empty($sess_id)){
                     $sess_id = self::$context->http_input->getPost($this->cookie_key);
                 }
-                echo "\nstart:".$sess_id."\n";
+                //echo "\nstart:".$sess_id."\n";
                 if(empty($sess_id)){
                     $sess_id = md5('__'.create_uuid().'__').md5('__'.create_uuid().'__');
                     self::$context->http_output->setCookie($this->cookie_key,$sess_id,time()+$this->cookie_expire,$this->cookie_path,$this->cookie_domain);
