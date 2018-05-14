@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50635
 File Encoding         : 65001
 
-Date: 2018-05-04 15:57:44
+Date: 2018-05-14 14:33:20
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -521,7 +521,7 @@ CREATE TABLE `sd_content_comment` (
   `catid` int(11) NOT NULL,
   `status` tinyint(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_content_comment
@@ -533,6 +533,7 @@ INSERT INTO `sd_content_comment` VALUES ('4', '18', '1523872249', '胜多负少�
 INSERT INTO `sd_content_comment` VALUES ('5', '18', '1523872251', '胜多负少的', 'ming', '0', null, '热修改mysql数据库pt-online-schema-change 的使用详解', 'ming@qq.com', '0', '0');
 INSERT INTO `sd_content_comment` VALUES ('8', '20', '1523957204', '内容不错\n有没有其他模式的例子~', 'mingk', '0', null, 'PHP 装饰器模式', 'ming@qq.com', '0', '0');
 INSERT INTO `sd_content_comment` VALUES ('9', '20', '1524475179', '性能分表。。', 'ming23', '0', null, 'PHP 装饰器模式', '799871365@qq.com', '2', '0');
+INSERT INTO `sd_content_comment` VALUES ('10', '19', '1525699116', '非一般的速度~ good\n', 'ming98', '0', null, 'MYSQL性能优化之分库分表与不停机修改mysql表结构', 'ming98@qq.com', '2', '0');
 
 -- ----------------------------
 -- Table structure for `sd_content_hits`
@@ -564,15 +565,69 @@ INSERT INTO `sd_content_hits` VALUES ('8', '1', '5', '0', '5', '5', '5', '152359
 INSERT INTO `sd_content_hits` VALUES ('9', '1', '2', '0', '2', '2', '2', '1523958187', '0');
 INSERT INTO `sd_content_hits` VALUES ('10', '1', '2', '0', '2', '2', '2', '1523958169', '0');
 INSERT INTO `sd_content_hits` VALUES ('11', '1', '6', '0', '6', '6', '6', '1524222525', '0');
-INSERT INTO `sd_content_hits` VALUES ('12', '1', '12', '0', '2', '2', '2', '1525265267', '0');
+INSERT INTO `sd_content_hits` VALUES ('12', '1', '15', '0', '2', '2', '5', '1525685949', '0');
 INSERT INTO `sd_content_hits` VALUES ('13', '1', '1348', '0', '5', '1327', '1327', '1525409718', '1');
-INSERT INTO `sd_content_hits` VALUES ('14', '1', '43', '0', '35', '35', '35', '1525276539', '0');
+INSERT INTO `sd_content_hits` VALUES ('14', '1', '49', '0', '2', '2', '41', '1526260647', '0');
 INSERT INTO `sd_content_hits` VALUES ('15', '2', '2', '0', '2', '2', '2', '1523863694', '0');
 INSERT INTO `sd_content_hits` VALUES ('16', '2', '2', '0', '2', '2', '2', '1523863762', '0');
 INSERT INTO `sd_content_hits` VALUES ('17', '2', '8', '2', '3', '3', '3', '1525269934', '1');
-INSERT INTO `sd_content_hits` VALUES ('18', '2', '29', '3', '2', '5', '5', '1525335961', '1');
-INSERT INTO `sd_content_hits` VALUES ('19', '2', '1675', '20', '735', '766', '766', '1525420674', '3');
-INSERT INTO `sd_content_hits` VALUES ('20', '2', '68', '4', '15', '15', '15', '1525273982', '2');
+INSERT INTO `sd_content_hits` VALUES ('18', '2', '31', '3', '2', '2', '7', '1525759320', '1');
+INSERT INTO `sd_content_hits` VALUES ('19', '2', '1681', '4', '1', '5', '772', '1525759251', '3');
+INSERT INTO `sd_content_hits` VALUES ('20', '2', '74', '4', '1', '5', '21', '1525759247', '2');
+
+-- ----------------------------
+-- Table structure for `sd_im_group`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_im_group`;
+CREATE TABLE `sd_im_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `groupname` varchar(40) NOT NULL,
+  `avatar` varchar(200) NOT NULL COMMENT '群组头像',
+  `num` int(11) NOT NULL DEFAULT '0',
+  `create_time` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_im_group
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `sd_im_user_friend`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_im_user_friend`;
+CREATE TABLE `sd_im_user_friend` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_group_id` int(11) NOT NULL,
+  `num` int(11) NOT NULL DEFAULT '0',
+  `create_time` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `friend_uid` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_im_user_friend
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `sd_im_user_group`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_im_user_group`;
+CREATE TABLE `sd_im_user_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `groupname` varchar(40) NOT NULL,
+  `avatar` varchar(200) NOT NULL COMMENT '群组头像',
+  `num` int(11) NOT NULL DEFAULT '0',
+  `create_time` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_im_user_group
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `sd_log`
@@ -5673,7 +5728,7 @@ CREATE TABLE `sd_user` (
   `email` varchar(60) NOT NULL,
   `roleid` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_user
@@ -5683,6 +5738,7 @@ INSERT INTO `sd_user` VALUES ('2', 'ming2', '123456', '0', '1', '0', 'ming2@163.
 INSERT INTO `sd_user` VALUES ('3', 'ming3', '123456', '0', '1', '0', 'ming3@163.com', '0');
 INSERT INTO `sd_user` VALUES ('4', 'ming4', '123456', '0', '1', '0', 'ming4@163.com', '0');
 INSERT INTO `sd_user` VALUES ('6', 'ming23', '123456', '1524474021', '1', '0', '799871365@qq.com', '0');
+INSERT INTO `sd_user` VALUES ('7', 'ming98', '168123', '1525699071', '1', '0', 'ming98@qq.com', '0');
 
 -- ----------------------------
 -- Table structure for `sd_wx_user`
