@@ -137,7 +137,7 @@ class Base extends \app\Controllers\BaseController
          /**************使用内存模式******************/
          // 获取当前用户组拥有的权限
          //print_r("ok");
-         $role_arr = unserialize(self::get_cache_role_data_byid($role_id));
+         $role_arr = unserialize(yield self::get_cache_role_data_byid($role_id));
          //print_r($role_arr);
          $can = false;
          if(is_array($role_arr)&&!empty($role_arr)){
@@ -163,14 +163,20 @@ class Base extends \app\Controllers\BaseController
      * @return bool
      */
     protected function check_login(){
-        $s =  session($this->AdminSessionField);
-        if($s){
+        $obj = new \stdClass();
+        $obj->http_output = $this->http_output;
+        $obj->http_input = $this->http_input;
+        $s =  sessions($obj,$this->AdminSessionField);
+        if($s!=null){
+            parent::templateData('user.isLogin',true);
             parent::templateData('username',$s['username']);
-            parent::templateData('email',$s['email']);
-            $this->http_output->setCookie('__'.md5($this->AdminSessionField).'__',$cookie_data = md5(implode('-',$s)),$this->CookieExpire);
+            parent::templateData('user.email',$s['email']);
             unset($s);
             return true;
         }else{
+            parent::templateData('user.isLogin',false);
+            parent::templateData('username','');
+            parent::templateData('user.email','');
             return false;
         }
     }
@@ -180,10 +186,14 @@ class Base extends \app\Controllers\BaseController
      * @return array | bool
      */
     protected function get_login_session(){
-        $s =   session($this->AdminSessionField);
+        $obj = new \stdClass();
+        $obj->http_output = $this->http_output;
+        $obj->http_input = $this->http_input;
+        $s =  sessions($obj,$this->AdminSessionField);
         if($s){
             return $s;
         }else{
+            unset($s);
             return false;
         }
     }
@@ -194,8 +204,9 @@ class Base extends \app\Controllers\BaseController
      * @return mixed
      */
     protected function get_cache_role_data_byid($role_id){
-        $cache = Cache::getCache('WebCache');
-        return $cache->getOneMap($this->AdminCacheRoleIdDataField.$role_id);
+        //$cache = Cache::getCache('WebCache');
+        //return $cache->getOneMap($this->AdminCacheRoleIdDataField.$role_id);
+        return yield get_cache($this->AdminCacheRoleIdDataField.$role_id);
     }
 
     /**
@@ -204,8 +215,9 @@ class Base extends \app\Controllers\BaseController
      * @return mixed
      */
     protected function get_cache_role_menu_byid($role_id){
-        $cache = Cache::getCache('WebCache');
-        return $cache->getOneMap($this->AdminCacheRoleIdMenuField.$role_id);
+        //$cache = Cache::getCache('WebCache');
+        //return $cache->getOneMap($this->AdminCacheRoleIdMenuField.$role_id);
+        return yield get_cache($this->AdminCacheRoleIdMenuField.$role_id);
     }
 
 }

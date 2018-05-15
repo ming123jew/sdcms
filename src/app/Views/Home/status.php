@@ -14,6 +14,7 @@
 <input type="hidden" value="1" id="scroll">
 <div id="ws_info"></div>
 <div id="ws_log" style="background: black;color: #a7926d;padding: 5em;line-height: 30px;"></div>
+<input id="strlen" type="hidden" value="0"/>
 <script>
 
     function scroll() {
@@ -88,19 +89,26 @@
             //msg.type = 'login';
 
             ws.send($.toJSON(msg));
+
+
         };
 
         //定时获取错误信息
-        setInterval(function () {
+         setInterval(function () {
+             getServerInfo();
+         },850)
+        var getServerInfo = function(){
             msg.controller = 'Home/Status';
             msg.method = 'getlog';
             msg.num = GET['num'];
             ws.send($.toJSON(msg));
-        },500)
+
+        }
 
         //有消息到来时触发
         ws.onmessage = function (e) {
-            console.log(e.data);
+            //console.log(e.data);
+
             var message = $.evalJSON(e.data);
 
             var type = message.type;
@@ -111,12 +119,14 @@
             else if (type == 'getlog')
             {
                 client_id = $.evalJSON(e.data).fd;
-                if($.evalJSON(e.data).message!=null){
+
+                if($.evalJSON(e.data).message!=null && parseInt($('#strlen').val())!=$.evalJSON(e.data).strlen) {
                     var html = '';
-                    $.each($.evalJSON(e.data).message,function (i,e) {
-                        html += e + '<br />';
-                    })
-                    $('#ws_log').html(  html );
+                    // $.each($.evalJSON(e.data).message,function (i,e) {
+                    //     html += e + '<br />';
+                    // })
+                    $('#ws_log').html(  $.evalJSON(e.data).message );
+                    $('#strlen').val( $.evalJSON(e.data).strlen );
                     scroll();
                 }
             }

@@ -8,6 +8,7 @@
 namespace app\Controllers\Home;
 
 use app\Process\MyProcess;
+use Server\Components\Event\EventDispatcher;
 use Server\Components\Process\ProcessManager;
 use Server\Memory\Cache;
 use app\Controllers\BaseController;
@@ -65,27 +66,34 @@ class Status extends BaseController{
      */
     public function getlog()
     {
+//        //version1
+//        //print_r($this->client_data);
+//        $start_time = microtime(true);
+//        $log_file = LOG_DIR . '/swoole.log';
+//        $message = self::tail($log_file,$this->client_data->num ?? 300);
+//        //var_dump($message);
+        //version2
 
-        //print_r($this->client_data);
-        $start_time = microtime(true);
+        //异步读取
+        $log_file = LOG_DIR . '/SERVER-'.date('Y-m-d',time()).'.log';
         $log_file = LOG_DIR . '/swoole.log';
-        $message = self::tail($log_file,$this->client_data->num ?? 300);
-        //var_dump($message);
-        $cache = Cache::getCache('WsCache');
-        $key = 'get_log';
-        $md5 = $cache->getOneMap($key);
-        if($md5 == md5( json_encode($message) )){
-            //md5相同，说明没有内容更新
-            $end = ['type' => 'getlog','fd'=>$this->fd,'message'=>null];
+        $file_size = 0;
+        $file_size = filesize($log_file);
+        if($file_size>5000){
+            $file_size = $file_size - 2000;
         }else{
-            //md5不同，说明内容更新了，返回给前台
-            $cache->addMap($key,md5(json_encode($message)));
-            $end = ['type' => 'getlog','fd'=>$this->fd,'message'=>$message];
+            $file_size = 0;
         }
-        //$end = ['type' => 'getlog','fd'=>$this->fd,'message'=>($message)];
-
-        unset($log_file,$message,$cache,$key,$md5);
+        \swoole_async_read($log_file, function ($f,$c){
+            EventDispatcher::getInstance()->dispatch('unlock', $c);
+        },8192,$file_size);
+        $message = yield EventDispatcher::getInstance()->addOnceCoroutine('unlock')->setTimeout(500);
+        $message = self::addbold($message);
+        $end = ['type' => 'getlog','fd'=>$this->fd,'message'=>$message,'strlen'=>strlen($message)];
+        //echo "\n".md5( json_encode($message) )."\n";
+        unset($log_file,$message,$cache,$key,$md5,$file_name);
         $this->send($end);
+
     }
     public function update()
     {
@@ -150,10 +158,11 @@ class Status extends BaseController{
      * @return string
      */
     protected function addbold($string){
-
+        $string = str_replace(array("\t","\n"),array('&nbsp;','<br />'),$string);
         $string = str_replace(array('[',']'),array('<b>[',']</b>'),$string);
         //给[error]加红色
         $string = str_replace(array('<b>[ERROR]</b>'),array('<b style="color:#b53636;">[ERROR]</b>'),$string);
+
         //给[时间]加分隔
         $patten = "/^\d{4}[\-](0?[1-9]|1[012])[\-](0?[1-9]|[12][0-9]|3[01])(\s+(0?[0-9]|1[0-9]|2[0-3])\:(0?[0-9]|[1-5][0-9])\:(0?[0-9]|[1-5][0-9]))?$/";//未实现
 
@@ -195,11 +204,46 @@ class Status extends BaseController{
         return $lines;
     }
 
-    protected function tail2($file,$num){
+    protected function tail2(){
+        $log_file = LOG_DIR . '/SERVER-'.date('Y-m-d',time()).'.log';
+        $file_size = 0;
+        $file_size = filesize($log_file);
+        if($file_size>5000){
+            $file_size = $file_size - 2000;
+        }else{
+            $file_size = 0;
+        }
+        \swoole_async_read($log_file, function ($f,$c){
+            EventDispatcher::getInstance()->dispatch('unlock', $c);
+        },8192,$file_size);
+    }
 
-         \swoole_async_read($file,function ($fileName, $content){
-           var_dump($fileName,$content);
-        });
+    public function http_tail2(){
+        $log_file = LOG_DIR . '/SERVER-'.date('Y-m-d',time()).'.log';
+        $file_size = 0;
+        $file_size = filesize($log_file);
+        if($file_size>5000){
+            $file_size = $file_size - 2000;
+        }else{
+            $file_size = 0;
+        }
+
+         \swoole_async_read($log_file, function ($f,$c){
+             EventDispatcher::getInstance()->dispatch('unlock', $c);
+         },8192,$file_size);
+        $data = yield EventDispatcher::getInstance()->addOnceCoroutine('unlock')->setTimeout(1000);
+        $this->http_output->end($data);
+
+    }
+
+    protected function di($context){
+
+        $context->http_output->end(['fuck']);
+    }
+
+    public function http_tail3(){
+
+        $this->http_output->end(yield get_cache('aaa'));
     }
 
 

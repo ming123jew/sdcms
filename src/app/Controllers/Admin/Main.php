@@ -51,7 +51,8 @@ class Main extends Base
     public function http_ajaxgetmenu(){
         $login_session = self::get_login_session();
         $this->Data['role_id'] = $login_session['roleid'];
-        $this->Data['http_ajaxgetmenu'] = unserialize(parent::get_cache_role_menu_byid($this->Data['role_id']));
+
+        $this->Data['http_ajaxgetmenu'] = unserialize(  yield parent::get_cache_role_menu_byid($this->Data['role_id'])??false );
         //缓存不存在，则进行数据库读取
         if(! $this->Data['http_ajaxgetmenu']){
             $this->Data['http_ajaxgetmenu'] = yield self::_getRoleMenu($this->Data['role_id']);
@@ -94,10 +95,7 @@ class Main extends Base
                     //储存到SESSION - memory
                     unset($this->Data['UserModel']['password']);
                     $session_data = $this->Data['UserModel'];
-                    session($this->AdminSessionField,$session_data);//print_r($session_data);
-                    $cookie_data = md5(implode('-',$session_data));
-                    //echo $cookie_data;exit(0);
-                    $this->http_output->setCookie($this->AdminSessionField,$cookie_data,$this->CookieExpire);
+                    sessions($this,$this->AdminSessionField,$session_data);
 
                     //查询权限，并存到Cache
                     $role_id = $session_data['roleid'];
@@ -114,7 +112,6 @@ class Main extends Base
                     yield set_cache($this->AdminCacheRoleIdMenuField.$role_id,serialize($this->Data['role_menu']));
 
                     $end = [
-                        'token'=>$cookie_data,
                         'status' => 1,
                         'code'=>200,
                         'message'=>'login success.'
@@ -128,7 +125,7 @@ class Main extends Base
                 }
 
             }
-            unset($session_data,$cookie_data,$role_id);
+            unset($session_data,$role_id);
             $this->http_output->end(json_encode($end),false);
 
         }else{
@@ -147,8 +144,7 @@ class Main extends Base
      */
     public function http_logout(){
         //销毁session
-        session($this->AdminSessionField,null);
-        $this->http_output->setCookie($this->AdminSessionField,'');
+        sessions($this,$this->AdminSessionField,null);
         parent::templateData('title','成功退出登录.');
         parent::templateData('message','成功退出登录.');
         parent::templateData('gourl',url('Admin','Main','index'));

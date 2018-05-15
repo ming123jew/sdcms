@@ -41,7 +41,7 @@ class CategoryBusiness extends BaseBusiness
     /**
      * @return string
      */
-    public function get_category_for_category_list()
+    public function get_category_for_category_list($context)
     {
         $this->CategoryModel =  $this->loader->model(CategoryModel::class,$this);
         $all = yield $this->CategoryModel->getAll();
@@ -55,8 +55,8 @@ class CategoryBusiness extends BaseBusiness
             {
                 $all[$n]['parent_id_node'] = isset($r['parent_id']) ? ' class="child-of-node-' . $r['parent_id'] . '"' : '';
                 //$all[$n]['str_manage'] = checkRole('auth/menuAdd',["parent_id" => $r['id']]) ? '<a href="'.url("auth/menuAdd",["parent_id" => $r['id']]).'">添加子菜单</a> |':'';
-                $all[$n]['str_manage'] = (yield check_role('Admin','Category','category_edit',$this)) ?'<a href="'.url('','','category_edit',["id" => $r['id']]).'">编辑</a> |':'';
-                $all[$n]['str_manage'] .= (yield check_role('Admin','Category','category_delete',$this)) ?'<a  onclick="category_delete('.$r['id'].')" href="javascript:;">删除</a>':'';
+                $all[$n]['str_manage'] = (yield check_role('Admin','Category','category_edit',$context)) ?'<a href="'.url('','','category_edit',["id" => $r['id']]).'">编辑</a> |':'';
+                $all[$n]['str_manage'] .= (yield check_role('Admin','Category','category_delete',$context)) ?'<a  onclick="category_delete('.$r['id'].')" href="javascript:;">删除</a>':'';
                 $all[$n]['status'] = $r['status'] ? '启用' : '禁用';
                 $all[$n]['is_menu'] = $r['is_menu'] ? '是' : '否';
                 $all[$n]['model_name'] = get_modelname_bymodelid($r['model_id']);

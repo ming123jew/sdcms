@@ -46,7 +46,7 @@ class Category extends Base
             $this->http_output->end(json_encode($end),false);
         }else{
             $this->Model['CategoryBusiness'] =  $this->loader->model(CategoryBusiness::class,$this);
-            $allcategory = yield $this->Model['CategoryBusiness']->get_category_for_category_list();
+            $allcategory = yield $this->Model['CategoryBusiness']->get_category_for_category_list($this);
             parent::templateData('allcategory',$allcategory);
             //web or app
             unset($allcategory);

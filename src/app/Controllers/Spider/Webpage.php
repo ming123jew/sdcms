@@ -156,4 +156,9 @@ class Webpage extends Base
         $this->http_output->end('ok');
     }
 
+    public function http_test(){
+        $this->http_output->end($this->getContext());
+
+    }
+
 }

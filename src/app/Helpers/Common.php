@@ -19,8 +19,9 @@ function Test()
  * Session管理 | 旧版
  * @param string|array  $name session名称，如果为数组表示进行session设置
  * @param mixed         $value session值
- * @param string        $prefix 前缀
- * @return mixed
+ * @param null $prefix  $prefix 前缀
+ * @return bool|mixed|void
+ * @throws Exception
  */
 function session($name, $value = '', $prefix = null)
 {
@@ -148,6 +149,7 @@ function token($name = '__token__', $type = 'md5', $is_ajax=false)
  */
 function set_cache($key,$value,$expire=24*3600)
 {
+
     $data = [
         'data'=>$value,
         'create_time'=>time(),
@@ -186,7 +188,6 @@ function get_cache($key,$type="data")
         unset($type);
         return $result;
     }
-
 }
 
 /**
@@ -410,7 +411,7 @@ function http_post_url($remote_server, array $params)
  */
 function check_role($m,$c,$a,$context,$param=[])
 {
-    $login_info = session('__SESSION__ADMIN__');
+    $login_info = sessions($context,'__SESSION__ADMIN__');
     //print_r($login_info);
     $role_id = $login_info['roleid'];
     //cache存在内存泄漏

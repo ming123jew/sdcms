@@ -14,7 +14,7 @@ class LogTask extends Task
     public function CutLog()
     {
         $config = get_instance()->config;
-        print_r($config['server']['set']['log_file']);
+        //print_r($config['server']['set']['log_file']);
         return "test task\n";
     }
 }
