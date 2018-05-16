@@ -149,7 +149,7 @@
     <!--/内容-->
     <aside class="sidebar visible-lg"><!--右侧>992px显示-->
         <div class="sentence"> <strong>每日一句</strong>
-            <h2>2015年11月1日 星期日</h2>
+            <h2><?php echo $data['date'];?></h2>
             <p>你是我人生中唯一的主角，我却只能是你故事中的一晃而过得路人甲。</p>
         </div>
         <div id="search" class="sidebar-block search" role="search">

@@ -12,6 +12,8 @@ html{background-color: #333;}
 </head>
 <body>
 <script src="../layui/layui.js"></script>
+<script src="js/jquery-2.1.4.min.js" type="text/javascript"></script>
+<script src="js/jquery.json.js"></script>
 <script>
 
 if(!/^http(s*):\/\//.test(location.href)){
@@ -38,7 +40,8 @@ layui.use('layim', function(layim){
 
     //初始化接口
     init: {
-      url: 'http://118.89.26.188:8081/layui/json/getList.json'
+        //http://118.89.26.188:8081/layui/json/getList.json
+      url: '<?php echo url("IM","Index","init");?>'
       ,data: {}
     }
     
@@ -60,7 +63,8 @@ layui.use('layim', function(layim){
 
     //查看群员接口
     ,members: {
-      url: 'http://118.89.26.188:8081/layui/json/getMembers.json'
+        //http://118.89.26.188:8081/layui/json/getMembers.json
+      url: '<?php echo url("IM","Index","getMembers");?>'
       ,data: {}
     }
     
@@ -144,42 +148,42 @@ layui.use('layim', function(layim){
 
     //console.log(res.mine);
     
-    layim.msgbox(5); //模拟消息盒子有新消息，实际使用时，一般是动态获得
+    layim.msgbox(8); //模拟消息盒子有新消息，实际使用时，一般是动态获得
   
     //添加好友（如果检测到该socket）
-    layim.addList({
-      type: 'group'
-      ,avatar: "http://tva3.sinaimg.cn/crop.64.106.361.361.50/7181dbb3jw8evfbtem8edj20ci0dpq3a.jpg"
-      ,groupname: 'Angular开发'
-      ,id: "12333333"
-      ,members: 0
-    });
-    layim.addList({
-      type: 'friend'
-      ,avatar: "http://tp2.sinaimg.cn/2386568184/180/40050524279/0"
-      ,username: '冲田杏梨'
-      ,groupid: 2
-      ,id: "1233333312121212"
-      ,remark: "本人冲田杏梨将结束AV女优的工作"
-    });
+    // layim.addList({
+    //   type: 'group'
+    //   ,avatar: "http://tva3.sinaimg.cn/crop.64.106.361.361.50/7181dbb3jw8evfbtem8edj20ci0dpq3a.jpg"
+    //   ,groupname: 'Angular开发'
+    //   ,id: "12333333"
+    //   ,members: 0
+    // });
+    // layim.addList({
+    //   type: 'friend'
+    //   ,avatar: "http://tp2.sinaimg.cn/2386568184/180/40050524279/0"
+    //   ,username: '冲田杏梨'
+    //   ,groupid: 2
+    //   ,id: "1233333312121212"
+    //   ,remark: "本人冲田杏梨将结束AV女优的工作"
+    // });
     
     setTimeout(function(){
       //接受消息（如果检测到该socket）
       layim.getMessage({
         username: "Hi"
         ,avatar: "http://qzapp.qlogo.cn/qzapp/100280987/56ADC83E78CEC046F8DF2C5D0DD63CDE/100"
-        ,id: "10000111"
+        ,id: "1"
         ,type: "friend"
         ,content: "临时："+ new Date().getTime()
       });
       
-      /*layim.getMessage({
+      layim.getMessage({
         username: "贤心"
         ,avatar: "http://tp1.sinaimg.cn/1571889140/180/40030060651/1"
         ,id: "100001"
         ,type: "friend"
         ,content: "嗨，你好！欢迎体验LayIM。演示标记："+ new Date().getTime()
-      });*/
+      });
       
     }, 3000);
   });
@@ -240,10 +244,102 @@ layui.use('layim', function(layim){
       });
     }
   });
-  
-  
+
+  //websocket
+    var wsUri = "ws://118.89.26.188:8083";
+    //var output;
+    var websocket;
+    var msg = new Object();
+    function init() {
+        //output = document.getElementById("output");
+        //getData();
+        runWebSocket();
+
+    }
+
+    function runWebSocket() {
+        websocket = new WebSocket(wsUri);
+        websocket.onopen = function (evt) {
+            onOpen(evt)
+        };
+        websocket.onclose = function (evt) {
+            onClose(evt)
+        };
+        websocket.onmessage = function (evt) {
+            onMessage(evt)
+        };
+        websocket.onerror = function (evt) {
+            onError(evt)
+        };
+    }
+
+    function onOpen(evt) {
+        //writeToScreen("CONNECTED");
+        console.log("CONNECTED:"+evt);
+        //doSend("WebSocket rocks");
+
+        msg.controller = 'IM/Ws';
+        msg.method='connect';
+        //msg.type = 'login';
+
+        websocket.send($.toJSON(msg));
+    }
+
+    function onClose(evt) {
+        //writeToScreen("DISCONNECTED");
+        console.log("DISCONNECTED:"+evt);
+    }
+
+    function onMessage(evt) {
+        //writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data + '</span>');
+        //websocket.close();
+        var json = $.parseJSON(evt.data);
+        console.log(json);
+
+    }
+
+    function onError(evt) {
+        //writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+        console.log(evt.data);
+    }
+
+    function doSend(message) {
+        //writeToScreen("SENT: " + message);
+        websocket.send(message);
+    }
+
+    function writeToScreen(message) {
+        var pre = document.createElement("p");
+        pre.style.wordWrap = "break-word";
+        pre.innerHTML = message;
+        output.appendChild(pre);
+    }
+
+    window.addEventListener("load", init, false);
+
+
+
+    function sendData() {
+        if (!websocket) {
+            return false;
+        }
+        if (!$('#msg').val()) {
+            return false;
+        }
+
+        var send_data = {};
+        send_data.username = 'ming123jew';
+        send_data.message = $('#msg').val();
+
+        websocket.send(JSON.stringify(send_data));
+        $('#msg').val("");
+        return false
+    }
 
 });
+
+
+
 </script>
 </body>
 </html>

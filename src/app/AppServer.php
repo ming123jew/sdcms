@@ -119,6 +119,7 @@ class AppServer extends SwooleDistributedServer
      */
     public function getEventControllerName()
     {
+        print_r($this->getContext());
         return 'Home/Status';
     }
 

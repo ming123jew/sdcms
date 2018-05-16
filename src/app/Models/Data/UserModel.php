@@ -18,6 +18,27 @@ class UserModel extends BaseModel
      */
     private $table = 'user';
 
+    public function getTable(){
+        return $this->prefix.$this->table;
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function getById(int $id){
+        $val = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
+            ->where('id',$id)
+            ->orderBy('id','desc')
+            ->select('*')
+            ->coroutineSend();
+        if(empty($val['result'])){
+            return false;
+        }else{
+            return $val['result'][0] ;
+        }
+    }
+
     /**
      * 获取所有
      * @return bool
