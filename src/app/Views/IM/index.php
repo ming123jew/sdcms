@@ -21,6 +21,119 @@ if(!/^http(s*):\/\//.test(location.href)){
 }
 
 layui.use('layim', function(layim){
+
+
+    //websocket
+    var wsUri = "ws://118.89.26.188:8083";
+    //var output;
+    var websocket;
+    var msg = new Object();
+    var fd;//当前fd
+    var fd_receiver;//接受者fd 如果有
+    var uid = <?php echo intval($data['uid']);?>;
+    function init() {
+        //output = document.getElementById("output");
+        //getData();
+        runWebSocket('IM/Ws','connect');
+
+    }
+
+    function runWebSocket(controller,method) {
+        websocket = new WebSocket(wsUri);
+        websocket.onopen = function (evt){
+            onOpen(evt,controller,method)
+        };
+        websocket.onclose = function (evt) {
+            onClose(evt)
+        };
+        websocket.onmessage = function (evt) {
+            onMessage(evt)
+        };
+        websocket.onerror = function (evt) {
+            onError(evt)
+        };
+    }
+
+    function onOpen(evt,controller,method) {
+        //writeToScreen("CONNECTED");
+        console.log("CONNECTED:"+evt);
+        //doSend("WebSocket rocks");
+        msg.controller = controller;
+        msg.method=method;
+        msg.uid = uid;
+        //msg.type = 'login';
+        websocket.send($.toJSON(msg));
+    }
+
+    function onClose(evt) {
+        //writeToScreen("DISCONNECTED");
+        console.log("DISCONNECTED:"+evt);
+    }
+
+    function onMessage(evt) {
+        //writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data + '</span>');
+        //websocket.close();
+        var json = $.parseJSON(evt.data);
+        var type = json.type;
+        switch (type){
+            case 'welcome':
+                fd = json.fd;
+                break;
+            case 'ready':
+                break;
+            case 'sendData':
+                var obj = {};
+                obj = {
+                    username: json.data.username,
+                    avatar: json.data.avatar,
+                    id: json.data.id,
+                    type: json.data.type,
+                    content: json.data.content
+                }
+                layim.getMessage(obj);
+                console.log(json.data);
+                break;
+        }
+        console.log(json);
+
+    }
+
+    function onError(evt) {
+        //writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+        console.log(evt.data);
+    }
+
+    function doSend(message) {
+        //writeToScreen("SENT: " + message);
+        websocket.send(message);
+    }
+
+    function writeToScreen(message) {
+        var pre = document.createElement("p");
+        pre.style.wordWrap = "break-word";
+        pre.innerHTML = message;
+        output.appendChild(pre);
+    }
+
+    window.addEventListener("load", init, false);
+
+
+
+    function sendData(controller,method,message) {
+        if (!websocket) {
+            return false;
+        }
+        msg.controller = controller;
+        msg.method=method;
+        //msg.type = 'login';
+        msg.message = message;
+        msg.fd = fd;
+        msg.uid = uid;
+        websocket.send($.toJSON(msg));
+
+        return false
+    }
+
   
   //演示自动回复
   var autoReplay = [
@@ -41,8 +154,8 @@ layui.use('layim', function(layim){
     //初始化接口
     init: {
         //http://118.89.26.188:8081/layui/json/getList.json
-      url: '<?php echo url("IM","Index","init");?>'
-      ,data: {}
+      url: '<?php echo url("IM","Index","init",['uid'=>$data['uid']]);?>'
+      ,data: {fd:fd}
     }
     
     //或采用以下方式初始化接口
@@ -64,7 +177,7 @@ layui.use('layim', function(layim){
     //查看群员接口
     ,members: {
         //http://118.89.26.188:8081/layui/json/getMembers.json
-      url: '<?php echo url("IM","Index","getMembers");?>'
+      url: '<?php echo url("IM","Index","getMembers",['uid'=>$data['uid']]);?>'
       ,data: {}
     }
     
@@ -166,60 +279,88 @@ layui.use('layim', function(layim){
     //   ,id: "1233333312121212"
     //   ,remark: "本人冲田杏梨将结束AV女优的工作"
     // });
-    
-    setTimeout(function(){
-      //接受消息（如果检测到该socket）
-      layim.getMessage({
-        username: "Hi"
-        ,avatar: "http://qzapp.qlogo.cn/qzapp/100280987/56ADC83E78CEC046F8DF2C5D0DD63CDE/100"
-        ,id: "1"
-        ,type: "friend"
-        ,content: "临时："+ new Date().getTime()
-      });
-      
-      layim.getMessage({
-        username: "贤心"
-        ,avatar: "http://tp1.sinaimg.cn/1571889140/180/40030060651/1"
-        ,id: "100001"
-        ,type: "friend"
-        ,content: "嗨，你好！欢迎体验LayIM。演示标记："+ new Date().getTime()
-      });
-      
-    }, 3000);
+
+      //获取服务器端信息
+    // setTimeout(function(){
+    //   //接受消息（如果检测到该socket）
+    //   layim.getMessage({
+    //     username: "Hi"
+    //     ,avatar: "http://qzapp.qlogo.cn/qzapp/100280987/56ADC83E78CEC046F8DF2C5D0DD63CDE/100"
+    //     ,id: "1"
+    //     ,type: "friend"
+    //     ,content: "临时："+ new Date().getTime()
+    //   });
+    //
+    //   layim.getMessage({
+    //     username: "贤心"
+    //     ,avatar: "http://tp1.sinaimg.cn/1571889140/180/40030060651/1"
+    //     ,id: "100001"
+    //     ,type: "friend"
+    //     ,content: "嗨，你好！欢迎体验LayIM。演示标记："+ new Date().getTime()
+    //   });
+    // }, 3000);
+
   });
 
   //监听发送消息
   layim.on('sendMessage', function(data){
+    data.mine.fd = fd;
     var To = data.to;
-    //console.log(data);
+    console.log(data);
     
     if(To.type === 'friend'){
       layim.setChatStatus('<span style="color:#FF5722;">对方正在输入。。。</span>');
     }
+
+    //将内容发送到服务器
+      sendData('IM/Ws','sendData',data);
+
+    // var obj = {};
+    // if(To.type === 'group'){
+    //     obj = {
+    //         username: '模拟群员'+(Math.random()*100|0),
+    //         avatar: layui.cache.dir + 'images/face/'+ (Math.random()*72|0) + '.gif',
+    //         id: To.id,
+    //         type: To.type,
+    //         content: autoReplay[Math.random()*9|0]
+    //       }
+    // } else {
+    //       obj = {
+    //         username: To.name,
+    //           avatar: To.avatar,
+    //               id: To.id,
+    //             type: To.type,
+    //          content: autoReplay[Math.random()*9|0]
+    //       }
+    //     layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
+    // }
+
+
     
     //演示自动回复
-    setTimeout(function(){
-      var obj = {};
-      if(To.type === 'group'){
-        obj = {
-          username: '模拟群员'+(Math.random()*100|0)
-          ,avatar: layui.cache.dir + 'images/face/'+ (Math.random()*72|0) + '.gif'
-          ,id: To.id
-          ,type: To.type
-          ,content: autoReplay[Math.random()*9|0]
-        }
-      } else {
-        obj = {
-          username: To.name
-          ,avatar: To.avatar
-          ,id: To.id
-          ,type: To.type
-          ,content: autoReplay[Math.random()*9|0]
-        }
-        layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
-      }
-      layim.getMessage(obj);
-    }, 1000);
+    // setTimeout(function(){
+    //   var obj = {};
+    //   if(To.type === 'group'){
+    //     obj = {
+    //       username: '模拟群员'+(Math.random()*100|0)
+    //       ,avatar: layui.cache.dir + 'images/face/'+ (Math.random()*72|0) + '.gif'
+    //       ,id: To.id
+    //       ,type: To.type
+    //       ,content: autoReplay[Math.random()*9|0]
+    //     }
+    //   } else {
+    //     obj = {
+    //       username: To.name,
+    //         avatar: To.avatar,
+    //             id: To.id,
+    //           type: To.type,
+    //        content: autoReplay[Math.random()*9|0]
+    //
+    //     }
+    //     layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
+    //   }
+    //   layim.getMessage(obj);
+    // }, 1000);
   });
 
   //监听查看群员
@@ -245,97 +386,14 @@ layui.use('layim', function(layim){
     }
   });
 
-  //websocket
-    var wsUri = "ws://118.89.26.188:8083";
-    //var output;
-    var websocket;
-    var msg = new Object();
-    function init() {
-        //output = document.getElementById("output");
-        //getData();
-        runWebSocket();
-
-    }
-
-    function runWebSocket() {
-        websocket = new WebSocket(wsUri);
-        websocket.onopen = function (evt) {
-            onOpen(evt)
-        };
-        websocket.onclose = function (evt) {
-            onClose(evt)
-        };
-        websocket.onmessage = function (evt) {
-            onMessage(evt)
-        };
-        websocket.onerror = function (evt) {
-            onError(evt)
-        };
-    }
-
-    function onOpen(evt) {
-        //writeToScreen("CONNECTED");
-        console.log("CONNECTED:"+evt);
-        //doSend("WebSocket rocks");
-
-        msg.controller = 'IM/Ws';
-        msg.method='connect';
-        //msg.type = 'login';
-
-        websocket.send($.toJSON(msg));
-    }
-
-    function onClose(evt) {
-        //writeToScreen("DISCONNECTED");
-        console.log("DISCONNECTED:"+evt);
-    }
-
-    function onMessage(evt) {
-        //writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data + '</span>');
-        //websocket.close();
-        var json = $.parseJSON(evt.data);
-        console.log(json);
-
-    }
-
-    function onError(evt) {
-        //writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
-        console.log(evt.data);
-    }
-
-    function doSend(message) {
-        //writeToScreen("SENT: " + message);
-        websocket.send(message);
-    }
-
-    function writeToScreen(message) {
-        var pre = document.createElement("p");
-        pre.style.wordWrap = "break-word";
-        pre.innerHTML = message;
-        output.appendChild(pre);
-    }
-
-    window.addEventListener("load", init, false);
 
 
-
-    function sendData() {
-        if (!websocket) {
-            return false;
-        }
-        if (!$('#msg').val()) {
-            return false;
-        }
-
-        var send_data = {};
-        send_data.username = 'ming123jew';
-        send_data.message = $('#msg').val();
-
-        websocket.send(JSON.stringify(send_data));
-        $('#msg').val("");
-        return false
-    }
-
+  setInterval(function () {
+      //每15分钟进行一次记录
+      //var data = Object();
+      //console.log(localStorage.getItem('layim'));
+      sendData('IM/Ws','historyData',localStorage.getItem('layim'));
+  },1000 * 60 * 10 )//10分钟进行一次记录
 });
 
 

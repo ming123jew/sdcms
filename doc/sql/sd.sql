@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50635
 File Encoding         : 65001
 
-Date: 2018-05-14 14:33:20
+Date: 2018-05-17 17:50:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -563,17 +563,17 @@ INSERT INTO `sd_content_hits` VALUES ('6', '1', '0', '0', '0', '0', '0', '152239
 INSERT INTO `sd_content_hits` VALUES ('7', '1', '5', '0', '2', '2', '5', '1524994964', '0');
 INSERT INTO `sd_content_hits` VALUES ('8', '1', '5', '0', '5', '5', '5', '1523591119', '0');
 INSERT INTO `sd_content_hits` VALUES ('9', '1', '2', '0', '2', '2', '2', '1523958187', '0');
-INSERT INTO `sd_content_hits` VALUES ('10', '1', '2', '0', '2', '2', '2', '1523958169', '0');
+INSERT INTO `sd_content_hits` VALUES ('10', '1', '5', '1', '2', '3', '3', '1526521707', '1');
 INSERT INTO `sd_content_hits` VALUES ('11', '1', '6', '0', '6', '6', '6', '1524222525', '0');
 INSERT INTO `sd_content_hits` VALUES ('12', '1', '15', '0', '2', '2', '5', '1525685949', '0');
 INSERT INTO `sd_content_hits` VALUES ('13', '1', '1348', '0', '5', '1327', '1327', '1525409718', '1');
-INSERT INTO `sd_content_hits` VALUES ('14', '1', '49', '0', '2', '2', '41', '1526260647', '0');
+INSERT INTO `sd_content_hits` VALUES ('14', '1', '57', '1', '4', '10', '49', '1526433318', '0');
 INSERT INTO `sd_content_hits` VALUES ('15', '2', '2', '0', '2', '2', '2', '1523863694', '0');
 INSERT INTO `sd_content_hits` VALUES ('16', '2', '2', '0', '2', '2', '2', '1523863762', '0');
-INSERT INTO `sd_content_hits` VALUES ('17', '2', '8', '2', '3', '3', '3', '1525269934', '1');
+INSERT INTO `sd_content_hits` VALUES ('17', '2', '10', '2', '2', '2', '5', '1526287574', '1');
 INSERT INTO `sd_content_hits` VALUES ('18', '2', '31', '3', '2', '2', '7', '1525759320', '1');
-INSERT INTO `sd_content_hits` VALUES ('19', '2', '1681', '4', '1', '5', '772', '1525759251', '3');
-INSERT INTO `sd_content_hits` VALUES ('20', '2', '74', '4', '1', '5', '21', '1525759247', '2');
+INSERT INTO `sd_content_hits` VALUES ('19', '2', '1686', '3', '2', '5', '777', '1526485332', '4');
+INSERT INTO `sd_content_hits` VALUES ('20', '2', '78', '3', '1', '4', '25', '1526375871', '2');
 
 -- ----------------------------
 -- Table structure for `sd_im_group`
@@ -587,11 +587,94 @@ CREATE TABLE `sd_im_group` (
   `create_time` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_im_group
 -- ----------------------------
+INSERT INTO `sd_im_group` VALUES ('1', '群组1', '1', '0', '1', '1');
+
+-- ----------------------------
+-- Table structure for `sd_im_group_friend`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_im_group_friend`;
+CREATE TABLE `sd_im_group_friend` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `friend_uid` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_im_group_friend
+-- ----------------------------
+INSERT INTO `sd_im_group_friend` VALUES ('1', '1', '1', '1', '2');
+INSERT INTO `sd_im_group_friend` VALUES ('2', '1', '1', '1', '3');
+
+-- ----------------------------
+-- Table structure for `sd_im_history`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_im_history`;
+CREATE TABLE `sd_im_history` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` char(6) NOT NULL,
+  `content` text NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `sender_uid` int(11) NOT NULL COMMENT '发送者uid',
+  `receiver_uid` int(11) NOT NULL COMMENT '接受者uid',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_im_history
+-- ----------------------------
+INSERT INTO `sd_im_history` VALUES ('2', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"aa\",\"fd\":9},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526528259', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('3', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"f\",\"fd\":60},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming\",\"type\":\"friend\"}}', '1526528941', '2', '1');
+INSERT INTO `sd_im_history` VALUES ('4', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"fuck\",\"fd\":67},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\",\"historyTime\":1526529304973}}', '1526529393', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('5', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"222\",\"fd\":67},\"to\":{\"username\":\"ming3\",\"id\":\"3\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming3\",\"type\":\"friend\"}}', '1526529466', '1', '3');
+INSERT INTO `sd_im_history` VALUES ('6', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"a\",\"fd\":100},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526543963', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('7', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"888\",\"fd\":3},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526547647', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('8', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"aaaaaaaaaaaa\",\"fd\":3},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526547691', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('9', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"f\",\"fd\":10},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526547949', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('10', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"ff\",\"fd\":10},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526547956', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('11', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"ffff\",\"fd\":5},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526547984', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('12', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"ggg\",\"fd\":10},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming\",\"type\":\"friend\"}}', '1526548173', '2', '1');
+INSERT INTO `sd_im_history` VALUES ('13', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"uuu\",\"fd\":4},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526548225', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('14', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"uuuuuuuuuuuuu\",\"fd\":4},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526548232', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('15', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"dd\",\"fd\":10},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming\",\"type\":\"friend\"}}', '1526548334', '2', '1');
+INSERT INTO `sd_im_history` VALUES ('16', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"d\",\"fd\":14},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526548437', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('17', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"aaa\",\"fd\":15},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming\",\"type\":\"friend\"}}', '1526548461', '2', '1');
+INSERT INTO `sd_im_history` VALUES ('18', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"hh\",\"fd\":4},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526548506', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('19', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"aaa\",\"fd\":9},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526548557', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('20', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"aaaaaaaaaaaaaa\",\"fd\":9},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526548579', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('21', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"aaa\",\"fd\":9},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526548584', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('22', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"fuck\",\"fd\":17},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526548646', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('23', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"fff\",\"fd\":17},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526548685', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('24', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"aaaaaaaaaaa\",\"fd\":22},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming\",\"type\":\"friend\"}}', '1526548922', '2', '1');
+INSERT INTO `sd_im_history` VALUES ('25', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"fd\":22},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming\",\"type\":\"friend\"}}', '1526548933', '2', '1');
+INSERT INTO `sd_im_history` VALUES ('26', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"aaa\",\"fd\":25},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526549084', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('27', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"fuck\",\"fd\":26},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"type\":\"friend\",\"name\":\"ming\"}}', '1526549092', '2', '1');
+INSERT INTO `sd_im_history` VALUES ('28', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"what the fuck\",\"fd\":25},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526549119', '1', '2');
+INSERT INTO `sd_im_history` VALUES ('29', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"yes fuck\",\"fd\":26},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"type\":\"friend\",\"name\":\"ming\"}}', '1526549124', '2', '1');
+INSERT INTO `sd_im_history` VALUES ('30', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"aaaaaaad\",\"fd\":26},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"type\":\"friend\",\"name\":\"ming\"}}', '1526549204', '2', '1');
+INSERT INTO `sd_im_history` VALUES ('31', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"aaa\",\"fd\":25},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526549210', '1', '2');
+
+-- ----------------------------
+-- Table structure for `sd_im_history_log`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_im_history_log`;
+CREATE TABLE `sd_im_history_log` (
+  `content` text NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `uid` int(11) NOT NULL COMMENT '发送者uid'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_im_history_log
+-- ----------------------------
+INSERT INTO `sd_im_history_log` VALUES ('{\"1\":{\"spread0\":\"true\",\"history\":{\"friend2\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\",\"historyTime\":1526545760122},\"friend3\":{\"username\":\"ming3\",\"id\":\"3\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming3\",\"type\":\"friend\",\"historyTime\":1526529462679}},\"chatlog\":{\"friend2\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"fuck\",\"timestamp\":1526529392061,\"mine\":true},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"a\",\"timestamp\":1526543962028,\"mine\":true}],\"friend3\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"3\",\"type\":\"friend\",\"content\":\"222\",\"timestamp\":1526529464261,\"mine\":true}]}},\"2\":{\"spread0\":\"true\",\"history\":{\"friend1\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming\",\"type\":\"friend\",\"historyTime\":1526545832928}}}}', '1526546215', '1');
 
 -- ----------------------------
 -- Table structure for `sd_im_user_friend`
@@ -600,16 +683,18 @@ DROP TABLE IF EXISTS `sd_im_user_friend`;
 CREATE TABLE `sd_im_user_friend` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_group_id` int(11) NOT NULL,
-  `num` int(11) NOT NULL DEFAULT '0',
   `create_time` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
   `friend_uid` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_im_user_friend
 -- ----------------------------
+INSERT INTO `sd_im_user_friend` VALUES ('1', '1', '1', '1', '2');
+INSERT INTO `sd_im_user_friend` VALUES ('2', '1', '1', '1', '3');
+INSERT INTO `sd_im_user_friend` VALUES ('3', '3', '1', '2', '1');
 
 -- ----------------------------
 -- Table structure for `sd_im_user_group`
@@ -623,11 +708,14 @@ CREATE TABLE `sd_im_user_group` (
   `create_time` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_im_user_group
 -- ----------------------------
+INSERT INTO `sd_im_user_group` VALUES ('1', '我的好友', '1', '0', '1', '1');
+INSERT INTO `sd_im_user_group` VALUES ('2', '我的家人', '1', '0', '1', '1');
+INSERT INTO `sd_im_user_group` VALUES ('3', '我的好友', '1', '0', '1', '2');
 
 -- ----------------------------
 -- Table structure for `sd_log`
@@ -5727,18 +5815,20 @@ CREATE TABLE `sd_user` (
   `groupid` int(5) NOT NULL DEFAULT '0',
   `email` varchar(60) NOT NULL,
   `roleid` smallint(6) NOT NULL DEFAULT '0',
+  `sign` varchar(200) DEFAULT NULL,
+  `avatar` varchar(200) DEFAULT 'http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_user
 -- ----------------------------
-INSERT INTO `sd_user` VALUES ('1', 'ming', '123456', '0', '1', '0', 'ming@163.com', '1');
-INSERT INTO `sd_user` VALUES ('2', 'ming2', '123456', '0', '1', '0', 'ming2@163.com', '0');
-INSERT INTO `sd_user` VALUES ('3', 'ming3', '123456', '0', '1', '0', 'ming3@163.com', '0');
-INSERT INTO `sd_user` VALUES ('4', 'ming4', '123456', '0', '1', '0', 'ming4@163.com', '0');
-INSERT INTO `sd_user` VALUES ('6', 'ming23', '123456', '1524474021', '1', '0', '799871365@qq.com', '0');
-INSERT INTO `sd_user` VALUES ('7', 'ming98', '168123', '1525699071', '1', '0', 'ming98@qq.com', '0');
+INSERT INTO `sd_user` VALUES ('1', 'ming', '123456', '0', '1', '0', 'ming@163.com', '1', null, 'http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg');
+INSERT INTO `sd_user` VALUES ('2', 'ming2', '123456', '0', '1', '0', 'ming2@163.com', '0', null, 'http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg');
+INSERT INTO `sd_user` VALUES ('3', 'ming3', '123456', '0', '1', '0', 'ming3@163.com', '0', null, 'http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg');
+INSERT INTO `sd_user` VALUES ('4', 'ming4', '123456', '0', '1', '0', 'ming4@163.com', '0', null, 'http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg');
+INSERT INTO `sd_user` VALUES ('6', 'ming23', '123456', '1524474021', '1', '0', '799871365@qq.com', '0', null, 'http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg');
+INSERT INTO `sd_user` VALUES ('7', 'ming98', '168123', '1525699071', '1', '0', 'ming98@qq.com', '0', null, 'http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg');
 
 -- ----------------------------
 -- Table structure for `sd_wx_user`

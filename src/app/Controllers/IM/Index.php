@@ -21,6 +21,7 @@ class Index extends Base{
 
 
     public function http_index(){
+        parent::templateData('uid',intval($this->http_input->getPost('uid')));
         parent::webOrApp(function (){
             $template = $this->loader->view('app::IM/index');
             $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
@@ -32,7 +33,7 @@ class Index extends Base{
      * 初始化接口
      */
     public function http_init(){
-        $uid = 1;
+        $uid = intval($this->http_input->getPost('uid'));
         //获取个人信息
         $this->Model['UserModel'] = $this->loader->model(UserModel::class,$this);
         $this->Data['UserModel'] = yield $this->Model['UserModel']->getById($uid);
@@ -83,7 +84,7 @@ class Index extends Base{
     }
 
     public function http_getMembers(){
-        $uid = 1;
+        $uid = intval($this->http_input->getPost('uid'));
         $group_id = 1;
         //获取个人信息
         $this->Model['UserModel'] = $this->loader->model(UserModel::class,$this);
