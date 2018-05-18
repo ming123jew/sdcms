@@ -102,6 +102,23 @@ class ImHistoryLogModel extends BaseModel
         }
     }
 
+    /**
+     * @param int $uid
+     * @param string $fields
+     * @return bool
+     */
+    public function getByUid(int $uid,$fields='*')
+    {
+        $r = yield $this->mysql_pool->dbQueryBuilder->from($this->prefix.$this->table)
+            ->where('uid',$uid)
+            ->select($fields)
+            ->coroutineSend();
+        if(empty($r['result'])){
+            return false;
+        }else{
+            return $r['result'][0];
+        }
+    }
 
     /**
      * @param $id

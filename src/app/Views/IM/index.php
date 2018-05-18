@@ -78,10 +78,15 @@ layui.use('layim', function(layim){
         switch (type){
             case 'welcome':
                 fd = json.fd;
+                //加载历史信息
+                if(json.history){
+                    localStorage.setItem('layim',json.history.content);
+                }
                 break;
             case 'ready':
                 break;
             case 'sendData':
+                //发送数据回调
                 var obj = {};
                 obj = {
                     username: json.data.username,
@@ -91,6 +96,7 @@ layui.use('layim', function(layim){
                     content: json.data.content
                 }
                 layim.getMessage(obj);
+                sendData('IM/Ws','historyData',localStorage.getItem('layim'));
                 console.log(json.data);
                 break;
         }
@@ -236,7 +242,7 @@ layui.use('layim', function(layim){
 
   //监听在线状态的切换事件
   layim.on('online', function(data){
-    //console.log(data);
+    console.log(data);
   });
   
   //监听签名修改
@@ -314,6 +320,7 @@ layui.use('layim', function(layim){
 
     //将内容发送到服务器
       sendData('IM/Ws','sendData',data);
+      sendData('IM/Ws','historyData',localStorage.getItem('layim'));
 
     // var obj = {};
     // if(To.type === 'group'){
@@ -334,8 +341,6 @@ layui.use('layim', function(layim){
     //       }
     //     layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
     // }
-
-
     
     //演示自动回复
     // setTimeout(function(){
@@ -386,14 +391,13 @@ layui.use('layim', function(layim){
     }
   });
 
-
-
   setInterval(function () {
       //每15分钟进行一次记录
       //var data = Object();
       //console.log(localStorage.getItem('layim'));
       sendData('IM/Ws','historyData',localStorage.getItem('layim'));
   },1000 * 60 * 10 )//10分钟进行一次记录
+
 });
 
 

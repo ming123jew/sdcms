@@ -46,6 +46,10 @@ class Index extends Base{
         $this->Model['ImUserFriendModel'] = $this->loader->model(ImUserFriendModel::class,$this);
         $this->Data['ImUserFriendModel'] = yield $this->Model['ImUserFriendModel']->getAllByUid($uid);
 
+        //获取在线用户
+        $this->Data['onlines'] = yield get_instance()->coroutineGetAllUids();
+        var_dump( $this->Data['onlines']);
+
         //进行分组
         $this->Data['firend'] = [];
         foreach ($this->Data['ImUserFriendModel'] as $key=>$value){
@@ -56,7 +60,7 @@ class Index extends Base{
                 if($value['user_group_id']==$v['id']){
                     $this->Data['firend'][$k]['list'][$key]['username'] =  $value['username'];
                     $this->Data['firend'][$k]['list'][$key]['id'] =  $value['friend_uid'];
-                    $this->Data['firend'][$k]['list'][$key]['status'] =  'online';
+                    $this->Data['firend'][$k]['list'][$key]['status'] =   in_array($value['friend_uid'],$this->Data['onlines'])? 'online':'offline';
                     $this->Data['firend'][$k]['list'][$key]['sign'] =  $value['sign'];
                     $this->Data['firend'][$k]['list'][$key]['avatar'] =  $value['avatar'];
                 }else{
