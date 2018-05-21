@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0x13] = array(
+
+static $data = [
 'ja', 'ju', 'ji', 'jaa', 'jee', 'je', 'jo', 'jwa', 'ga', 'gu', 'gi', 'gaa', 'gee', 'ge', 'go', '[?]',
 'gwa', '[?]', 'gwi', 'gwaa', 'gwee', 'gwe', '[?]', '[?]', 'gga', 'ggu', 'ggi', 'ggaa', 'ggee', 'gge', 'ggo', '[?]',
 'tha', 'thu', 'thi', 'thaa', 'thee', 'the', 'tho', 'thwa', 'cha', 'chu', 'chi', 'chaa', 'chee', 'che', 'cho', 'chwa',
@@ -15,5 +16,9 @@ $UTF8_TO_ASCII[0x13] = array(
 'nah', 'ne', 'ni', 'no', 'nu', 'nv', 'qua', 'que', 'qui', 'quo', 'quu', 'quv', 'sa', 's', 'se', 'si',
 'so', 'su', 'sv', 'da', 'ta', 'de', 'te', 'di', 'ti', 'do', 'du', 'dv', 'dla', 'tla', 'tle', 'tli',
 'tlo', 'tlu', 'tlv', 'tsa', 'tse', 'tsi', 'tso', 'tsu', 'tsv', 'wa', 'we', 'wi', 'wo', 'wu', 'wv', 'ya',
-'ye', 'yi', 'yo', 'yu', 'yv', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]',
-);
+'ye', 'yi', 'yo', 'yu', 'yv', 'MV', '[?]', '[?]', 'ye', 'yi', 'yo', 'yu', 'yv', 'mv', '[?]', '[?]',
+];
+
+$result =& $data;
+unset($data);
+return $result;

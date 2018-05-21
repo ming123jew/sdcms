@@ -8,8 +8,7 @@
 [![Reference Status](https://www.versioneye.com/php/voku:anti-xss/reference_badge.svg?style=flat)](https://www.versioneye.com/php/voku:anti-xss/references)
 [![Dependency Status](https://www.versioneye.com/php/voku:anti-xss/dev-master/badge.svg)](https://www.versioneye.com/php/voku:anti-xss/dev-master)
 [![Latest Stable Version](https://poser.pugx.org/voku/anti-xss/v/stable)](https://packagist.org/packages/voku/anti-xss) 
-[![Total Downloads](https://poser.pugx.org/voku/anti-xss/downloads)](https://packagist.org/packages/voku/anti-xss) 
-[![Latest Unstable Version](https://poser.pugx.org/voku/anti-xss/v/unstable)](https://packagist.org/packages/voku/anti-xss)
+[![Total Downloads](https://poser.pugx.org/voku/anti-xss/downloads)](https://packagist.org/packages/voku/anti-xss)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/voku/anti-xss/badge.svg)](https://travis-ci.org/voku/anti-xss)
 [![License](https://poser.pugx.org/voku/anti-xss/license)](https://packagist.org/packages/voku/anti-xss)
 
@@ -49,35 +48,90 @@ composer require voku/anti-xss
 Usage:
 ======
 
-    $antiXss = new AntiXSS();
+```php
+$antiXss = new AntiXSS();
+```
 
 Example 1: (HTML Character)
 
-    $harm_string = "Hello, i try to <script>alert('Hack');</script> your site";
-    $harmless_string = $antiXss->xss_clean($harm_string);
-    
-    // Hello, i try to alert&#40;'Hack'&#41;; your site
+```php
+$harm_string = "Hello, i try to <script>alert('Hack');</script> your site";
+$harmless_string = $antiXss->xss_clean($harm_string);
+
+// Hello, i try to alert&#40;'Hack'&#41;; your site
+```
 
 Example 2: (Hexadecimal HTML Character)
 
-    $harm_string = "<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>";
-    $harmless_string = $antiXss->xss_clean($harm_string);
-        
-    // <IMG >
+```php
+$harm_string = "<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>";
+$harmless_string = $antiXss->xss_clean($harm_string);
+    
+// <IMG >
+```
     
 Example 3: (Unicode Hex Character)
 
-    $harm_string = "<a href='&#x2000;javascript:alert(1)'>CLICK</a>";
-    $harmless_string = $antiXss->xss_clean($harm_string);
-        
-    // <a >CLICK</a>
+```php
+$harm_string = "<a href='&#x2000;javascript:alert(1)'>CLICK</a>";
+$harmless_string = $antiXss->xss_clean($harm_string);
+    
+// <a >CLICK</a>
+```
 
 Example 4: (Unicode Character)
 
-    $harm_string = "<a href=\"\u0001java\u0003script:alert(1)\">CLICK<a>";
-    $harmless_string = $antiXss->xss_clean($harm_string);
-        
-    // <a >CLICK</a>
+```php
+$harm_string = "<a href=\"\u0001java\u0003script:alert(1)\">CLICK<a>";
+$harmless_string = $antiXss->xss_clean($harm_string);
+    
+// <a >CLICK</a>
+```
+
+Example 5.1: (non Inline CSS)
+
+```php
+$harm_string = '<li style="list-style-image: url(javascript:alert(0))">';
+$harmless_string = $antiXss->xss_clean($harm_string);
+
+// <li >
+```
+
+Example 5.2: (with Inline CSS)
+
+```php
+$harm_string = '<li style="list-style-image: url(javascript:alert(0))">';
+$antiXss->removeEvilAttributes(array('style')); // allow style-attributes
+$harmless_string = $antiXss->xss_clean($harm_string);
+
+// <li style="list-style-image: url(alert&#40;0&#41;)">
+```
+
+Example 6: (check if an string contains a XSS attack)
+
+```php
+$harm_string = "\x3cscript src=http://www.example.com/malicious-code.js\x3e\x3c/script\x3e";
+$harmless_string = $antiXss->xss_clean($harm_string);
+
+// 
+
+$antiXss->isXssFound(); 
+
+// true
+```
+
+Example 7: (allow e.g. iframes)
+
+```php
+$harm_string = "<iframe width="560" onclick="alert('xss')" height="315" src="https://www.youtube.com/embed/foobar?rel=0&controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>";
+
+$antiXss->removeEvilHtmlTags(array('iframe'));
+
+$harmless_string = $antiXss->xss_clean($harm_string);
+
+// <iframe width="560"  height="315" src="https://www.youtube.com/embed/foobar?rel=0&controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>
+```
+
 
 Unit Test:
 ==========
@@ -93,4 +147,3 @@ composer install
 ```bash
 ./vendor/bin/phpunit
 ```
-

@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xbd] = array(
+
+static $data = [
 'bols', 'bolt', 'bolp', 'bolh', 'bom', 'bob', 'bobs', 'bos', 'boss', 'bong', 'boj', 'boc', 'bok', 'bot', 'bop', 'boh',
 'bwa', 'bwag', 'bwagg', 'bwags', 'bwan', 'bwanj', 'bwanh', 'bwad', 'bwal', 'bwalg', 'bwalm', 'bwalb', 'bwals', 'bwalt', 'bwalp', 'bwalh',
 'bwam', 'bwab', 'bwabs', 'bwas', 'bwass', 'bwang', 'bwaj', 'bwac', 'bwak', 'bwat', 'bwap', 'bwah', 'bwae', 'bwaeg', 'bwaegg', 'bwaegs',
@@ -16,4 +17,8 @@ $UTF8_TO_ASCII[0xbd] = array(
 'bwek', 'bwet', 'bwep', 'bweh', 'bwi', 'bwig', 'bwigg', 'bwigs', 'bwin', 'bwinj', 'bwinh', 'bwid', 'bwil', 'bwilg', 'bwilm', 'bwilb',
 'bwils', 'bwilt', 'bwilp', 'bwilh', 'bwim', 'bwib', 'bwibs', 'bwis', 'bwiss', 'bwing', 'bwij', 'bwic', 'bwik', 'bwit', 'bwip', 'bwih',
 'byu', 'byug', 'byugg', 'byugs', 'byun', 'byunj', 'byunh', 'byud', 'byul', 'byulg', 'byulm', 'byulb', 'byuls', 'byult', 'byulp', 'byulh',
-);
+];
+
+$result =& $data;
+unset($data);
+return $result;

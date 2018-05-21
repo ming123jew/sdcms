@@ -423,7 +423,7 @@ function check_role($m,$c,$a,$context,$param=[])
     if(!$role_id_priv)
     {
         //数据库查找
-        $model = get_instance()->loader->model(\app\Models\RolePrivModel::class,$context);
+        $model = get_instance()->loader->model(\app\Models\Data\RolePrivModel::class,$context);
         $r =  yield $model->authRole($role_id,$m,$c,$a);
         //print_r('check_role from db \n;');
 

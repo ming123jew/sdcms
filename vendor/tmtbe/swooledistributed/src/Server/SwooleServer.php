@@ -3,13 +3,16 @@
 namespace Server;
 
 use Gelf\Publisher;
+use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\GelfHandler;
 use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\SyslogHandler;
 use Monolog\Logger;
 use Noodlehaus\Config;
 use Server\Components\Backstage\BackstageHelp;
 use Server\Components\Event\EventDispatcher;
 use Server\Components\GrayLog\UdpTransport;
+use Server\Components\log\SDJsonFormatter;
 use Server\Components\Middleware\MiddlewareManager;
 use Server\Components\Process\ProcessRPC;
 use Server\CoreBase\ControllerFactory;
@@ -17,6 +20,7 @@ use Server\CoreBase\ILoader;
 use Server\CoreBase\Loader;
 use Server\CoreBase\PortManager;
 use Server\Coroutine\Coroutine;
+use Whoops\Exception\ErrorException;
 
 /**
  * Created by PhpStorm.
@@ -34,7 +38,7 @@ abstract class SwooleServer extends ProcessRPC
     /**
      * 版本
      */
-    const version = "2.7.6";
+    const version = "2.8.10";
 
     /**
      * server name
@@ -132,9 +136,16 @@ abstract class SwooleServer extends ProcessRPC
                     $this->config['log']['log_level'])]);
                 break;
             case "file":
-                $this->log->pushHandler(new RotatingFileHandler(LOG_DIR . "/" . $this->name . '.log',
+                $handel = new RotatingFileHandler(LOG_DIR . "/" . $this->name . '.log',
                     $this->config['log']['file']['log_max_files'],
-                    $this->config['log']['log_level']));
+                    $this->config['log']['log_level']);
+                $handel->setFormatter(new JsonFormatter());
+                $this->log->pushHandler($handel);
+                break;
+            case "syslog":
+                $handel = new SyslogHandler($this->config['log']['syslog']['ident']);
+                $handel->setFormatter(new SDJsonFormatter());
+                $this->log->pushHandler($handel);
                 break;
         }
     }
@@ -145,17 +156,26 @@ abstract class SwooleServer extends ProcessRPC
     public function __construct()
     {
         $this->onErrorHandel = [$this, 'onErrorHandel'];
-        Start::initServer($this);
         $this->setConfig();
         $this->middlewareManager = new MiddlewareManager();
         $this->user = $this->config->get('server.set.user', '');
         $this->setLogHandler();
         register_shutdown_function(array($this, 'checkErrors'));
-        set_error_handler(array($this, 'displayErrorHandler'));
+        set_error_handler(array($this, 'displayErrorHandler'), E_ALL | E_STRICT);
+        set_exception_handler(array($this, 'displayExceptionHandler'));
         $this->portManager = new PortManager($this->config['ports']);
         if ($this->loader == null) {
             $this->loader = new Loader();
         }
+    }
+
+    /**
+     * @param \Exception $exception
+     * @throws ErrorException
+     */
+    public function displayExceptionHandler(\Exception $exception)
+    {
+        throw new ErrorException($exception->getMessage(), $exception->getCode(), 1, $exception->getFile(), $exception->getLine());
     }
 
     /**
@@ -191,8 +211,6 @@ abstract class SwooleServer extends ProcessRPC
         $set['daemonize'] = Start::getDaemonize();
         $this->server->set($set);
         swoole_async_set([
-            'aio_mode' => SWOOLE_AIO_BASE,
-            'thread_num' => 100,
             'socket_buffer_size' => 128 * 1024 * 1024
         ]);
     }
@@ -327,7 +345,6 @@ abstract class SwooleServer extends ProcessRPC
      */
     public function onSwooleReceive($serv, $fd, $from_id, $data, $server_port = null)
     {
-        //var_dump("diceng:".$data);
         if (!Start::$testUnity) {
             $server_port = $this->getServerPort($fd);
             $uid = $this->getUidFromFd($fd);
@@ -339,7 +356,7 @@ abstract class SwooleServer extends ProcessRPC
         //反序列化，出现异常断开连接
         try {
             $client_data = $pack->unPack($data);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $pack->errorHandle($e, $fd);
             return;
         }
@@ -364,14 +381,14 @@ abstract class SwooleServer extends ProcessRPC
                     } else {
                         throw new \Exception('no controller');
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $route->errorHandle($e, $fd);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
             }
             try {
                 yield $this->middlewareManager->after($middlewares, $path);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
 
             }
             $this->middlewareManager->destory($middlewares);
@@ -553,15 +570,11 @@ abstract class SwooleServer extends ProcessRPC
      * @param $filename
      * @param $line
      * @param $symbols
+     * @throws ErrorException
      */
     public function displayErrorHandler($error, $error_string, $filename, $line, $symbols)
     {
-        $log = "WORKER Error ";
-        $log .= "$error_string ($filename:$line)";
-        $this->log->error($log);
-        if ($this->onErrorHandel != null) {
-            call_user_func($this->onErrorHandel, '服务器发生严重错误', $log);
-        }
+        throw new ErrorException($error_string, $error, 1, $filename, $line);
     }
 
     /**

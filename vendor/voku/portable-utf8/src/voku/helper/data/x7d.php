@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0x7d] = array(
+
+static $data = [
 'Ji ', 'Cha ', 'Zhou ', 'Xun ', 'Yue ', 'Hong ', 'Yu ', 'He ', 'Wan ', 'Ren ', 'Wen ', 'Wen ', 'Qiu ', 'Na ', 'Zi ', 'Tou ',
 'Niu ', 'Fou ', 'Jie ', 'Shu ', 'Chun ', 'Pi ', 'Yin ', 'Sha ', 'Hong ', 'Zhi ', 'Ji ', 'Fen ', 'Yun ', 'Ren ', 'Dan ', 'Jin ',
 'Su ', 'Fang ', 'Suo ', 'Cui ', 'Jiu ', 'Zha ', 'Kinu ', 'Jin ', 'Fu ', 'Zhi ', 'Ci ', 'Zi ', 'Chou ', 'Hong ', 'Zha ', 'Lei ',
@@ -16,4 +17,8 @@ $UTF8_TO_ASCII[0x7d] = array(
 'Fan ', 'Lu ', 'Xu ', 'Yingl ', 'Zhang ', 'Kasuri ', 'Xu ', 'Xiang ', 'Jian ', 'Ke ', 'Xian ', 'Ruan ', 'Mian ', 'Qi ', 'Duan ', 'Zhong ',
 'Di ', 'Min ', 'Miao ', 'Yuan ', 'Xie ', 'Bao ', 'Si ', 'Qiu ', 'Bian ', 'Huan ', 'Geng ', 'Cong ', 'Mian ', 'Wei ', 'Fu ', 'Wei ',
 'Yu ', 'Gou ', 'Miao ', 'Xie ', 'Lian ', 'Zong ', 'Bian ', 'Yun ', 'Yin ', 'Ti ', 'Gua ', 'Zhi ', 'Yun ', 'Cheng ', 'Chan ', 'Dai ',
-);
+];
+
+$result =& $data;
+unset($data);
+return $result;

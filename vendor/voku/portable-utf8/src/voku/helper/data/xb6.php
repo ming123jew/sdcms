@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xb6] = array(
+
+static $data = [
 'ddyels', 'ddyelt', 'ddyelp', 'ddyelh', 'ddyem', 'ddyeb', 'ddyebs', 'ddyes', 'ddyess', 'ddyeng', 'ddyej', 'ddyec', 'ddyek', 'ddyet', 'ddyep', 'ddyeh',
 'ddo', 'ddog', 'ddogg', 'ddogs', 'ddon', 'ddonj', 'ddonh', 'ddod', 'ddol', 'ddolg', 'ddolm', 'ddolb', 'ddols', 'ddolt', 'ddolp', 'ddolh',
 'ddom', 'ddob', 'ddobs', 'ddos', 'ddoss', 'ddong', 'ddoj', 'ddoc', 'ddok', 'ddot', 'ddop', 'ddoh', 'ddwa', 'ddwag', 'ddwagg', 'ddwags',
@@ -16,4 +17,8 @@ $UTF8_TO_ASCII[0xb6] = array(
 'ddweok', 'ddweot', 'ddweop', 'ddweoh', 'ddwe', 'ddweg', 'ddwegg', 'ddwegs', 'ddwen', 'ddwenj', 'ddwenh', 'ddwed', 'ddwel', 'ddwelg', 'ddwelm', 'ddwelb',
 'ddwels', 'ddwelt', 'ddwelp', 'ddwelh', 'ddwem', 'ddweb', 'ddwebs', 'ddwes', 'ddwess', 'ddweng', 'ddwej', 'ddwec', 'ddwek', 'ddwet', 'ddwep', 'ddweh',
 'ddwi', 'ddwig', 'ddwigg', 'ddwigs', 'ddwin', 'ddwinj', 'ddwinh', 'ddwid', 'ddwil', 'ddwilg', 'ddwilm', 'ddwilb', 'ddwils', 'ddwilt', 'ddwilp', 'ddwilh',
-);
+];
+
+$result =& $data;
+unset($data);
+return $result;

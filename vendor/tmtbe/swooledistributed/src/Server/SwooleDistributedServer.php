@@ -2,6 +2,7 @@
 
 namespace Server;
 
+use Server\Asyn\HttpClient\HttpClientPool;
 use Server\Asyn\MQTT\Utility;
 use Server\Asyn\Mysql\Miner;
 use Server\Asyn\Mysql\MysqlAsynPool;
@@ -146,7 +147,7 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
         if (!$this->isCluster()) {
             Start::setLeader(true);
         }
-        return parent::start();
+        parent::start();
     }
 
     /**
@@ -509,7 +510,7 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
     public function addAsynPool($name, $pool)
     {
         if (array_key_exists($name, $this->asynPools)) {
-            throw  new SwooleException($name.'pool key is exists!');
+            throw  new SwooleException('pool key is exists!');
         }
         $this->asynPools[$name] = $pool;
     }
@@ -535,8 +536,6 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
     {
         parent::onSwooleWorkerStart($serv, $workerId);
         $this->initAsynPools($workerId);
-        $this->redis_pool = $this->asynPools['redisPool'] ?? null;
-        $this->mysql_pool = $this->asynPools['mysqlPool'] ?? null;
         //进程锁保证只有一个进程会执行以下的代码,reload也不会执行
         if (!$this->isTaskWorker() && $this->initLock->trylock()) {
             //进程启动后进行开服的初始化
@@ -576,6 +575,11 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
         if ($this->config->get('mysql.enable', true)) {
             $this->asynPools['mysqlPool'] = new MysqlAsynPool($this->config, $this->config->get('mysql.active'));
         }
+        if ($this->config->get('error.dingding_enable', false)) {
+            $this->asynPools['dingdingRest'] = new HttpClientPool($this->config, $this->config->get('error.dingding_url'));
+        }
+        $this->redis_pool = $this->asynPools['redisPool'] ?? null;
+        $this->mysql_pool = $this->asynPools['mysqlPool'] ?? null;
     }
 
     /**
@@ -669,13 +673,13 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
         if ($isKick) {
             $this->kickUid($uid, false);
         }
+        $this->uid_fd_table->set($uid, ['fd' => $fd]);
+        $this->fd_uid_table->set($fd, ['uid' => $uid]);
         if ($this->isCluster()) {
             ProcessManager::getInstance()->getRpcCall(ClusterProcess::class, true)->my_addUid($uid);
         } else {
             get_instance()->pub('$SYS/uidcount', count($this->uid_fd_table));
         }
-        $this->uid_fd_table->set($uid, ['fd' => $fd]);
-        $this->fd_uid_table->set($fd, ['uid' => $uid]);
     }
 
     /**
@@ -689,6 +693,9 @@ abstract class SwooleDistributedServer extends SwooleWebSocketServer
         $this->fd_uid_table->del($fd);
         //这里无论是不是集群都需要调用
         ProcessManager::getInstance()->getRpcCall(ClusterProcess::class, true)->my_removeUid($uid);
+        if (!$this->isCluster()) {
+            get_instance()->pub('$SYS/uidcount', count($this->uid_fd_table));
+        }
     }
 
     /**

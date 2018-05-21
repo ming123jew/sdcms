@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xd3] = array(
+
+static $data = [
 'tim', 'tib', 'tibs', 'tis', 'tiss', 'ting', 'tij', 'tic', 'tik', 'tit', 'tip', 'tih', 'pa', 'pag', 'pagg', 'pags',
 'pan', 'panj', 'panh', 'pad', 'pal', 'palg', 'palm', 'palb', 'pals', 'palt', 'palp', 'palh', 'pam', 'pab', 'pabs', 'pas',
 'pass', 'pang', 'paj', 'pac', 'pak', 'pat', 'pap', 'pah', 'pae', 'paeg', 'paegg', 'paegs', 'paen', 'paenj', 'paenh', 'paed',
@@ -16,4 +17,8 @@ $UTF8_TO_ASCII[0xd3] = array(
 'pye', 'pyeg', 'pyegg', 'pyegs', 'pyen', 'pyenj', 'pyenh', 'pyed', 'pyel', 'pyelg', 'pyelm', 'pyelb', 'pyels', 'pyelt', 'pyelp', 'pyelh',
 'pyem', 'pyeb', 'pyebs', 'pyes', 'pyess', 'pyeng', 'pyej', 'pyec', 'pyek', 'pyet', 'pyep', 'pyeh', 'po', 'pog', 'pogg', 'pogs',
 'pon', 'ponj', 'ponh', 'pod', 'pol', 'polg', 'polm', 'polb', 'pols', 'polt', 'polp', 'polh', 'pom', 'pob', 'pobs', 'pos',
-);
+];
+
+$result =& $data;
+unset($data);
+return $result;

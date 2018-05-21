@@ -403,3 +403,35 @@ try {
 }
 ```
 5.Actor现在默认会落地存盘，如不手动调用Destroy，重启服务器会自动恢复Actor，可以删除cache文件夹清理。
+
+# 2.7.7-beta
+1.需要PHP7.1.6以上版本
+
+2.依赖项全部升级到最新
+
+3.全新控制台，用户可以自定义控制台命令，app/Console下命令将会自动加载
+
+# 2.7.7
+正式版，已经历线上产品验证，稳定
+
+# 2.7.8
+1.修复bug
+
+2.business配置支持路由到控制器
+```php
+'default' =>
+        [
+            'index' => ['TestController', 'test'] //转到控制器
+        ]
+    ,
+```
+通过传递给index一个数组即可路由到TestController的test方法，记住这里方法不需要加前缀
+
+# 2.8.1
+1.新增syslog，可以接入阿里云日志系统
+
+2.新增错误收集系统需要连接Redis，配置：error.php
+
+3.新增Whoops，查看错误
+
+4.bug修复

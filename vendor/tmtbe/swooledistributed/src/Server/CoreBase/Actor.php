@@ -124,7 +124,11 @@ abstract class Actor extends CoreBase
         if ($this->saveContext["@status"] == null) {
             $this->saveContext["@status"] = [$key => $value];
         } else {
-            $this->saveContext["@status"][$key] = $value;
+            //如果存在了并且相等就pass
+            if (isset($this->saveContext["@status"][$key]) && $this->saveContext["@status"][$key] == $value) {
+                return;
+            }
+            $this->saveContext->getData()["@status"][$key] = $value;
             //二维数组需要自己手动调用save
             $this->saveContext->save();
         }
@@ -150,17 +154,30 @@ abstract class Actor extends CoreBase
                 return;
             }
         }
-        $generator = call_user_func_array([$this, $function], $params);
-        if ($generator instanceof \Generator) {
-            Coroutine::startCoroutine(function () use (&$generator, $workerId, $token, $oneWay, $node) {
-                $result = yield $generator;
+        try {
+            $generator = call_user_func_array([$this, $function], $params);
+            if ($generator instanceof \Generator) {
+                Coroutine::startCoroutine(function () use (&$generator, $workerId, $token, $oneWay, $node) {
+                    try {
+                        $result = yield $generator;
+                    }catch (\Throwable $e)
+                    {
+                        $result = new RPCThrowable($e);
+                    }
+                    if (!$oneWay) {
+                        $this->rpcBack($workerId, $token, $result, $node);
+                    }
+                });
+            }else {
                 if (!$oneWay) {
-                    $this->rpcBack($workerId, $token, $result, $node);
+                    $this->rpcBack($workerId, $token, $generator, $node);
                 }
-            });
-        } else {
+            }
+        } catch (\Throwable $e)
+        {
+            $result = new RPCThrowable($e);
             if (!$oneWay) {
-                $this->rpcBack($workerId, $token, $generator, $node);
+                $this->rpcBack($workerId, $token, $result, $node);
             }
         }
     }
@@ -241,10 +258,11 @@ abstract class Actor extends CoreBase
 
     public function destroy()
     {
+        ProcessManager::getInstance()->getRpcCall(ClusterProcess::class)->my_removeActor($this->name);
         EventDispatcher::getInstance()->removeAll($this->messageId);
         EventDispatcher::getInstance()->remove(self::SAVE_NAME . Actor::ALL_COMMAND, [$this, '_handle']);
         foreach ($this->timerIdArr as $id) {
-            \swoole_timer_clear($id);
+            @\swoole_timer_clear($id);
         }
         $this->saveContext->destroy();
         Pool::getInstance()->push($this->saveContext);
@@ -295,7 +313,7 @@ abstract class Actor extends CoreBase
      */
     public function clearTimer($id)
     {
-        \swoole_timer_clear($id);
+        @\swoole_timer_clear($id);
         unset($this->timerIdArr[$id]);
     }
 

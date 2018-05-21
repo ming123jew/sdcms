@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0x11] = array(
+
+static $data = [
 'g', 'gg', 'n', 'd', 'dd', 'r', 'm', 'b', 'bb', 's', 'ss', '', 'j', 'jj', 'c', 'k',
 't', 'p', 'h', 'ng', 'nn', 'nd', 'nb', 'dg', 'rn', 'rr', 'rh', 'rN', 'mb', 'mN', 'bg', 'bn',
 '', 'bs', 'bsg', 'bst', 'bsb', 'bss', 'bsj', 'bj', 'bc', 'bt', 'bp', 'bN', 'bbN', 'sg', 'sn', 'sd',
@@ -15,5 +16,9 @@ $UTF8_TO_ASCII[0x11] = array(
 't', 'p', 'h', 'gl', 'gsg', 'ng', 'nd', 'ns', 'nZ', 'nt', 'dg', 'tl', 'lgs', 'ln', 'ld', 'lth',
 'll', 'lmg', 'lms', 'lbs', 'lbh', 'rNp', 'lss', 'lZ', 'lk', 'lQ', 'mg', 'ml', 'mb', 'ms', 'mss', 'mZ',
 'mc', 'mh', 'mN', 'bl', 'bp', 'ph', 'pN', 'sg', 'sd', 'sl', 'sb', 'Z', 'g', 'ss', '', 'kh',
-'N', 'Ns', 'NZ', 'pb', 'pN', 'hn', 'hl', 'hm', 'hb', 'Q', '[?]', '[?]', '[?]', '[?]', '[?]',
-);
+'N', 'Ns', 'NZ', 'pb', 'pN', 'hn', 'hl', 'hm', 'hb', 'Q', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]',
+];
+
+$result =& $data;
+unset($data);
+return $result;

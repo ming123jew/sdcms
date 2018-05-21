@@ -3,3 +3,4 @@ composer.lock
 *.log
 src/config
 bin/log
+doc/config.bak

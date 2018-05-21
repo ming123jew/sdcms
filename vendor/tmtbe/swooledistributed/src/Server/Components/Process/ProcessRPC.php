@@ -10,6 +10,7 @@ namespace Server\Components\Process;
 
 
 use Server\CoreBase\Child;
+use Server\CoreBase\RPCThrowable;
 use Server\Coroutine\Coroutine;
 use Server\SwooleMarco;
 use Server\Test\DocParser;
@@ -77,7 +78,7 @@ abstract class ProcessRPC extends Child
         $message['worker_id'] = $my_worker_id;
         $message['arg'] = $arguments;
         $message['func'] = $name;
-        $message['token'] = "[PR]$my_worker_id->$worker_id:" . $this->token;
+        $message['token'] = "[PR]$my_worker_id->$worker_id:" . $this->token .":". getTickTime();
         $message['oneWay'] = $oneWay;
         if ($my_worker_id == $worker_id) {
             \swoole_event_defer(function () use (&$message) {
@@ -97,22 +98,36 @@ abstract class ProcessRPC extends Child
     protected function processPpcRun($message)
     {
         $func = $message['func'];
-        $result = call_user_func_array([$this->rpcProxy ?? $this, $func], $message['arg']);
-        if ($result instanceof \Generator)//需要协程调度
-        {
-            if (!$this->coroutine_need) {
-                throw new \Exception("该进程不支持协程调度器");
-            }
-            Coroutine::startCoroutine(function () use ($result, $message) {
-                $result = yield $result;
+        try {
+            $result = call_user_func_array([$this->rpcProxy ?? $this, $func], $message['arg']);
+            if ($result instanceof \Generator)//需要协程调度
+            {
+                if (!$this->coroutine_need) {
+                    throw new \Exception("该进程不支持协程调度器");
+                }
+                Coroutine::startCoroutine(function () use ($result, $message) {
+                    try {
+                        $result = yield $result;
+                    }catch (\Throwable $e){
+                        $result = new RPCThrowable($e);
+                    }
+                    if (!$message['oneWay']) {
+                        $newMessage['result'] = $result;
+                        $newMessage['token'] = $message['token'];
+                        $data = get_instance()->packServerMessageBody(SwooleMarco::PROCESS_RPC_RESULT, $newMessage);
+                        $this->sendMessage($data, $message['worker_id']);
+                    }
+                });
+            } else {
                 if (!$message['oneWay']) {
                     $newMessage['result'] = $result;
                     $newMessage['token'] = $message['token'];
                     $data = get_instance()->packServerMessageBody(SwooleMarco::PROCESS_RPC_RESULT, $newMessage);
                     $this->sendMessage($data, $message['worker_id']);
                 }
-            });
-        } else {
+            }
+        }catch (\Throwable $e){
+            $result = new RPCThrowable($e);
             if (!$message['oneWay']) {
                 $newMessage['result'] = $result;
                 $newMessage['token'] = $message['token'];

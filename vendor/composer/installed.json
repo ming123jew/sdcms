@@ -1,5 +1,68 @@
 [
     {
+        "name": "filp/whoops",
+        "version": "2.1.14",
+        "version_normalized": "2.1.14.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/filp/whoops.git",
+            "reference": "c6081b8838686aa04f1e83ba7e91f78b7b2a23e6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/filp/whoops/c6081b8838686aa04f1e83ba7e91f78b7b2a23e6.zip",
+            "reference": "c6081b8838686aa04f1e83ba7e91f78b7b2a23e6",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.5.9 || ^7.0",
+            "psr/log": "^1.0.1"
+        },
+        "require-dev": {
+            "mockery/mockery": "0.9.*",
+            "phpunit/phpunit": "^4.8.35 || ^5.7",
+            "symfony/var-dumper": "^2.6 || ^3.0"
+        },
+        "suggest": {
+            "symfony/var-dumper": "Pretty print complex values better with var-dumper available",
+            "whoops/soap": "Formats errors as SOAP responses"
+        },
+        "time": "2017-11-23T18:22:44+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Whoops\\": "src/Whoops/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Filipe Dobreira",
+                "homepage": "https://github.com/filp",
+                "role": "Developer"
+            }
+        ],
+        "description": "php error handling for cool kids",
+        "homepage": "https://filp.github.io/whoops/",
+        "keywords": [
+            "error",
+            "exception",
+            "handling",
+            "library",
+            "throwable",
+            "whoops"
+        ]
+    },
+    {
         "name": "graylog2/gelf-php",
         "version": "1.5.5",
         "version_normalized": "1.5.5.0",
@@ -10,7 +73,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/bzikarsky/gelf-php/zipball/c4e0743ba323459b6e62222107a0898e77d2fd6e",
+            "url": "https://files.phpcomposer.com/files/bzikarsky/gelf-php/c4e0743ba323459b6e62222107a0898e77d2fd6e.zip",
             "reference": "c4e0743ba323459b6e62222107a0898e77d2fd6e",
             "shasum": ""
         },
@@ -58,219 +121,33 @@
         "description": "A php implementation to send log-messages to a GELF compatible backend like Graylog2."
     },
     {
-        "name": "guzzlehttp/guzzle",
-        "version": "6.3.2",
-        "version_normalized": "6.3.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/guzzle/guzzle.git",
-            "reference": "68d0ea14d5a3f42a20e87632a5f84931e2709c90"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/guzzle/guzzle/zipball/68d0ea14d5a3f42a20e87632a5f84931e2709c90",
-            "reference": "68d0ea14d5a3f42a20e87632a5f84931e2709c90",
-            "shasum": ""
-        },
-        "require": {
-            "guzzlehttp/promises": "^1.0",
-            "guzzlehttp/psr7": "^1.4",
-            "php": ">=5.5"
-        },
-        "require-dev": {
-            "ext-curl": "*",
-            "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4",
-            "psr/log": "^1.0"
-        },
-        "suggest": {
-            "psr/log": "Required for using the Log middleware"
-        },
-        "time": "2018-03-26T16:33:04+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "6.3-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/functions_include.php"
-            ],
-            "psr-4": {
-                "GuzzleHttp\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Michael Dowling",
-                "email": "mtdowling@gmail.com",
-                "homepage": "https://github.com/mtdowling"
-            }
-        ],
-        "description": "Guzzle is a PHP HTTP client library",
-        "homepage": "http://guzzlephp.org/",
-        "keywords": [
-            "client",
-            "curl",
-            "framework",
-            "http",
-            "http client",
-            "rest",
-            "web service"
-        ]
-    },
-    {
-        "name": "guzzlehttp/promises",
-        "version": "v1.3.1",
-        "version_normalized": "1.3.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/guzzle/promises.git",
-            "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646",
-            "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.0"
-        },
-        "time": "2016-12-20T10:07:11+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "GuzzleHttp\\Promise\\": "src/"
-            },
-            "files": [
-                "src/functions_include.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Michael Dowling",
-                "email": "mtdowling@gmail.com",
-                "homepage": "https://github.com/mtdowling"
-            }
-        ],
-        "description": "Guzzle promises library",
-        "keywords": [
-            "promise"
-        ]
-    },
-    {
-        "name": "guzzlehttp/psr7",
-        "version": "1.4.2",
-        "version_normalized": "1.4.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/guzzle/psr7.git",
-            "reference": "f5b8a8512e2b58b0071a7280e39f14f72e05d87c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/guzzle/psr7/zipball/f5b8a8512e2b58b0071a7280e39f14f72e05d87c",
-            "reference": "f5b8a8512e2b58b0071a7280e39f14f72e05d87c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.4.0",
-            "psr/http-message": "~1.0"
-        },
-        "provide": {
-            "psr/http-message-implementation": "1.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.0"
-        },
-        "time": "2017-03-20T17:10:46+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "GuzzleHttp\\Psr7\\": "src/"
-            },
-            "files": [
-                "src/functions_include.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Michael Dowling",
-                "email": "mtdowling@gmail.com",
-                "homepage": "https://github.com/mtdowling"
-            },
-            {
-                "name": "Tobias Schultze",
-                "homepage": "https://github.com/Tobion"
-            }
-        ],
-        "description": "PSR-7 message implementation that also provides common utility methods",
-        "keywords": [
-            "http",
-            "message",
-            "request",
-            "response",
-            "stream",
-            "uri",
-            "url"
-        ]
-    },
-    {
         "name": "hassankhan/config",
-        "version": "0.11.2",
-        "version_normalized": "0.11.2.0",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/hassankhan/config.git",
-            "reference": "7fbc236c32dc6cc53a7b00992a2739cf8b41c085"
+            "reference": "2065b1ff1e937dd93f72073667be59dcc53e6966"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/hassankhan/config/zipball/7fbc236c32dc6cc53a7b00992a2739cf8b41c085",
-            "reference": "7fbc236c32dc6cc53a7b00992a2739cf8b41c085",
+            "url": "https://files.phpcomposer.com/files/hassankhan/config/2065b1ff1e937dd93f72073667be59dcc53e6966.zip",
+            "reference": "2065b1ff1e937dd93f72073667be59dcc53e6966",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.0"
+            "php": ">=5.5.9"
         },
         "require-dev": {
             "phpunit/phpunit": "~4.0",
             "scrutinizer/ocular": "~1.1",
-            "squizlabs/php_codesniffer": "~2.2"
+            "squizlabs/php_codesniffer": "~2.2",
+            "symfony/yaml": "~2.5"
         },
         "suggest": {
             "symfony/yaml": "~2.5"
         },
-        "time": "2017-11-07T22:49:43+00:00",
+        "time": "2018-03-31T13:21:58+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -304,183 +181,6 @@
         ]
     },
     {
-        "name": "ircmaxell/password-compat",
-        "version": "v1.0.4",
-        "version_normalized": "1.0.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ircmaxell/password_compat.git",
-            "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ircmaxell/password_compat/zipball/5c5cde8822a69545767f7c7f3058cb15ff84614c",
-            "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c",
-            "shasum": ""
-        },
-        "require-dev": {
-            "phpunit/phpunit": "4.*"
-        },
-        "time": "2014-11-20T16:49:30+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "lib/password.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Anthony Ferrara",
-                "email": "ircmaxell@php.net",
-                "homepage": "http://blog.ircmaxell.com"
-            }
-        ],
-        "description": "A compatibility library for the proposed simplified password hashing algorithm: https://wiki.php.net/rfc/password_hash",
-        "homepage": "https://github.com/ircmaxell/password_compat",
-        "keywords": [
-            "hashing",
-            "password"
-        ]
-    },
-    {
-        "name": "jaeger/g-http",
-        "version": "V1.4.1",
-        "version_normalized": "1.4.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jae-jae/GHttp.git",
-            "reference": "14e82c0e5a22adf762aca0d9b10b3cb597f2bc95"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jae-jae/GHttp/zipball/14e82c0e5a22adf762aca0d9b10b3cb597f2bc95",
-            "reference": "14e82c0e5a22adf762aca0d9b10b3cb597f2bc95",
-            "shasum": ""
-        },
-        "require": {
-            "guzzlehttp/guzzle": "^6.2"
-        },
-        "time": "2017-12-26T07:13:50+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Jaeger\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jaeger",
-                "email": "JaegerCode@gmail.com"
-            }
-        ],
-        "description": "Simple Http client base on GuzzleHttp"
-    },
-    {
-        "name": "jaeger/phpquery-single",
-        "version": "0.9.9",
-        "version_normalized": "0.9.9.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jae-jae/phpQuery-single.git",
-            "reference": "6c12e3a1648dc619f16920f96082f397d74e0127"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jae-jae/phpQuery-single/zipball/6c12e3a1648dc619f16920f96082f397d74e0127",
-            "reference": "6c12e3a1648dc619f16920f96082f397d74e0127",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2017-12-07T02:13:37+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "phpQuery.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Tobiasz Cudnik",
-                "email": "tobiasz.cudnik@gmail.com",
-                "homepage": "https://github.com/TobiaszCudnik",
-                "role": "Developer"
-            },
-            {
-                "name": "Jaeger",
-                "role": "Packager"
-            }
-        ],
-        "description": "phpQuery单文件版本，是Querylist的依赖(http://querylist.cc/)，phpQuery项目主页:http://code.google.com/p/phpquery/",
-        "homepage": "http://code.google.com/p/phpquery/"
-    },
-    {
-        "name": "jaeger/querylist",
-        "version": "V4.0.3",
-        "version_normalized": "4.0.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jae-jae/QueryList.git",
-            "reference": "1d7389598123ee0b87d4893bdf042d40f7e6ce90"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jae-jae/QueryList/zipball/1d7389598123ee0b87d4893bdf042d40f7e6ce90",
-            "reference": "1d7389598123ee0b87d4893bdf042d40f7e6ce90",
-            "shasum": ""
-        },
-        "require": {
-            "jaeger/g-http": "^1.1",
-            "jaeger/phpquery-single": "^0.9",
-            "php": ">=7.0",
-            "tightenco/collect": "^5"
-        },
-        "require-dev": {
-            "symfony/var-dumper": "^3.3"
-        },
-        "time": "2017-12-15T03:05:32+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "QL\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jaeger",
-                "email": "JaegerCode@gmail.com"
-            }
-        ],
-        "description": "Simple, elegant, extensible PHP Web Scraper (crawler/spider),Use the css3 dom selector,Based on phpQuery! 简洁、优雅、可扩展的PHP采集工具(爬虫)，基于phpQuery。",
-        "homepage": "http://querylist.cc",
-        "keywords": [
-            "QueryList",
-            "phpQuery",
-            "spider"
-        ]
-    },
-    {
         "name": "league/plates",
         "version": "3.3.0",
         "version_normalized": "3.3.0.0",
@@ -491,7 +191,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/thephpleague/plates/zipball/b1684b6f127714497a0ef927ce42c0b44b45a8af",
+            "url": "https://files.phpcomposer.com/files/thephpleague/plates/b1684b6f127714497a0ef927ce42c0b44b45a8af.zip",
             "reference": "b1684b6f127714497a0ef927ce42c0b44b45a8af",
             "shasum": ""
         },
@@ -539,17 +239,17 @@
     },
     {
         "name": "monolog/monolog",
-        "version": "1.22.1",
-        "version_normalized": "1.22.1.0",
+        "version": "1.23.0",
+        "version_normalized": "1.23.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Seldaek/monolog.git",
-            "reference": "1e044bc4b34e91743943479f1be7a1d5eb93add0"
+            "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1e044bc4b34e91743943479f1be7a1d5eb93add0",
-            "reference": "1e044bc4b34e91743943479f1be7a1d5eb93add0",
+            "url": "https://files.phpcomposer.com/files/Seldaek/monolog/fd8c787753b3a2ad11bc60c063cff1358a32a3b4.zip",
+            "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
             "shasum": ""
         },
         "require": {
@@ -570,7 +270,7 @@
             "phpunit/phpunit-mock-objects": "2.3.0",
             "ruflin/elastica": ">=0.90 <3.0",
             "sentry/sentry": "^0.13",
-            "swiftmailer/swiftmailer": "~5.3"
+            "swiftmailer/swiftmailer": "^5.3|^6.0"
         },
         "suggest": {
             "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
@@ -585,7 +285,7 @@
             "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
             "sentry/sentry": "Allow sending log messages to a Sentry server"
         },
-        "time": "2017-03-13T07:08:03+00:00",
+        "time": "2017-06-19T01:22:40+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -618,68 +318,18 @@
         ]
     },
     {
-        "name": "paragonie/random_compat",
-        "version": "v2.0.11",
-        "version_normalized": "2.0.11.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/paragonie/random_compat.git",
-            "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/paragonie/random_compat/zipball/5da4d3c796c275c55f057af5a643ae297d96b4d8",
-            "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "4.*|5.*"
-        },
-        "suggest": {
-            "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
-        },
-        "time": "2017-09-27T21:40:39+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "lib/random.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Paragon Initiative Enterprises",
-                "email": "security@paragonie.com",
-                "homepage": "https://paragonie.com"
-            }
-        ],
-        "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
-        "keywords": [
-            "csprng",
-            "pseudorandom",
-            "random"
-        ]
-    },
-    {
         "name": "php-amqplib/php-amqplib",
-        "version": "v2.6.3",
-        "version_normalized": "2.6.3.0",
+        "version": "v2.7.2",
+        "version_normalized": "2.7.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/php-amqplib/php-amqplib.git",
-            "reference": "fa2f0d4410a11008cb36b379177291be7ee9e4f6"
+            "reference": "dfd3694a86f1a7394d3693485259d4074a6ec79b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/fa2f0d4410a11008cb36b379177291be7ee9e4f6",
-            "reference": "fa2f0d4410a11008cb36b379177291be7ee9e4f6",
+            "url": "https://files.phpcomposer.com/files/php-amqplib/php-amqplib/dfd3694a86f1a7394d3693485259d4074a6ec79b.zip",
+            "reference": "dfd3694a86f1a7394d3693485259d4074a6ec79b",
             "shasum": ""
         },
         "require": {
@@ -691,6 +341,7 @@
             "videlalvaro/php-amqplib": "self.version"
         },
         "require-dev": {
+            "phpdocumentor/phpdocumentor": "^2.9",
             "phpunit/phpunit": "^4.8",
             "scrutinizer/ocular": "^1.1",
             "squizlabs/php_codesniffer": "^2.5"
@@ -698,7 +349,7 @@
         "suggest": {
             "ext-sockets": "Use AMQPSocketConnection"
         },
-        "time": "2016-04-11T14:30:01+00:00",
+        "time": "2018-02-11T19:28:00+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -713,7 +364,7 @@
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "LGPL-2.1"
+            "LGPL-2.1-or-later"
         ],
         "authors": [
             {
@@ -750,7 +401,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/php-ds/polyfill/zipball/27bed3897f9c801604f5bdcb65b71eb61ec80099",
+            "url": "https://files.phpcomposer.com/files/php-ds/polyfill/27bed3897f9c801604f5bdcb65b71eb61ec80099.zip",
             "reference": "27bed3897f9c801604f5bdcb65b71eb61ec80099",
             "shasum": ""
         },
@@ -789,58 +440,6 @@
         ]
     },
     {
-        "name": "psr/http-message",
-        "version": "1.0.1",
-        "version_normalized": "1.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-fig/http-message.git",
-            "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
-            "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2016-08-06T14:39:51+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Psr\\Http\\Message\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "PHP-FIG",
-                "homepage": "http://www.php-fig.org/"
-            }
-        ],
-        "description": "Common interface for HTTP messages",
-        "homepage": "https://github.com/php-fig/http-message",
-        "keywords": [
-            "http",
-            "http-message",
-            "psr",
-            "psr-7",
-            "request",
-            "response"
-        ]
-    },
-    {
         "name": "psr/log",
         "version": "1.0.2",
         "version_normalized": "1.0.2.0",
@@ -851,7 +450,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+            "url": "https://files.phpcomposer.com/files/php-fig/log/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d.zip",
             "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
             "shasum": ""
         },
@@ -890,90 +489,54 @@
         ]
     },
     {
-        "name": "shark/simple_html_dom",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "name": "symfony/console",
+        "version": "v4.0.9",
+        "version_normalized": "4.0.9.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/samacs/simple_html_dom.git",
-            "reference": "830223ef1faa89bf8bbd8b231bd228993fd4bd3b"
+            "url": "https://github.com/symfony/console.git",
+            "reference": "3e820bc2c520a87ca209ad8fa961c97f42e0b4ae"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/samacs/simple_html_dom/zipball/830223ef1faa89bf8bbd8b231bd228993fd4bd3b",
-            "reference": "830223ef1faa89bf8bbd8b231bd228993fd4bd3b",
+            "url": "https://files.phpcomposer.com/files/symfony/console/3e820bc2c520a87ca209ad8fa961c97f42e0b4ae.zip",
+            "reference": "3e820bc2c520a87ca209ad8fa961c97f42e0b4ae",
             "shasum": ""
         },
         "require": {
-            "ext-mbstring": "*",
-            "php": ">=5.2.4"
+            "php": "^7.1.3",
+            "symfony/polyfill-mbstring": "~1.0"
         },
-        "time": "2017-11-09T21:14:14+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "simple_html_dom.php"
-            ],
-            "files": [
-                "simple_html_dom.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "authors": [
-            {
-                "name": "S.C. Chen",
-                "email": "me578022@gmail.com",
-                "homepage": "http://simplehtmldom.sourceforge.net/"
-            }
-        ],
-        "description": "Simple HTML DOM package.",
-        "homepage": "http://simplehtmldom.sourceforge.net/",
-        "keywords": [
-            "dom",
-            "php dom"
-        ]
-    },
-    {
-        "name": "symfony/intl",
-        "version": "v3.4.6",
-        "version_normalized": "3.4.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/intl.git",
-            "reference": "4bcae9ab4e07c534586fc22f98a1fe694482b10b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/intl/zipball/4bcae9ab4e07c534586fc22f98a1fe694482b10b",
-            "reference": "4bcae9ab4e07c534586fc22f98a1fe694482b10b",
-            "shasum": ""
-        },
-        "require": {
-            "php": "^5.5.9|>=7.0.8",
-            "symfony/polyfill-intl-icu": "~1.0"
+        "conflict": {
+            "symfony/dependency-injection": "<3.4",
+            "symfony/process": "<3.3"
         },
         "require-dev": {
-            "symfony/filesystem": "~2.8|~3.0|~4.0"
+            "psr/log": "~1.0",
+            "symfony/config": "~3.4|~4.0",
+            "symfony/dependency-injection": "~3.4|~4.0",
+            "symfony/event-dispatcher": "~3.4|~4.0",
+            "symfony/lock": "~3.4|~4.0",
+            "symfony/process": "~3.4|~4.0"
         },
         "suggest": {
-            "ext-intl": "to use the component with locales other than \"en\""
+            "psr/log-implementation": "For using the console logger",
+            "symfony/event-dispatcher": "",
+            "symfony/lock": "",
+            "symfony/process": ""
         },
-        "time": "2018-02-03T00:57:06+00:00",
+        "time": "2018-04-30T01:23:47+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "3.4-dev"
+                "dev-master": "4.0-dev"
             }
         },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Symfony\\Component\\Intl\\": ""
+                "Symfony\\Component\\Console\\": ""
             },
-            "classmap": [
-                "Resources/stubs"
-            ],
             "exclude-from-classmap": [
                 "/Tests/"
             ]
@@ -984,97 +547,52 @@
         ],
         "authors": [
             {
-                "name": "Bernhard Schussek",
-                "email": "bschussek@gmail.com"
-            },
-            {
-                "name": "Eriksen Costa",
-                "email": "eriksen.costa@infranology.com.br"
-            },
-            {
-                "name": "Igor Wiedler",
-                "email": "igor@wiedler.ch"
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
             },
             {
                 "name": "Symfony Community",
                 "homepage": "https://symfony.com/contributors"
             }
         ],
-        "description": "A PHP replacement layer for the C intl extension that includes additional data from the ICU library.",
-        "homepage": "https://symfony.com",
-        "keywords": [
-            "i18n",
-            "icu",
-            "internationalization",
-            "intl",
-            "l10n",
-            "localization"
-        ]
+        "description": "Symfony Console Component",
+        "homepage": "https://symfony.com"
     },
     {
-        "name": "symfony/polyfill",
-        "version": "v1.2.0",
-        "version_normalized": "1.2.0.0",
+        "name": "symfony/polyfill-iconv",
+        "version": "v1.8.0",
+        "version_normalized": "1.8.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/polyfill.git",
-            "reference": "ee2c9c2576fdd4a42b024260a1906a9888770c34"
+            "url": "https://github.com/symfony/polyfill-iconv.git",
+            "reference": "7cb8436a814d5b0fcf292810ee26f8b0cb47584d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill/zipball/ee2c9c2576fdd4a42b024260a1906a9888770c34",
-            "reference": "ee2c9c2576fdd4a42b024260a1906a9888770c34",
+            "url": "https://files.phpcomposer.com/files/symfony/polyfill-iconv/7cb8436a814d5b0fcf292810ee26f8b0cb47584d.zip",
+            "reference": "7cb8436a814d5b0fcf292810ee26f8b0cb47584d",
             "shasum": ""
         },
         "require": {
-            "ircmaxell/password-compat": "~1.0",
-            "paragonie/random_compat": "~1.0|~2.0",
-            "php": ">=5.3.3",
-            "symfony/intl": "~2.3|~3.0"
+            "php": ">=5.3.3"
         },
-        "replace": {
-            "symfony/polyfill-apcu": "self.version",
-            "symfony/polyfill-iconv": "self.version",
-            "symfony/polyfill-intl-grapheme": "self.version",
-            "symfony/polyfill-intl-icu": "self.version",
-            "symfony/polyfill-intl-normalizer": "self.version",
-            "symfony/polyfill-mbstring": "self.version",
-            "symfony/polyfill-php54": "self.version",
-            "symfony/polyfill-php55": "self.version",
-            "symfony/polyfill-php56": "self.version",
-            "symfony/polyfill-php70": "self.version",
-            "symfony/polyfill-util": "self.version",
-            "symfony/polyfill-xml": "self.version"
+        "suggest": {
+            "ext-iconv": "For best performance"
         },
-        "time": "2016-05-18T14:27:53+00:00",
+        "time": "2018-04-26T10:06:28+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.2-dev"
+                "dev-master": "1.8-dev"
             }
         },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Symfony\\Polyfill\\": "src/"
+                "Symfony\\Polyfill\\Iconv\\": ""
             },
             "files": [
-                "src/Apcu/bootstrap.php",
-                "src/Php54/bootstrap.php",
-                "src/Php55/bootstrap.php",
-                "src/Php56/bootstrap.php",
-                "src/Php70/bootstrap.php",
-                "src/Iconv/bootstrap.php",
-                "src/Intl/Grapheme/bootstrap.php",
-                "src/Intl/Icu/bootstrap.php",
-                "src/Intl/Normalizer/bootstrap.php",
-                "src/Mbstring/bootstrap.php",
-                "src/Xml/bootstrap.php"
-            ],
-            "classmap": [
-                "src/Intl/Normalizer/Resources/stubs",
-                "src/Php70/Resources/stubs",
-                "src/Php54/Resources/stubs"
+                "bootstrap.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -1091,63 +609,51 @@
                 "homepage": "https://symfony.com/contributors"
             }
         ],
-        "description": "Symfony polyfills backporting features to lower PHP versions",
+        "description": "Symfony polyfill for the Iconv extension",
         "homepage": "https://symfony.com",
         "keywords": [
-            "compat",
             "compatibility",
+            "iconv",
             "polyfill",
+            "portable",
             "shim"
         ]
     },
     {
-        "name": "symfony/var-dumper",
-        "version": "v3.4.6",
-        "version_normalized": "3.4.6.0",
+        "name": "symfony/polyfill-intl-grapheme",
+        "version": "v1.8.0",
+        "version_normalized": "1.8.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/var-dumper.git",
-            "reference": "80964679d81da3d5618519e0e4be488c3d7ecd7d"
+            "url": "https://github.com/symfony/polyfill-intl-grapheme.git",
+            "reference": "f30a9fb355ef8cc7411caf8da7c59b4e2db137fe"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/80964679d81da3d5618519e0e4be488c3d7ecd7d",
-            "reference": "80964679d81da3d5618519e0e4be488c3d7ecd7d",
+            "url": "https://files.phpcomposer.com/files/symfony/polyfill-intl-grapheme/f30a9fb355ef8cc7411caf8da7c59b4e2db137fe.zip",
+            "reference": "f30a9fb355ef8cc7411caf8da7c59b4e2db137fe",
             "shasum": ""
         },
         "require": {
-            "php": "^5.5.9|>=7.0.8",
-            "symfony/polyfill-mbstring": "~1.0"
-        },
-        "conflict": {
-            "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0"
-        },
-        "require-dev": {
-            "ext-iconv": "*",
-            "twig/twig": "~1.34|~2.4"
+            "php": ">=5.3.3"
         },
         "suggest": {
-            "ext-iconv": "To convert non-UTF-8 strings to UTF-8 (or symfony/polyfill-iconv in case ext-iconv cannot be used).",
-            "ext-intl": "To show region name in time zone dump",
-            "ext-symfony_debug": ""
+            "ext-intl": "For best performance"
         },
-        "time": "2018-02-22T17:29:24+00:00",
+        "time": "2018-04-26T10:06:28+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "3.4-dev"
+                "dev-master": "1.8-dev"
             }
         },
         "installation-source": "dist",
         "autoload": {
-            "files": [
-                "Resources/functions/dump.php"
-            ],
             "psr-4": {
-                "Symfony\\Component\\VarDumper\\": ""
+                "Symfony\\Polyfill\\Intl\\Grapheme\\": ""
             },
-            "exclude-from-classmap": [
-                "/Tests/"
+            "files": [
+                "bootstrap.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -1164,47 +670,56 @@
                 "homepage": "https://symfony.com/contributors"
             }
         ],
-        "description": "Symfony mechanism for exploring and dumping PHP variables",
+        "description": "Symfony polyfill for intl's grapheme_* functions",
         "homepage": "https://symfony.com",
         "keywords": [
-            "debug",
-            "dump"
+            "compatibility",
+            "grapheme",
+            "intl",
+            "polyfill",
+            "portable",
+            "shim"
         ]
     },
     {
-        "name": "tightenco/collect",
-        "version": "v5.5.33",
-        "version_normalized": "5.5.33.0",
+        "name": "symfony/polyfill-intl-normalizer",
+        "version": "v1.8.0",
+        "version_normalized": "1.8.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/tightenco/collect.git",
-            "reference": "a2a3ca1c56aa18948b4e08e90f38fcdee859cc4c"
+            "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
+            "reference": "00fad3a3e2db93a2b788d83dfdd432a3c7e8fb4f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/tightenco/collect/zipball/a2a3ca1c56aa18948b4e08e90f38fcdee859cc4c",
-            "reference": "a2a3ca1c56aa18948b4e08e90f38fcdee859cc4c",
+            "url": "https://files.phpcomposer.com/files/symfony/polyfill-intl-normalizer/00fad3a3e2db93a2b788d83dfdd432a3c7e8fb4f.zip",
+            "reference": "00fad3a3e2db93a2b788d83dfdd432a3c7e8fb4f",
             "shasum": ""
         },
         "require": {
-            "php": ">=7.0",
-            "symfony/var-dumper": "~3.3"
+            "php": ">=5.3.3"
         },
-        "require-dev": {
-            "mockery/mockery": "~1.0",
-            "phpunit/phpunit": "~6.0"
+        "suggest": {
+            "ext-intl": "For best performance"
         },
-        "time": "2018-02-09T02:05:17+00:00",
+        "time": "2018-04-26T10:06:28+00:00",
         "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.8-dev"
+            }
+        },
         "installation-source": "dist",
         "autoload": {
-            "files": [
-                "src/Collect/Support/helpers.php",
-                "src/Collect/Support/alias.php"
-            ],
             "psr-4": {
-                "Tightenco\\Collect\\": "src/Collect"
-            }
+                "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
+            },
+            "files": [
+                "bootstrap.php"
+            ],
+            "classmap": [
+                "Resources/stubs"
+            ]
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
@@ -1212,42 +727,171 @@
         ],
         "authors": [
             {
-                "name": "Taylor Otwell",
-                "email": "taylorotwell@gmail.com"
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
             }
         ],
-        "description": "Collect - Illuminate Collections as a separate package.",
+        "description": "Symfony polyfill for intl's Normalizer class and related functions",
+        "homepage": "https://symfony.com",
         "keywords": [
-            "collection",
-            "laravel"
+            "compatibility",
+            "intl",
+            "normalizer",
+            "polyfill",
+            "portable",
+            "shim"
+        ]
+    },
+    {
+        "name": "symfony/polyfill-mbstring",
+        "version": "v1.8.0",
+        "version_normalized": "1.8.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/polyfill-mbstring.git",
+            "reference": "3296adf6a6454a050679cde90f95350ad604b171"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/symfony/polyfill-mbstring/3296adf6a6454a050679cde90f95350ad604b171.zip",
+            "reference": "3296adf6a6454a050679cde90f95350ad604b171",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "suggest": {
+            "ext-mbstring": "For best performance"
+        },
+        "time": "2018-04-26T10:06:28+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.8-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Polyfill\\Mbstring\\": ""
+            },
+            "files": [
+                "bootstrap.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony polyfill for the Mbstring extension",
+        "homepage": "https://symfony.com",
+        "keywords": [
+            "compatibility",
+            "mbstring",
+            "polyfill",
+            "portable",
+            "shim"
+        ]
+    },
+    {
+        "name": "symfony/polyfill-php72",
+        "version": "v1.8.0",
+        "version_normalized": "1.8.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/polyfill-php72.git",
+            "reference": "a4576e282d782ad82397f3e4ec1df8e0f0cafb46"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/symfony/polyfill-php72/a4576e282d782ad82397f3e4ec1df8e0f0cafb46.zip",
+            "reference": "a4576e282d782ad82397f3e4ec1df8e0f0cafb46",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2018-04-26T10:06:28+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.8-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Polyfill\\Php72\\": ""
+            },
+            "files": [
+                "bootstrap.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony polyfill backporting some PHP 7.2+ features to lower PHP versions",
+        "homepage": "https://symfony.com",
+        "keywords": [
+            "compatibility",
+            "polyfill",
+            "portable",
+            "shim"
         ]
     },
     {
         "name": "tmtbe/swooledistributed",
-        "version": "2.7.6",
-        "version_normalized": "2.7.6.0",
+        "version": "2.9.10",
+        "version_normalized": "2.9.10.0",
         "source": {
             "type": "git",
             "url": "https://github.com/SwooleDistributed/SwooleDistributed.git",
-            "reference": "2eef80861c4c59c57d94fbf6dcc6d8e271ca7513"
+            "reference": "f39d9cabf398b7990ee876532f6887262aa00205"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/SwooleDistributed/SwooleDistributed/zipball/2eef80861c4c59c57d94fbf6dcc6d8e271ca7513",
-            "reference": "2eef80861c4c59c57d94fbf6dcc6d8e271ca7513",
+            "url": "https://files.phpcomposer.com/files/SwooleDistributed/SwooleDistributed/f39d9cabf398b7990ee876532f6887262aa00205.zip",
+            "reference": "f39d9cabf398b7990ee876532f6887262aa00205",
             "shasum": ""
         },
         "require": {
-            "graylog2/gelf-php": "~1.0",
-            "hassankhan/config": "~0.10",
-            "league/plates": "3.*",
-            "monolog/monolog": "1.22.1",
-            "php": ">=7.0.0",
-            "php-amqplib/php-amqplib": "2.6.*",
-            "php-ds/php-ds": ">=1.2.0",
-            "voku/anti-xss": "2.0.1"
+            "filp/whoops": "@stable",
+            "graylog2/gelf-php": "@stable",
+            "hassankhan/config": "@stable",
+            "league/plates": "@stable",
+            "monolog/monolog": "@stable",
+            "php": ">=7.1.6",
+            "php-amqplib/php-amqplib": "@stable",
+            "php-ds/php-ds": "@stable",
+            "symfony/console": "@stable",
+            "voku/anti-xss": "@stable"
         },
-        "time": "2018-01-19T07:51:39+00:00",
+        "time": "2018-04-02T02:15:04+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1280,31 +924,31 @@
     },
     {
         "name": "voku/anti-xss",
-        "version": "2.0.1",
-        "version_normalized": "2.0.1.0",
+        "version": "4.1.1",
+        "version_normalized": "4.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/voku/anti-xss.git",
-            "reference": "1200459a100b85bb482bd25237740e2e7e323639"
+            "reference": "b94a71ce203877714b650034fac22931fc161fd4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/voku/anti-xss/zipball/1200459a100b85bb482bd25237740e2e7e323639",
-            "reference": "1200459a100b85bb482bd25237740e2e7e323639",
+            "url": "https://files.phpcomposer.com/files/voku/anti-xss/b94a71ce203877714b650034fac22931fc161fd4.zip",
+            "reference": "b94a71ce203877714b650034fac22931fc161fd4",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.0",
-            "voku/portable-utf8": "~2.1"
+            "php": ">=7.0.0",
+            "voku/portable-utf8": "~5.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "~4.0"
+            "phpunit/phpunit": "~6.0|~7.0"
         },
-        "time": "2016-07-06T22:00:19+00:00",
+        "time": "2018-04-26T18:56:41+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.0.x-dev"
+                "dev-master": "4.0.x-dev"
             }
         },
         "installation-source": "dist",
@@ -1339,36 +983,40 @@
     },
     {
         "name": "voku/portable-utf8",
-        "version": "2.1.24",
-        "version_normalized": "2.1.24.0",
+        "version": "5.0.6",
+        "version_normalized": "5.0.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/voku/portable-utf8.git",
-            "reference": "17c394be13374b196d4691c54c5f3ffccca253cf"
+            "reference": "d591208c292c9a603131e0169bf1da7cd179b417"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/voku/portable-utf8/zipball/17c394be13374b196d4691c54c5f3ffccca253cf",
-            "reference": "17c394be13374b196d4691c54c5f3ffccca253cf",
+            "url": "https://files.phpcomposer.com/files/voku/portable-utf8/d591208c292c9a603131e0169bf1da7cd179b417.zip",
+            "reference": "d591208c292c9a603131e0169bf1da7cd179b417",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.0",
-            "symfony/polyfill": "1.2.*@dev"
+            "php": ">=7.0.0",
+            "symfony/polyfill-iconv": "~1.0",
+            "symfony/polyfill-intl-grapheme": "~1.0",
+            "symfony/polyfill-intl-normalizer": "~1.0",
+            "symfony/polyfill-mbstring": "~1.0",
+            "symfony/polyfill-php72": "~1.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "~4.0"
+            "phpunit/phpunit": "~6.0|~7.0"
         },
         "suggest": {
             "ext-iconv": "Use iconv for best performance",
             "ext-intl": "Use Intl for best performance",
             "ext-mbstring": "Use Mbstring for best performance"
         },
-        "time": "2016-06-29T23:42:06+00:00",
+        "time": "2018-05-02T07:03:29+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.1.x-dev"
+                "dev-master": "4.0.x-dev"
             }
         },
         "installation-source": "dist",

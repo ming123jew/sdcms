@@ -236,6 +236,6 @@ class HttpClient
         $data['filename'] = $filename;
         $data['offset'] = $offset;
         $data['callMethod'] = 'download';
-        return Pool::getInstance()->get(HttpClientRequsetQueryestCoroutine::class)->init($this->pool, $data);
+        return Pool::getInstance()->get(HttpClientRequestCoroutine::class)->init($this->pool, $data);
     }
 }

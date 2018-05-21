@@ -274,7 +274,7 @@
                             <!--Login Area Dropdown-->
                             <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
                                 <li class="username"><a><?php echo $data['username'];?></a></li>
-                                <li class="email"><a><?php echo $data['email'];?></a></li>
+                                <li class="email"><a><?php echo isset($data['email'])??'';?></a></li>
                                 <!--Avatar Area-->
                                 <li>
                                     <div class="avatar-area">
