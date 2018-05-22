@@ -1,6 +1,6 @@
 {
   "require": {
-    "tmtbe/swooledistributed":">2.0.0",
+    "tmtbe/swooledistributed":"=2.9.10",
     "jaeger/querylist": "^4.0",
     "shark/simple_html_dom":"dev-master"
   },
@@ -13,10 +13,12 @@
      "src/app/Helpers/Common.php"
    ]
   },
+
   "repositories": {
     "packagist": {
-        "type": "composer",
-        "url": "https://packagist.org"
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
     }
   }
+
 }
