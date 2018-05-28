@@ -1,17 +1,15 @@
 {
   "require": {
-    "tmtbe/swooledistributed":"=2.9.10",
-    "jaeger/querylist": "^4.0",
-    "shark/simple_html_dom":"dev-master"
+    "tmtbe/swooledistributed":"=2.9.10"
   },
  "autoload": {
     "psr-4": {
       "app\\": "src/app",
       "test\\": "src/test"
     },
-   "files": [
-     "src/app/Helpers/Common.php"
-   ]
+    "files": [
+      "src/app/Helpers/Common.php"
+    ]
   },
 
   "repositories": {
