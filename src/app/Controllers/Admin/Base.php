@@ -167,7 +167,7 @@ class Base extends \app\Controllers\BaseController
         $obj->http_output = $this->http_output;
         $obj->http_input = $this->http_input;
         $s =  sessions($obj,$this->AdminSessionField);
-        if($s!=null){
+        if($s){
             parent::templateData('user.isLogin',true);
             parent::templateData('username',$s['username']);
             parent::templateData('user.email',$s['email']);

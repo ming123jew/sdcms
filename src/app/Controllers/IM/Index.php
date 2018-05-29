@@ -52,22 +52,25 @@ class Index extends Base{
 
         //进行分组
         $this->Data['firend'] = [];
-        foreach ($this->Data['ImUserFriendModel'] as $key=>$value){
-            foreach ($this->Data['ImUserGroupModel'] as $k=>$v){
-                $this->Data['firend'][$k]['groupname'] = $v['groupname'];
-                $this->Data['firend'][$k]['id'] = $v['id'];
-                $this->Data['firend'][$k]['online'] = 2;
-                if($value['user_group_id']==$v['id']){
-                    $this->Data['firend'][$k]['list'][$key]['username'] =  $value['username'];
-                    $this->Data['firend'][$k]['list'][$key]['id'] =  $value['friend_uid'];
-                    $this->Data['firend'][$k]['list'][$key]['status'] =   in_array($value['friend_uid'],$this->Data['onlines'])? 'online':'offline';
-                    $this->Data['firend'][$k]['list'][$key]['sign'] =  $value['sign'];
-                    $this->Data['firend'][$k]['list'][$key]['avatar'] =  $value['avatar'];
-                }else{
-                    $this->Data['firend'][$k]['list'] = [];
+        if($this->Data['ImUserFriendModel']){
+            foreach ($this->Data['ImUserFriendModel'] as $key=>$value){
+                foreach ($this->Data['ImUserGroupModel'] as $k=>$v){
+                    $this->Data['firend'][$k]['groupname'] = $v['groupname'];
+                    $this->Data['firend'][$k]['id'] = $v['id'];
+                    $this->Data['firend'][$k]['online'] = 2;
+                    if($value['user_group_id']==$v['id']){
+                        $this->Data['firend'][$k]['list'][$key]['username'] =  $value['username'];
+                        $this->Data['firend'][$k]['list'][$key]['id'] =  $value['friend_uid'];
+                        $this->Data['firend'][$k]['list'][$key]['status'] =   in_array($value['friend_uid'],$this->Data['onlines'])? 'online':'offline';
+                        $this->Data['firend'][$k]['list'][$key]['sign'] =  $value['sign'];
+                        $this->Data['firend'][$k]['list'][$key]['avatar'] =  $value['avatar'];
+                    }else{
+                        $this->Data['firend'][$k]['list'] = [];
+                    }
                 }
             }
         }
+
         unset($key,$value,$k,$v);
         //print_r($this->Data);
         $end = [

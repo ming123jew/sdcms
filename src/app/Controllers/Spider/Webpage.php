@@ -27,7 +27,7 @@ class Webpage extends Base
         $this->antiLeech = '';
     }
 
-
+    //处理页面 url
     public function http_get_url()
     {
         //抓取的URL
@@ -54,6 +54,7 @@ class Webpage extends Base
         parent::httpOutputTis('ok');
     }
 
+    //处理内容
     public function http_get_content(){
         //抓取数组 [ ['title'=>'','url'=>''],['title'=>'','url'=>''],['title'=>'','url'=>''] ]
         $params = $this->http_input->postGet('params');

@@ -87,10 +87,11 @@ class Status extends BaseController{
         \swoole_async_read($log_file, function ($f,$c){
             EventDispatcher::getInstance()->dispatch('unlock', $c);
         },8192,$file_size);
-        $message = yield EventDispatcher::getInstance()->addOnceCoroutine('unlock')->setTimeout(500);
+        $message = yield EventDispatcher::getInstance()->addOnceCoroutine('unlock')->setTimeout(50000);
         $message = self::addbold($message);
         $end = ['type' => 'getlog','fd'=>$this->fd,'message'=>$message,'strlen'=>strlen($message)];
         //echo "\n".md5( json_encode($message) )."\n";
+
         unset($log_file,$message,$cache,$key,$md5,$file_name);
         $this->send($end);
 
