@@ -143,8 +143,17 @@ class Main extends Base
      * 退出登录
      */
     public function http_logout(){
+        $this->Data['AdminSessionField'] = sessions($this,$this->AdminSessionField);
+
+        yield set_cache($this->AdminCacheRoleIdDataField.$this->Data['AdminSessionField']['roleid'],null);
+        yield set_cache($this->AdminCacheRoleIdMenuField.$this->Data['AdminSessionField']['roleid'],null);
+
         //销毁session
-        sessions($this,$this->AdminSessionField,null);
+        $obj = new \stdClass();
+        $obj->http_output = $this->http_output;
+        $obj->http_input = $this->http_input;
+
+        sessions($obj,$this->AdminSessionField,null);
         parent::templateData('title','成功退出登录.');
         parent::templateData('message','成功退出登录.');
         parent::templateData('gourl',url('Admin','Main','index'));

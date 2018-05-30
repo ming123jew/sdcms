@@ -156,7 +156,12 @@ function set_cache($key,$value,$expire=24*3600)
         'expire_time'=>$expire
     ];
     unset($value,$expire);
-    yield CatCacheRpcProxy::getRpc()->offsetSet($key,$data);
+    if(empty($value)||is_null($value)){
+        yield CatCacheRpcProxy::getRpc()->offsetUnset($key);
+    }else{
+        yield CatCacheRpcProxy::getRpc()->offsetSet($key,$data);
+    }
+
 }
 
 /**

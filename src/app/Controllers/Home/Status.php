@@ -73,21 +73,27 @@ class Status extends BaseController{
 //        $message = self::tail($log_file,$this->client_data->num ?? 300);
 //        //var_dump($message);
         //version2
-
-        //异步读取
-        $log_file = LOG_DIR . '/SERVER-'.date('Y-m-d',time()).'.log';
-        $log_file = LOG_DIR . '/swoole.log';
-        $file_size = 0;
-        $file_size = filesize($log_file);
-        if($file_size>5000){
-            $file_size = $file_size - 2000;
-        }else{
+        //延迟100毫秒秒执行异步，防止预先执行
+        $fd = $this->fd;
+        \swoole_timer_after(100, function ()use($fd ){
+            //异步读取
+            $log_file = LOG_DIR . '/SERVER-'.date('Y-m-d',time()).'.log';
+            $log_file = LOG_DIR . '/swoole.log';
             $file_size = 0;
-        }
-        \swoole_async_read($log_file, function ($f,$c){
-            EventDispatcher::getInstance()->dispatch('unlock', $c);
-        },8192,$file_size);
-        $message = yield EventDispatcher::getInstance()->addOnceCoroutine('unlock')->setTimeout(50000);
+            $file_size = filesize($log_file);
+            if($file_size>5000){
+                $file_size = $file_size - 2000;
+            }else{
+                $file_size = 0;
+            }
+
+            \swoole_async_read($log_file, function ($f,$c)use($fd){
+                //print_r($fd);
+                EventDispatcher::getInstance()->dispatch('unlock'.$fd, $c);
+            },8192,$file_size);
+        });
+
+        $message = yield EventDispatcher::getInstance()->addOnceCoroutine('unlock'.$this->fd)->setTimeout(5000000000);
         $message = self::addbold($message);
         $end = ['type' => 'getlog','fd'=>$this->fd,'message'=>$message,'strlen'=>strlen($message)];
         //echo "\n".md5( json_encode($message) )."\n";

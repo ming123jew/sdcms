@@ -111,8 +111,8 @@ Purchase: http://wrapbootstrap.com
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">状态</label>
                                             <div class="col-lg-8">
-                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php echo  $data['d_role_model']['status']==1 ? 'checked':'';?> value="1">显示
-                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php echo  $data['d_role_model']['status']==0 ? 'checked':'';?> value="0">隐藏
+                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php echo  isset( $data['d_role_model']['status'])&&$data['d_role_model']['status']==1 ? 'checked':'';?> value="1">显示
+                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php echo  isset( $data['d_role_model']['status'])&&$data['d_role_model']['status']==0 ? 'checked':'';?> value="0">隐藏
                                             </div>
                                         </div>
 

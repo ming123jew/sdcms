@@ -25,7 +25,6 @@ class Activity extends Base{
 
         if($this->Data['activeCount']>10){
             $this->Data['message'] = '服务器开小差.';
-
         }else{
             $this->Data['uid'] = $this->http_input->getPost('uid');
             $this->Data['execute_data'] = ['name'=>'llen', 'saleinfo-go'];

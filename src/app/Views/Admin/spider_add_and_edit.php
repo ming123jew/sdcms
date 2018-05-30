@@ -84,18 +84,18 @@ Purchase: http://wrapbootstrap.com
                 <!-- 菜单列表 -->
                 <div class="row">
 
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','category_list');?>"><i class="typcn typcn-lightbulb"></i>栏目列表</a></h5>
-                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','category_add');?>"><i class="typcn typcn-lightbulb"></i>添加栏目</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','spider_list');?>"><i class="typcn typcn-lightbulb"></i>爬虫任务</a></h5>
+                    <h5 class="row-title" style="margin-left: 20px;"><a href="<?php echo url('','','spider_add');?>"><i class="typcn typcn-lightbulb"></i>添加任务</a></h5>
 
                     <div class="col-xs-12">
                         <div class="widget flat radius-bordered">
                             <div class="widget-header bg-themeprimary">
-                                <span class="widget-caption">添加菜单</span>
+                                <span class="widget-caption">添加任务</span>
                             </div>
 
                             <div class="widget-body">
                                 <form id="form" method="post" class="form-horizontal">
-                                    <input type="hidden" value="<?php echo $data['d_category_model']['id']??'';?>" name="info[id]" id="id" />
+                                    <input type="hidden" value="<?php echo $data['d_spider_model']['id']??'';?>" name="info[id]" id="id" />
                                 <div class="widget-main ">
                                     <div class="tabbable">
                                         <ul class="nav nav-tabs tabs-flat" id="myTab11">
@@ -124,17 +124,17 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">请选择模型：</label>
                                                                 <div class="col-lg-4">
-                                                                    <select class="form-control" name="info[model_id]" readonly="readonly" disabled style="">
+                                                                    <select class="form-control" name="info[model_id]" >
                                                                         <option value="">请选择</option>
                                                                         <?php echo $data['selectModel'];?>
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label class="col-lg-4 control-label">上级栏目：</label>
+                                                                <label class="col-lg-4 control-label">选择栏目：</label>
                                                                 <div class="col-lg-4">
-                                                                    <input type="hidden" value="<?php echo $data['d_category_model']['catid']??'';?>" name="info[oldcatid]" />
-                                                                    <select class="form-control" name="info[parent_id]" readonly="readonly" disabled style="">
+                                                                    <input type="hidden" value="<?php echo $data['d_spider_model']['catid']??'';?>" name="info[oldcatid]" />
+                                                                    <select class="form-control" name="info[catid]">
                                                                         <option value="0">≡ 作为一级栏目 ≡</option>
                                                                         <?php echo $data['selectCategorys'];?>
                                                                     </select>
@@ -142,51 +142,51 @@ Purchase: http://wrapbootstrap.com
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label class="col-lg-4 control-label">栏目名称：</label>
+                                                                <label class="col-lg-4 control-label">目标链接：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input type="text" class="form-control" name="info[catname]" value="<?php echo $data['d_category_model']['catname']??'';?>"/>
+                                                                    <input class="form-control" name="info[url]" type="text" value="<?php echo $data['d_spider_model']['url']??'';?>"/>
                                                                 </div>
                                                             </div>
-
                                                             <div class="form-group">
-                                                                <label class="col-lg-4 control-label">英文目录：</label>
+                                                                <label class="col-lg-4 control-label">页码范围：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input class="form-control" name="info[catdir]" type="text" value="<?php echo $data['d_category_model']['catdir']??'';?>"/>
+                                                                    <input style="width: 50px" class="form-control" name="info[start]" type="text" value="<?php echo $data['d_spider_model']['start']??'';?>"/>
+                                                                    -
+                                                                    <input style="width: 50px" class="form-control" name="info[end]" type="text" value="<?php echo $data['d_spider_model']['end']??'';?>"/>
                                                                 </div>
                                                             </div>
-
                                                             <div class="form-group">
-                                                                <label class="col-lg-4 control-label">栏目图片：</label>
+                                                                <label class="col-lg-4 control-label">匹配规则：</label>
                                                                 <div class="col-lg-8">
-                                                                    <div class="layui-upload-drag" id="test10">
-                                                                        <i class="layui-icon">&#xe67c;</i>
-                                                                        <p>点击上传，或将文件拖拽到此处</p>
-                                                                    </div>
-                                                                    <input class="form-control" name="info[image]" type="text" value="<?php echo $data['d_category_model']['image']??'';?>"/>
+                                                                    <textarea name="info[rule]" class="form-control" rows="3"><?php echo $data['d_spider_model']['rule']??'';?></textarea>
+                                                                    <pre>
+
+                                                                    具体规则需要根据每个页面的不同进行定制
+                                                                    'div .alist li',//规则1
+                                                                    'li h3 a',//规则2
+                                                                   <!--
+                                                                   /*'#/<a .*?>.*?<\/a>/#',*
+                                                                   -->
+                                                                    </pre>
                                                                 </div>
                                                             </div>
-
-
+                                                            <div class="form-group">
+                                                                <label class="col-lg-4 control-label">优先度：</label>
+                                                                <div class="col-lg-4">
+                                                                    <select class="form-control" name="info[priority]">
+                                                                        <option <?php if(isset($data['d_spider_model']['priority'])&&$data['d_spider_model']['priority']==2){?>selected<?php }?> value="2">≡ 高 ≡</option>
+                                                                        <option <?php if(isset($data['d_spider_model']['priority'])&&$data['d_spider_model']['priority']==1){?>selected<?php }?> value="1" selected>≡ 中 ≡</option>
+                                                                        <option <?php if(isset($data['d_spider_model']['priority'])&&$data['d_spider_model']['priority']==0){?>selected<?php }?> value="0">≡ 低 ≡</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">备注：</label>
                                                                 <div class="col-lg-8">
-                                                                    <textarea name="info[description]" class="form-control" rows="3"><?php echo $data['d_category_model']['description']??'';?></textarea>
+                                                                    <textarea name="info[description]" class="form-control" rows="3"><?php echo $data['d_spider_model']['description']??'';?></textarea>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group">
-                                                                <label class="col-lg-4 control-label">是否在导航显示：</label>
-                                                                <div class="col-lg-8">
-                                                                    <input style="position: initial;opacity: inherit;" type="radio" name="info[is_menu]" <?php if(isset($data['d_category_model']['is_menu'])&&$data['d_category_model']['is_menu']==1){?>checked="checked"<?php }?> value="1">显示
-                                                                    <input style="position: initial;opacity: inherit;" type="radio" name="info[is_menu]"  <?php if(isset($data['d_category_model']['is_menu'])&&$data['d_category_model']['is_menu']==0){?>checked="checked"<?php }?> value="0">隐藏
-                                                                </div>
-                                                            </div>
-                                                        <div class="form-group">
-                                                            <label class="col-lg-4 control-label">状态：</label>
-                                                            <div class="col-lg-8">
-                                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php if(isset($data['d_category_model']['status'])&&$data['d_category_model']['status']==1){?>checked="checked"<?php }?> value="1">开启
-                                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php if(isset($data['d_category_model']['status'])&&$data['d_category_model']['status']==0){?>checked="checked"<?php }?> value="0">禁用
-                                                            </div>
-                                                        </div>
+
                                                             <div class="form-group">
                                                                 <div class="col-lg-offset-4 col-lg-8">
                                                                     <button class="btn btn-palegreen" type="submit">Validate</button>
@@ -211,21 +211,21 @@ Purchase: http://wrapbootstrap.com
                                                         <div class="form-group">
                                                             <label class="col-lg-4 control-label">META Title（栏目标题）：</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" data-toggle="tooltip" data-placement="top" data-original-title="针对搜索引擎设置的标题" class="form-control   tooltip-info" name="setting[meta_title]" value="<?php echo $data['d_category_model_setting']['meta_title']??'';?>" />
+                                                                <input type="text" data-toggle="tooltip" data-placement="top" data-original-title="针对搜索引擎设置的标题" class="form-control   tooltip-info" name="setting[meta_title]" value="<?php echo $data['d_spider_model_setting']['meta_title']??'';?>" />
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label class="col-lg-4 control-label">META Keywords（栏目关键词）：</label>
                                                             <div class="col-lg-8">
-                                                                <input data-toggle="tooltip" data-placement="top" data-original-title="关键字中间用半角逗号隔开" class="form-control tooltip-info" name="setting[meta_keywords]" type="text" value="<?php echo $data['d_category_model_setting']['meta_keywords']??'';?>"/>
+                                                                <input data-toggle="tooltip" data-placement="top" data-original-title="关键字中间用半角逗号隔开" class="form-control tooltip-info" name="setting[meta_keywords]" type="text" value="<?php echo $data['d_spider_model_setting']['meta_keywords']??'';?>"/>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label class="col-lg-4 control-label">META Description（栏目描述）：</label>
                                                             <div class="col-lg-8">
-                                                                <input data-toggle="tooltip" data-placement="top" data-original-title="针对搜索引擎设置的网页描述" class="form-control tooltip-info" name="setting[meta_description]" type="text" value="<?php echo $data['d_category_model_setting']['meta_description']??'';?>"/>
+                                                                <input data-toggle="tooltip" data-placement="top" data-original-title="针对搜索引擎设置的网页描述" class="form-control tooltip-info" name="setting[meta_description]" type="text" value="<?php echo $data['d_spider_model_setting']['meta_description']??'';?>"/>
                                                             </div>
                                                         </div>
 
@@ -233,7 +233,7 @@ Purchase: http://wrapbootstrap.com
                                                         <div class="form-group">
                                                             <label class="col-lg-4 control-label">备注：</label>
                                                             <div class="col-lg-8">
-                                                                <textarea name="setting[description]" class="form-control" rows="3"><?php echo $data['d_category_model_setting']['description']??'';?></textarea>
+                                                                <textarea name="setting[description]" class="form-control" rows="3"><?php echo $data['d_spider_model_setting']['description']??'';?></textarea>
                                                             </div>
                                                         </div>
 
@@ -363,9 +363,9 @@ Purchase: http://wrapbootstrap.com
                 var id = parseInt($('#id').val());
                 if(id==0)
                 {
-                    var post_url = '<?php echo  url('','','category_add');?>';
+                    var post_url = '<?php echo  url('','','spider_add');?>';
                 }else{
-                    var post_url = '<?php echo  url('','','category_edit');?>';
+                    var post_url = '<?php echo  url('','','spider_edit');?>';
                 }
                 // 实用ajax提交表单
                 $.post(post_url, form.serialize(), function(result) {
@@ -373,7 +373,7 @@ Purchase: http://wrapbootstrap.com
                     if(result.status==1){
                         $("#modal-success").find(".modal-body").html(result.message);
                         $("#modal-success").modal("show");
-                        //window.location.href = '<?php echo url('','','category_list');?>';
+                        //window.location.href = '<?php echo url('','','spider_list');?>';
                     }else{
                         $("#modal-warning").find(".modal-body").html(result.message);
                         $("#modal-warning").modal("show");

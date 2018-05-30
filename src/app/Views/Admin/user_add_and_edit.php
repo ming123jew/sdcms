@@ -118,8 +118,8 @@ Purchase: http://wrapbootstrap.com
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">状  态</label>
                                             <div class="col-lg-8">
-                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php echo  $data['d_user_model']['status']==1 ? 'checked':'';?> value="1">启用
-                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php echo  $data['d_user_model']['status']==0 ? 'checked':'';?> value="0">禁用
+                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php echo  isset($data['d_user_model']['status'])&&$data['d_user_model']['status']==1 ? 'checked':'';?> value="1">启用
+                                                <input style="position: initial;opacity: inherit;" type="radio" name="info[status]" <?php echo  isset($data['d_user_model']['status'])&& $data['d_user_model']['status']==0 ? 'checked':'';?> value="0">禁用
                                             </div>
                                         </div>
 

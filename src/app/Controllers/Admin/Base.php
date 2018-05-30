@@ -190,6 +190,7 @@ class Base extends \app\Controllers\BaseController
         $obj->http_output = $this->http_output;
         $obj->http_input = $this->http_input;
         $s =  sessions($obj,$this->AdminSessionField);
+        print_r($s);
         if($s){
             return $s;
         }else{
