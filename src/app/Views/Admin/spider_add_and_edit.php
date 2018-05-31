@@ -148,6 +148,12 @@ Purchase: http://wrapbootstrap.com
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
+                                                                <label class="col-lg-4 control-label">页码参数：</label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control" name="info[page_param]" type="text" value="<?php echo $data['d_spider_model']['page_param']??'';?>"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
                                                                 <label class="col-lg-4 control-label">页码范围：</label>
                                                                 <div class="col-lg-8">
                                                                     <input style="width: 50px" class="form-control" name="info[start]" type="text" value="<?php echo $data['d_spider_model']['start']??'';?>"/>
@@ -192,7 +198,6 @@ Purchase: http://wrapbootstrap.com
                                                                     <button class="btn btn-palegreen" type="submit">Validate</button>
                                                                 </div>
                                                             </div>
-
                                                     </div>
                                                 </div>
                                             </div>

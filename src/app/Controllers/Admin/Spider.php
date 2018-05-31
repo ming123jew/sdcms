@@ -9,6 +9,7 @@ namespace app\Controllers\Admin;
 use app\Models\Business\CategoryBusiness;
 use app\Models\Business\ModelBusiness;
 use app\Models\Data\CategoryModel;
+use app\Models\Data\SpiderTaskModel;
 
 /**
  *  菜单管理
@@ -64,16 +65,16 @@ class Spider extends Base
         if($this->http_input->getRequestMethod()=='POST')
         {
             $data['info'] = ($this->http_input->postGet('info'));
-            $data['info']['setting'] = json_encode($this->http_input->postGet('setting'));
-            $this->Model['CategoryModel'] =  $this->loader->model(CategoryModel::class,$this);
-            $r_category_model = yield $this->Model['CategoryModel']->insertMultiple(array_keys($data['info']),array_values($data['info']));
-            if(!$r_category_model)
+            print_r($data['info']);
+            $this->Model['SpiderTaskModel'] =  $this->loader->model(SpiderTaskModel::class,$this);
+            $this->Data['SpiderTaskModel'] = yield $this->Model['SpiderTaskModel']->insertMultiple(array_keys($data['info']),array_values($data['info']));
+            if(!$this->Data['SpiderTaskModel'])
             {
-                unset($data,$r_category_model);
-                parent::httpOutputTis('CategoryModel添加请求失败.');
+                unset($data);
+                parent::httpOutputTis('SpiderTaskModel.');
             }else{
                 unset($data);
-                parent::httpOutputEnd('栏目添加成功.','栏目添加失败.',$r_category_model);
+                parent::httpOutputEnd('爬虫任务添加成功.','爬虫任务添加失败.',$this->Data['SpiderTaskModel']);
             }
         }else{
             //获取模型
