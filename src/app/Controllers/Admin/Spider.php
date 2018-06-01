@@ -34,7 +34,7 @@ class Spider extends Base
     }
 
     /**
-     * 栏目列表
+     * 爬虫任务列表
      */
     public function http_spider_list()
     {
@@ -46,36 +46,59 @@ class Spider extends Base
             ];
             $this->http_output->end(json_encode($end),false);
         }else{
-            $this->Model['xxx'] =  $this->loader->model(CategoryBusiness::class,$this);
+            $this->Model['SpiderTaskModel'] =  $this->loader->model(SpiderTaskModel::class,$this);
+            $this->Data['p'] = intval( $this->http_input->postGet('p') );
+            if($this->Data['p'] == 0) {$this->Data['p'] = 1;}
+            $this->Data['end'] = 10;
+            $this->Data['start'] = ($this->Data['p']-1)*$this->Data['end'];
+            $this->Data['SpiderTaskModel'] = yield  $this->Model['SpiderTaskModel']->getAllByPage($this->Data['start'],$this->Data['end']);
+            if($this->Data['SpiderTaskModel']['result'])
+            {
+                foreach ($this->Data['SpiderTaskModel']['result'] as $n=> $v)
+                {
+                    $this->Data['SpiderTaskModel']['result'][$n]['str_manage'] = (yield check_role('Admin', 'Spider', 'spider_edit', $this)) ? '<a href="' . url('Admin', 'Spider', 'spider_edit', ["id" => $v['id']]) . '">编辑</a> |' : '';
+                    $this->Data['SpiderTaskModel']['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Spider', 'spider_delete', $this)) ? '<a  onclick="spider_delete(' . $v['id'] . ')" href="javascript:;">删除</a>' : '';
+                }
+            }
 
-            parent::templateData('allcategory',xx);
+            parent::templateData('list',$this->Data['SpiderTaskModel']['result']);
+            parent::templateData('page',page_bar($this->Data['SpiderTaskModel']['num'],$this->Data['p'],10,5,$this));
             //web or app
             parent::webOrApp(function (){
-                $template = $this->loader->view('app::Admin/spider_list');
+                $template = $this->loader->view('app::Admin/spider_task_list');
                 $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
             });
         }
     }
 
     /**
-     * 添加栏目
+     * 添加爬虫任务
      */
     public function http_spider_add()
     {
         if($this->http_input->getRequestMethod()=='POST')
         {
-            $data['info'] = ($this->http_input->postGet('info'));
-            print_r($data['info']);
-            $this->Model['SpiderTaskModel'] =  $this->loader->model(SpiderTaskModel::class,$this);
-            $this->Data['SpiderTaskModel'] = yield $this->Model['SpiderTaskModel']->insertMultiple(array_keys($data['info']),array_values($data['info']));
-            if(!$this->Data['SpiderTaskModel'])
-            {
-                unset($data);
-                parent::httpOutputTis('SpiderTaskModel.');
+            $this->Data['http_post']['info'] = ($this->http_input->postGet('info'));
+            //print_r($data['info']);
+            if( empty($this->Data['http_post']['info']['url'])
+                ||
+                intval($this->Data['http_post']['info']['catid'])==0
+                ||
+                intval($this->Data['http_post']['info']['model_id'])==0
+            ){
+                parent::httpOutputTis('请填写完整的信息.');
             }else{
-                unset($data);
-                parent::httpOutputEnd('爬虫任务添加成功.','爬虫任务添加失败.',$this->Data['SpiderTaskModel']);
+                $this->Data['http_post']['info']['create_time']=time();
+                $this->Model['SpiderTaskModel'] =  $this->loader->model(SpiderTaskModel::class,$this);
+                $this->Data['SpiderTaskModel'] = yield $this->Model['SpiderTaskModel']->insertMultiple(array_keys($this->Data['http_post']['info']),array_values($this->Data['http_post']['info']));
+                if(!$this->Data['SpiderTaskModel'])
+                {
+                    parent::httpOutputTis('SpiderTaskModel.');
+                }else{
+                    parent::httpOutputEnd('爬虫任务添加成功.','爬虫任务添加失败.',$this->Data['SpiderTaskModel']);
+                }
             }
+
         }else{
             //获取模型
             $this->ModelBusiness =  $this->loader->model(ModelBusiness::class,$this);
@@ -96,7 +119,7 @@ class Spider extends Base
     }
 
     /**
-     * 栏目编辑
+     * 爬虫任务编辑
      */
     public function http_spider_edit()
     {
@@ -116,7 +139,7 @@ class Spider extends Base
                 parent::httpOutputTis('CategoryModel更新请求失败.');
             }else{
                 unset($data,$id,$oldcatid);
-                parent::httpOutputEnd('栏目更新成功.','栏目更新失败.',$r_category_model);
+                parent::httpOutputEnd('爬虫任务更新成功.','爬虫任务更新失败.',$r_category_model);
             }
         }else{
             $id = intval($this->http_input->postGet('id'));

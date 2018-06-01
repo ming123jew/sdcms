@@ -227,7 +227,6 @@ class BaseController extends Controller
             unset($message,$json,$json_encode);
             $this->http_output->end(($end),$gzip);
         }
-
     }
 
     //入口可以设置IP限制操作，如1秒内同一个IP访问超出N次，将其IP放进禁止访问列表

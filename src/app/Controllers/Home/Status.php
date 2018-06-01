@@ -92,7 +92,7 @@ class Status extends BaseController{
                 EventDispatcher::getInstance()->dispatch('unlock'.$fd, $c);
             },8192,$file_size);
         });
-
+        EventDispatcher::getInstance()->removeAll('unlock'.$this->fd);
         $message = yield EventDispatcher::getInstance()->addOnceCoroutine('unlock'.$this->fd)->setTimeout(5000000000);
         $message = self::addbold($message);
         $end = ['type' => 'getlog','fd'=>$this->fd,'message'=>$message,'strlen'=>strlen($message)];

@@ -95,7 +95,7 @@ Purchase: http://wrapbootstrap.com
 
                             <div class="widget-body">
                                 <form id="form" method="post" class="form-horizontal">
-                                    <input type="hidden" value="<?php echo $data['d_spider_model']['id']??'';?>" name="info[id]" id="id" />
+                                    <input type="hidden" value="<?php echo ($data['d_spider_model']['id'])??'';?>" name="info[id]" id="id" />
                                 <div class="widget-main ">
                                     <div class="tabbable">
                                         <ul class="nav nav-tabs tabs-flat" id="myTab11">
@@ -133,14 +133,19 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">选择栏目：</label>
                                                                 <div class="col-lg-4">
-                                                                    <input type="hidden" value="<?php echo $data['d_spider_model']['catid']??'';?>" name="info[oldcatid]" />
+
                                                                     <select class="form-control" name="info[catid]">
                                                                         <option value="0">≡ 作为一级栏目 ≡</option>
                                                                         <?php echo $data['selectCategorys'];?>
                                                                     </select>
                                                                 </div>
                                                             </div>
-
+                                                            <div class="form-group">
+                                                                <label class="col-lg-4 control-label">链接标题：</label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control" name="info[title]" type="text" value="<?php echo $data['d_spider_model']['title']??'';?>"/>
+                                                                </div>
+                                                            </div>
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">目标链接：</label>
                                                                 <div class="col-lg-8">
@@ -150,30 +155,31 @@ Purchase: http://wrapbootstrap.com
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">页码参数：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input class="form-control" name="info[page_param]" type="text" value="<?php echo $data['d_spider_model']['page_param']??'';?>"/>
+                                                                    <input style="width: 50px;padding-right:0px;" class="form-control" name="info[page_param]" type="text" value="<?php echo $data['d_spider_model']['page_param']??'';?>"/>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">页码范围：</label>
                                                                 <div class="col-lg-8">
-                                                                    <input style="width: 50px" class="form-control" name="info[start]" type="text" value="<?php echo $data['d_spider_model']['start']??'';?>"/>
+                                                                    <input style="width: 50px;padding-right:0px;" class="form-control" name="info[start]" type="text" value="<?php echo $data['d_spider_model']['start']??'';?>"/>
                                                                     -
-                                                                    <input style="width: 50px" class="form-control" name="info[end]" type="text" value="<?php echo $data['d_spider_model']['end']??'';?>"/>
+                                                                    <input style="width: 50px;padding-right:0px;" class="form-control" name="info[end]" type="text" value="<?php echo $data['d_spider_model']['end']??'';?>"/>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">匹配规则：</label>
                                                                 <div class="col-lg-8">
                                                                     <textarea name="info[rule]" class="form-control" rows="3"><?php echo $data['d_spider_model']['rule']??'';?></textarea>
-                                                                    <pre>
-
-                                                                    具体规则需要根据每个页面的不同进行定制
-                                                                    'div .alist li',//规则1
-                                                                    'li h3 a',//规则2
-                                                                   <!--
-                                                                   /*'#/<a .*?>.*?<\/a>/#',*
-                                                                   -->
-                                                                    </pre>
+<pre>
+具体规则需要根据每个页面的不同进行定制获取页面列表URL
+'div .alist li',//规则1
+'li h3 a',//规则2
+<!--
+/*'#/<a .*?>.*?<\/a>/#',*
+-->
+    <em id="list"></em>
+</pre>
+                                                                    <button onclick="TestUrl()">Test</button>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
@@ -290,6 +296,12 @@ Purchase: http://wrapbootstrap.com
 <script src="assets/js/validation/bootstrapValidator.js"></script>
 
 <script>
+    function TestUrl() {
+        var post_url = '<?php echo url('Spider','Webpage','get_url');?>';
+        $.post(post_url, $("#form").serialize(), function(result) {
+
+        })
+    }
     $(document).ready(function () {
 
         $("#form").bootstrapValidator({
@@ -364,9 +376,9 @@ Purchase: http://wrapbootstrap.com
              */
             submitHandler: function (validator, form, submitButton) {
                 // Do nothing
-                //alert('here.')
-                var id = parseInt($('#id').val());
-                if(id==0)
+                var id = $('#id').val();
+
+                if(id==0 || $.empty(id))
                 {
                     var post_url = '<?php echo  url('','','spider_add');?>';
                 }else{
@@ -484,7 +496,6 @@ Purchase: http://wrapbootstrap.com
 //                },
             }
         });
-
     })
 
 

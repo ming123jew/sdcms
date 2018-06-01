@@ -10,6 +10,7 @@ namespace app\AMQPTasks;
 
 use PhpAmqpLib\Message\AMQPMessage;
 use Server\Components\AMQPTaskSystem\AMQPTask;
+use Server\Components\Event\EventDispatcher;
 use Server\Components\Process\ProcessManager;
 
 
@@ -47,10 +48,12 @@ class SpiderAMQPTask extends AMQPTask
             if($res->isComplete==true){
                 //print_r($res->body);
                 echo $res->httpStatusCode."work-over."."\n";
+                EventDispatcher::getInstance()->dispatch($handler->params->EventType, ['status'=>1,'data'=>$res->findHtml]);
                 //file_put_contents('',$res->body);
                 $this->ack();
             }else{
                 echo $res->httpStatusCode."work not over."."\n";
+                EventDispatcher::getInstance()->dispatch($handler->params->EventType, ['status'=>0,'data'=>'fail']);
                 $this->reject(true);
             }
 

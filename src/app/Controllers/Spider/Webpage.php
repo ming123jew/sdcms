@@ -14,6 +14,7 @@ use Server\Components\TimerTask\Timer;
  */
 class Webpage extends Base
 {
+    protected $get_url_ms_queue_key = 'Home-Webpag-get_url-ms-queue';
 
     public function initialization($controller_name, $method_name)
     {
@@ -30,6 +31,12 @@ class Webpage extends Base
     //处理页面 url
     public function http_get_url()
     {
+        //总共x页
+        $count_p = 3;
+
+        //第一页
+        $cur_p = 1;
+
         //抓取的URL
         $url = 'https://www.sanwen8.cn/sanwen/';
         //匹配规则
@@ -39,18 +46,75 @@ class Webpage extends Base
             /*'#/<a .*?>.*?<\/a>/#',*/
         ];
 
-        //投递一个任务
-        $channel = $this->AMQPChannel;
-        $msgBody = json_encode([
-            'url'=> $url,
-            'match'=>$match,
-            'params'=>[],
-            'callBackClass'=>\app\Controllers\Spider\AnalyseUrl::class,//必须带/路径，pool才能找到class
-            'action'=>'getUrlList']);
-        $this->AMQPMessage->setBody($msgBody);
-        //$msg = new AMQPMessage($this->AMQPMessage, ['content_type' => 'text/plain', 'delivery_mode' => 2]); //生成消息  //, ['content_type' => 'text/plain', 'delivery_mode' => 2]
-        $channel->basic_publish($this->AMQPMessage,$this->AMQPMessage_exchange); //推送消息到某个交换机
+        //生成一个唯一临时key
+        $event_type_uuid = create_uuid().'-'.md5($url.time());
 
+        //设置队列限制，只同时进行10个任务
+        //获取redis同时链接
+        $this->Data['activeCount'] =  yield $this->redis_pool->getRedisPool()->getClientCount();
+
+        if($this->Data['activeCount']>10){
+            $this->Data['message'] = '服务器开小差.';
+        }else{
+            //人数限制
+            $saleCount = intval( yield $this->redis_pool->getCoroutine()->lLen($this->get_url_ms_queue_key) );
+            print_r('\n正在执行任务数:'.$saleCount.'\n');
+            //小于10个则有机会
+            if ($saleCount < 10) {
+                //压入队列
+                yield $this->redis_pool->getCoroutine()->rpush( $this->get_url_ms_queue_key,$event_type_uuid);
+
+                //投递一个任务
+                $channel = $this->AMQPChannel;
+                $msgBody = json_encode([
+                    'url'=> $url,
+                    'match'=>$match,
+                    'params'=>['EventType'=>$event_type_uuid],
+                    'callBackClass'=>\app\Controllers\Spider\AnalyseUrl::class,//必须带/路径，pool才能找到class
+                    'action'=>'getUrlList']);
+                $this->AMQPMessage->setBody($msgBody);
+                //$msg = new AMQPMessage($this->AMQPMessage, ['content_type' => 'text/plain', 'delivery_mode' => 2]); //生成消息  //, ['content_type' => 'text/plain', 'delivery_mode' => 2]
+                $channel->basic_publish($this->AMQPMessage,$this->AMQPMessage_exchange); //推送消息到某个交换机
+
+                //等待任务结束 接收数据 设置永久等待，直到返回结果
+                $this->Data['message'] = yield EventDispatcher::getInstance()
+                    ->addOnceCoroutine($event_type_uuid)
+                    ->setTimeout(999999999)
+                    ->noException(['status'=>0,'message'=>'timeout!']);
+
+                if($this->Data['message']['status']==1){
+                    //任务成功处理
+                    //将获取到的链接投入spider_content表
+
+                    //设置链接处理状态
+
+                    //进行投递任务【开始获取内容】
+
+                }else{
+                    //任务失败处理
+                }
+                yield $this->redis_pool->getCoroutine()->lPop($this->get_url_ms_queue_key);
+                //退出队列
+
+            }else{
+                $this->Data['message'] = '已进行10个任务，超出限制.';
+            }
+
+        }
+
+        parent::httpOutputTis($this->Data['message']);
+    }
+
+    /**
+     * 清除获取get_url函数涉及到的限制队列
+     * @return \Generator
+     */
+    public function http_clean_get_url_ms_queue(){
+        yield $this->redis_pool->getCoroutine()->del($this->get_url_ms_queue_key);
+        //$this->Data[$this->get_url_ms_queue_key] = yield $this->redis_pool->getCoroutine()->keys('userlock*');
+        //foreach ($this->Data['userlocks'] as $key=>$value){
+        //    yield $this->redis_pool->getCoroutine()->del($value);
+        //}
         parent::httpOutputTis('ok');
     }
 
@@ -146,7 +210,7 @@ class Webpage extends Base
     public function http_getEvent()
     {
 
-        $data = yield EventDispatcher::getInstance()->addOnceCoroutine('unlock')->setTimeout(1000);
+        $data = yield EventDispatcher::getInstance()->addOnceCoroutine('unlock')->setTimeout(1000)->noException('time over.');
         //这里会等待事件到达，或者超时
         $this->http_output->end($data);
     }

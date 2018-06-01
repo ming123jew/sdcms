@@ -34,8 +34,10 @@ class AnalyseUrl extends Analyse {
         //curl方式获取内容
         //$response =  self::_http($argv[0],self::_agent());
         //swoole方式获取内容，支持高并发+协程
-        $this->response = yield self::_http_pool($argv[0]['url']);
+        $params = (array)$argv[0]['params'];
+        $this->response = yield self::_http_pool($argv[0]['url'],$params);
         $this->match = $argv[0]['match'];
+
         //print_r($this->response);
         //$t1 = microtime(true);
         if($this->response['statusCode']==200){
@@ -44,27 +46,25 @@ class AnalyseUrl extends Analyse {
             $family = new ISpiderServiceFamily();
             //链接检测器
             $family->addDecorator(new IAnalyseUrl());
-
             $family->before($this);
             $family->after($this);
+            $this->isComplete = true;
         }else{
             $this->httpStatusCode = $this->response['statusCode'];
+            $this->isComplete = false;
         }
-//        echo "\nstarttime:".$t1."\n";
-//        print_r(self::getTitle());
-//        $t2 = microtime(true);
-//        echo "\nendtime:".$t2."\n";
-//        echo "\nsum:".($t2-$t1)."\n";
-//        echo "\nmem".memory_get_usage() ."\n";
+        //echo "\nstarttime:".$t1."\n";
+        //print_r(self::getTitle());
+        //$t2 = microtime(true);
+        //echo "\nendtime:".$t2."\n";
+        //echo "\nsum:".($t2-$t1)."\n";
+        //echo "\nmem".memory_get_usage() ."\n";
         //print_r($this->findHtml);
         //获取到的列表再次投递到任务表，进行获取文章操作
-        yield self::_http_pool('http://118.89.26.188:8081/Spider/Webpage/get_content',['params'=>$this->findHtml],':8081');
+        //yield self::_http_pool('http://118.89.26.188:8081/Spider/Webpage/get_content',['params'=>$this->findHtml],':8081');
         //无法获取到AMQP池，因此通过http进行分配任务
         //get_instance()->getAsynPool('AMQP');
-
-        //将结果返回给任务管理器,是否完成
-        $this->isComplete = true;//
-        unset($argv,$family);
+        unset($argv,$family,$params);
         return $this;
     }
 
