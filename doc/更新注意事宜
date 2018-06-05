@@ -1,0 +1,6 @@
+redis链接数限制的问题
+F:\2017_web_sys\123.207.0.104_sd_2017\vendor\tmtbe\swooledistributed\src\Server\Asyn
+增加检测方法
+public function getClientCount(){
+    return $this->client_count;
+}

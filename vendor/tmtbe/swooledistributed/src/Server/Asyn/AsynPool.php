@@ -159,6 +159,15 @@ abstract class AsynPool implements IAsynPool
     }
 
     /**
+     * 获取当前连接数
+     * @return mixed
+     */
+    public function getClientCount(){
+        return $this->client_count;
+    }
+
+
+    /**
      * 获取同步
      * @return mixed
      */

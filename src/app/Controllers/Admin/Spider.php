@@ -33,6 +33,50 @@ class Spider extends Base
         parent::initialization($controller_name, $method_name);
     }
 
+    //使用ws进行检测状态
+    public function connect()
+    {
+        $this->Data['user_info'] = parent::get_login_session();
+        //绑定用户id
+        $this->bindUid($this->Data['user_info']['uid']);
+
+        //检测任务状态  返回当前任务队列
+        $this->Data['cur_queue'] = yield $this->redis_pool->getCoroutine()->lRange($this->redis_home_webPage_spider_task_queue_key,0,-1);
+    }
+
+    public function run(){
+        $this->Data['user_info'] = parent::get_login_session();
+        //任务id
+        $this->Data['task_id'] = '';
+        $this->Data['url'] = '';
+        $this->Data['match'] = [];
+        $this->Data['add'] = false; //任务添加情况
+
+        $queue_count = intval( yield $this->redis_pool->getCoroutine()->lLen($this->redis_home_webPage_spider_task_queue_key) );
+        if($queue_count < $this->redis_home_webPage_spider_task_limt){
+            //任务列表
+            yield $this->redis_pool->getCoroutine()->rpush( $this->redis_home_webPage_spider_task_queue_key,['task_id'=>$this->Data['task_id'],'url'=>$this->Data['url'],'match'=>$this->Data['match']]);
+
+            //页码参数
+            $this->Data['param_p'] = 'p';
+
+            //总共x页
+            $this->Data['count_p'] = 3;
+
+            //子任务列队
+            for ($i=1;$i<=$this->Data['count_p'];$i++){
+                yield $this->redis_pool->getCoroutine()->rpush( $this->redis_home_webPage_spider_task_queue_sub_key_.$this->Data['task_id'],$this->Data['url'].'?'.$this->Data['param_p'].'='.$i);
+            }
+            $add = true;
+
+        }else{
+            $add = false;
+        }
+        //检测任务状态  返回当前任务队列
+        $this->Data['cur_queue'] = yield $this->redis_pool->getCoroutine()->lRange($this->redis_home_webPage_spider_task_queue_key,0,-1);
+        $this->sendToUid($this->Data['user_info']['uid'],['cur_queue'=>$this->Data['cur_queue']]);
+    }
+
     /**
      * 爬虫任务列表
      */
@@ -143,8 +187,8 @@ class Spider extends Base
             }
         }else{
             $id = intval($this->http_input->postGet('id'));
-            $this->Model['CategoryModel'] = $this->loader->model(CategoryModel::class,$this);
-            $d = yield $this->Model['CategoryModel']->getById($id);
+            $this->Model['SpiderTaskModel'] = $this->loader->model(SpiderTaskModel::class,$this);
+            $d = yield $this->Model['SpiderTaskModel']->getById($id);
             if($id&&$d)
             {
                 //获取模型
@@ -152,15 +196,14 @@ class Spider extends Base
                 $selectModel= yield  $this->ModelBusiness->get_all_by_parent_id(intval($d['model_id']));
                 //获取分类
                 $this->Model['CategoryBusiness'] =  $this->loader->model(CategoryBusiness::class,$this);
-                $selectCategorys= yield  $this->Model['CategoryBusiness']->get_category_by_parentid(intval($d['parent_id']));
+                $selectCategorys= yield  $this->Model['CategoryBusiness']->get_category_by_parentid(intval($d['catid']));
                 parent::templateData('selectModel',$selectModel);
                 parent::templateData('selectCategorys',$selectCategorys);
-                parent::templateData('d_category_model',$d);
-                parent::templateData('d_category_model_setting',json_decode($d['setting'],true));
+                parent::templateData('d_spider_model',$d);
                 //web or app
                 unset($id,$d,$selectModel,$selectCategorys);
                 parent::webOrApp(function (){
-                    $template = $this->loader->view('app::Admin/category_add_and_edit');
+                    $template = $this->loader->view('app::Admin/spider_add_and_edit');
                     $this->http_output->end($template->render(['data'=>$this->TemplateData,'message'=>'']));
                 });
             }else{

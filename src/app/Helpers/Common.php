@@ -144,7 +144,7 @@ function token($name = '__token__', $type = 'md5', $is_ajax=false)
  * 设置缓存{全局助手函数}
  * @param $key
  * @param $value
- * @param int $expire
+ * @param float|int $expire
  * @return Generator
  */
 function set_cache($key,$value,$expire=24*3600)
@@ -155,12 +155,13 @@ function set_cache($key,$value,$expire=24*3600)
         'create_time'=>time(),
         'expire_time'=>$expire
     ];
-    unset($value,$expire);
+
     if(empty($value)||is_null($value)){
         yield CatCacheRpcProxy::getRpc()->offsetUnset($key);
     }else{
         yield CatCacheRpcProxy::getRpc()->offsetSet($key,$data);
     }
+    unset($value,$expire);
 
 }
 
@@ -559,9 +560,10 @@ function get_catname_by_catid(int $catid,$context,$alias='catname')
     {
         //查找缓存
         $cache_arr = yield get_cache($key);
+        //var_dump($cache_arr);
         if($cache_arr)
         {
-            print_r('catname from cache');
+            //print_r('catname from cache');
         }else{
             //数据库查找
             $model = get_instance()->loader->model(\app\Models\Data\CategoryModel::class,$context);
@@ -571,7 +573,7 @@ function get_catname_by_catid(int $catid,$context,$alias='catname')
                 $cache_arr = $r;
                 //存入缓存
                 yield set_cache($key,$r);
-                print_r('catname from db');
+                //print_r('catname from db');
             }
         }
     }
