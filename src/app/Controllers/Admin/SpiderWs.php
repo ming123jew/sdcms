@@ -6,6 +6,7 @@
  * Time: 15:17
  */
 namespace app\Controllers\Admin;
+use app\Controllers\BaseController;
 use app\Models\Business\CategoryBusiness;
 use app\Models\Business\ModelBusiness;
 use app\Models\Data\CategoryModel;
@@ -17,11 +18,16 @@ use app\Models\Data\SpiderTaskModel;
  * @package app\Controllers\Admin
  */
 
-class Spider extends Base
+class SpiderWs extends BaseController
 {
     protected $CategoryModel;
     protected $CategoryBusiness;
     protected $ModelBusiness;
+
+    //任务队列
+    protected $redis_home_webPage_spider_task_queue_key='redis_home_webPage_spider_task_queue_key';
+    //任务队列限制
+    protected $redis_home_webPage_spider_task_limt = 3;
 
     /**
      * @param string $controller_name
@@ -33,6 +39,48 @@ class Spider extends Base
         parent::initialization($controller_name, $method_name);
     }
 
+    //使用ws进行检测状态
+    public function connect()
+    {
+        //绑定用户id
+        $this->bindUid($this->client_data->uid);
+        //检测任务状态  返回当前任务队列
+        $this->Data['cur_queue'] = yield $this->redis_pool->getCoroutine()->lRange($this->redis_home_webPage_spider_task_queue_key,0,-1);
+        $this->send(['type' => 'welcome', 'id' => $this->client_data->uid,'fd'=>$this->fd,'cur_queue'=>$this->Data['cur_queue']]);
+    }
+
+    public function run(){
+        $this->Data['user_info'] = parent::get_login_session();
+        //任务id
+        $this->Data['task_id'] = '';
+        $this->Data['url'] = '';
+        $this->Data['match'] = [];
+        $this->Data['add'] = false; //任务添加情况
+
+        $queue_count = intval( yield $this->redis_pool->getCoroutine()->lLen($this->redis_home_webPage_spider_task_queue_key) );
+        if($queue_count < $this->redis_home_webPage_spider_task_limt){
+            //任务列表
+            yield $this->redis_pool->getCoroutine()->rpush( $this->redis_home_webPage_spider_task_queue_key,['task_id'=>$this->Data['task_id'],'url'=>$this->Data['url'],'match'=>$this->Data['match']]);
+
+            //页码参数
+            $this->Data['param_p'] = 'p';
+
+            //总共x页
+            $this->Data['count_p'] = 3;
+
+            //子任务列队
+            for ($i=1;$i<=$this->Data['count_p'];$i++){
+                yield $this->redis_pool->getCoroutine()->rpush( $this->redis_home_webPage_spider_task_queue_sub_key_.$this->Data['task_id'],$this->Data['url'].'?'.$this->Data['param_p'].'='.$i);
+            }
+            $add = true;
+
+        }else{
+            $add = false;
+        }
+        //检测任务状态  返回当前任务队列
+        $this->Data['cur_queue'] = yield $this->redis_pool->getCoroutine()->lRange($this->redis_home_webPage_spider_task_queue_key,0,-1);
+        $this->sendToUid($this->Data['user_info']['uid'],['cur_queue'=>$this->Data['cur_queue']]);
+    }
 
     /**
      * 爬虫任务列表

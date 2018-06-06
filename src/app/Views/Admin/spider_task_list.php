@@ -162,8 +162,12 @@ Purchase: http://wrapbootstrap.com
 <!--Beyond Scripts-->
 <script src="assets/js/beyond.min.js"></script>
 <script src="assets/js/bootbox/bootbox.js"></script>
+<script src="assets/js/jquery.json.js"></script>
 <script>
-    function content_delete(content_id) {
+    function spider_start() {
+
+    }
+    function spider_delete(content_id) {
         var url = '<?php echo url('','',"content_delete");?>';
         bootbox.confirm({
             message: '您确认要删除该文章吗？',
@@ -186,6 +190,127 @@ Purchase: http://wrapbootstrap.com
             }
         });
     }
+
+
+    //websocket
+    var wsUri = "ws://118.89.26.188:8083";
+    //var output;
+    var websocket;
+    var msg = new Object();
+    var fd;//当前fd
+    var fd_receiver;//接受者fd 如果有
+    var uid = <?php echo intval($data['uid']);?>;
+    function init() {
+        //output = document.getElementById("output");
+        //getData();
+        runWebSocket('Admin/SpiderWs','connect');
+
+    }
+
+    function runWebSocket(controller,method) {
+        websocket = new WebSocket(wsUri);
+        websocket.onopen = function (evt){
+            onOpen(evt,controller,method)
+        };
+        websocket.onclose = function (evt) {
+            onClose(evt)
+        };
+        websocket.onmessage = function (evt) {
+            onMessage(evt)
+        };
+        websocket.onerror = function (evt) {
+            onError(evt)
+        };
+    }
+
+    function onOpen(evt,controller,method) {
+        //writeToScreen("CONNECTED");
+        console.log("CONNECTED:"+evt);
+        //doSend("WebSocket rocks");
+        msg.controller = controller;
+        msg.method=method;
+        msg.uid = uid;
+        //msg.type = 'login';
+        websocket.send($.toJSON(msg));
+    }
+
+    function onClose(evt) {
+        //writeToScreen("DISCONNECTED");
+        console.log("DISCONNECTED:"+evt);
+    }
+
+    function onMessage(evt) {
+        //writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data + '</span>');
+        //websocket.close();
+        var json = $.parseJSON(evt.data);
+        var type = json.type;
+        switch (type){
+            case 'welcome':
+
+                fd = json.fd;
+                //加载正在运行的爬虫
+                if(json.cur_queue){
+                   console.log(json.cur_queue)
+                }
+                break;
+            case 'ready':
+                break;
+            case 'sendData':
+                //发送数据回调
+                var obj = {};
+                obj = {
+                    username: json.data.username,
+                    avatar: json.data.avatar,
+                    id: json.data.id,
+                    type: json.data.type,
+                    content: json.data.content
+                }
+                layim.getMessage(obj);
+                sendData('IM/Ws','historyData',localStorage.getItem('layim'));
+                console.log(json.data);
+                break;
+        }
+        console.log(json);
+
+    }
+
+    function onError(evt) {
+        //writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+        console.log(evt.data);
+    }
+
+    function doSend(message) {
+        //writeToScreen("SENT: " + message);
+        websocket.send(message);
+    }
+
+    function writeToScreen(message) {
+        var pre = document.createElement("p");
+        pre.style.wordWrap = "break-word";
+        pre.innerHTML = message;
+        output.appendChild(pre);
+    }
+
+    window.addEventListener("load", init, false);
+
+
+
+    function sendData(controller,method,message) {
+        if (!websocket) {
+            return false;
+        }
+        msg.controller = controller;
+        msg.method=method;
+        //msg.type = 'login';
+        msg.message = message;
+        msg.fd = fd;
+        msg.uid = uid;
+        websocket.send($.toJSON(msg));
+
+        return false
+    }
+
+
 </script>
 
 </body>
