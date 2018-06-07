@@ -42,6 +42,7 @@ class SpiderWs extends BaseController
     //使用ws进行检测状态
     public function connect()
     {
+
         //绑定用户id
         $this->bindUid($this->client_data->uid);
         //检测任务状态  返回当前任务队列
