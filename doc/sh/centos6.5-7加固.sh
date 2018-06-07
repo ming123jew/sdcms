@@ -24,7 +24,7 @@ if [ -f "/home/system/backup/etc/ssh/sshd_config" ] ; then
 else
 	cp -a /etc/ssh/sshd_config /home/system/backup/etc/ssh/sshd_config
 	sed -i "s/#Port 22/Port ${sshd_port}/g" `grep '#Port 22' -rl /etc/ssh/sshd_config`
-	if [ $centos_version == 7 ] ; then
+	if [ $centos_version==7 ] ; then
 		systemctl restart sshd.service
 	else
 		service sshd restart
@@ -33,7 +33,7 @@ fi
 
 #防火墙设置
 mkdir -p /home/system/backup/etc/init.d/
-if [ $centos_version == 7 ] ; then
+if [ $centos_version==7 ] ; then
 	systemctl stop firewalld
 	systemctl mask firewalld
 	yum install -y iptables-services
@@ -55,7 +55,7 @@ done
 iptables -A INPUT -j REJECT
 iptables -A FORWARD -j REJECT
 iptables -A OUTPUT -j ACCEPT
-if [ $centos_version == 7 ] ; then
+if [ $centos_version==7 ] ; then
 	service iptables save
 else
 	/etc/init.d/iptables save
@@ -78,15 +78,16 @@ else
 	sed -i "s/#www/www/g" `grep '#www' -rl /etc/passwd`
 	#给mysql删除#
 	sed -i "s/#mysql/mysql/g" `grep '#mysql' -rl /etc/passwd`
-	if [ $centos_version == 7 ] ; then
-		yum install policycoreutils-python
-		semanage port -a -t ssh_port_t -p tcp ${sshd_port}
+	if [ $centos_version==7 ] ; then
+		#yum install policycoreutils-python
+		#semanage port -a -t ssh_port_t -p tcp ${sshd_port}
+		echo "ok"
 	fi
 fi
 
 
 #关闭重启ctl-alt-delete组合键
-if [ $centos_version == 7 ] ; then
+if [ $centos_version==7 ] ; then
 	if [ -f "/home/system/backup/usr/lib/systemd/system/ctrl-alt-del.target" ] ; then
 		#存在不操作
 		echo "found"
