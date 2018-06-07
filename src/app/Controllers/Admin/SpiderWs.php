@@ -51,7 +51,7 @@ class SpiderWs extends BaseController
     }
 
     public function run(){
-        $this->Data['user_info'] = parent::get_login_session();
+        $this->Data['uid'] = $this->client_data->uid;
         //任务id
         $this->Data['task_id'] = '';
         $this->Data['url'] = '';

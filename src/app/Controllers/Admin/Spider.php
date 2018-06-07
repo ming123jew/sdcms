@@ -48,6 +48,8 @@ class Spider extends Base
 
             $this->http_output->end(json_encode($end),false);
         }else{
+            $this->Data['user_info'] = parent::get_login_session();
+
             $this->Model['SpiderTaskModel'] =  $this->loader->model(SpiderTaskModel::class,$this);
             $this->Data['p'] = intval( $this->http_input->postGet('p') );
             if($this->Data['p'] == 0) {$this->Data['p'] = 1;}
@@ -58,15 +60,15 @@ class Spider extends Base
             {
                 foreach ($this->Data['SpiderTaskModel']['result'] as $n=> $v)
                 {
+                    //var_dump($v);
                     $this->Data['SpiderTaskModel']['result'][$n]['str_manage'] = (yield check_role('Admin', 'Spider', 'spider_edit', $this)) ? '<a href="' . url('Admin', 'Spider', 'spider_edit', ["id" => $v['id']]) . '">编辑</a> |' : '';
                     $this->Data['SpiderTaskModel']['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Spider', 'spider_delete', $this)) ? '<a  onclick="spider_delete(' . $v['id'] . ')" href="javascript:;">删除</a> |' : '';
-                    $this->Data['SpiderTaskModel']['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Spider', 'spider_delete', $this)) ? '<a  onclick="spider_start(' . $v['id'] . ')" href="javascript:;"><em id="task_'.$v['id'].'">开始抓取</em></a>' : '';
+                    $this->Data['SpiderTaskModel']['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Spider', 'spider_delete', $this)) ? '<a  onclick="spider_start(' . $v['id'] .',this)" data=\''.serialize($v).'\' href="javascript:;"><em id="task_'.$v['id'].'">开始抓取</em></a>' : '';
                 }
             }
 
             parent::templateData('list',$this->Data['SpiderTaskModel']['result']);
             parent::templateData('page',page_bar($this->Data['SpiderTaskModel']['num'],$this->Data['p'],10,5,$this));
-            $this->Data['user_info'] = parent::get_login_session();
             parent::templateData('uid',intval($this->Data['user_info']['id']));
             //web or app
             parent::webOrApp(function (){

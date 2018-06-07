@@ -163,8 +163,12 @@ Purchase: http://wrapbootstrap.com
 <script src="assets/js/beyond.min.js"></script>
 <script src="assets/js/bootbox/bootbox.js"></script>
 <script src="assets/js/jquery.json.js"></script>
+<script src="assets/js/utf.js"></script>
+<script src="assets/js/phpSerializer.js"></script>
 <script>
-    function spider_start() {
+    function spider_start(task_id,obj) {
+        var json = ('(' + unserialize($(obj).attr('data')) + ')');
+        console.log(json)
 
     }
     function spider_delete(content_id) {
