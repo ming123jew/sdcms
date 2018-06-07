@@ -20,6 +20,7 @@ chattr -i /etc/gshadow
 mkdir -p /home/system/backup/etc/ssh/
 if [ -f "/home/system/backup/etc/ssh/sshd_config" ] ; then
 	#存在不操作
+	echo "found"
 else
 	cp -a /etc/ssh/sshd_config /home/system/backup/etc/ssh/sshd_config
 	sed -i "s/#Port 22/Port ${sshd_port}/g" `grep '#Port 22' -rl /etc/ssh/sshd_config`
@@ -58,11 +59,12 @@ if [ $centos_version == 7 ] ; then
 	service iptables save
 else
 	/etc/init.d/iptables save
-if
+fi
 
 #禁止不用用户【注意不要禁止sshd root www mysql】
 if [ -f "/home/system/backup/etc/passwd" ] ; then
 	#存在不操作
+	echo "found"
 else
 	mkdir -p /home/system/backup/etc/
 	cp -a /etc/passwd /home/system/backup/etc/passwd
@@ -87,6 +89,7 @@ fi
 if [ $centos_version == 7 ] ; then
 	if [ -f "/home/system/backup/usr/lib/systemd/system/ctrl-alt-del.target" ] ; then
 		#存在不操作
+		echo "found"
 	else
 		ln -s /usr/lib/systemd/system/reboot.target /usr/lib/systemd/system/ctrl-alt-del.target
 		#centos7
@@ -99,12 +102,13 @@ else
 	#centos6
 	if [ -f "/home/system/backup/etc/init/control-alt-delete.conf" ] ; then
 		#存在不操作
+		echo "found"
 	else
 		mkdir -p /home/system/backup/etc/init
 		cp -a /etc/init/control-alt-delete.conf /home/system/backup/etc/init/control-alt-delete.conf
 		sed -i 's/exec \/sbin\/shutdown/#exec \/sbin\/shutdown/g' `grep 'exec \/sbin\/shutdown' -rl /etc/init/control-alt-delete.conf`
 	fi
-if
+fi
 
 #chattr给文件增加不可更改属性
 chattr +i /etc/passwd
