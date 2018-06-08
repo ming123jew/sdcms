@@ -7,6 +7,7 @@
  */
 namespace app\Controllers\Home;
 
+use app\Process\MyAMQPTaskProcess;
 use app\Process\MyProcess;
 use Server\Components\Event\EventDispatcher;
 use Server\Components\Process\ProcessManager;
@@ -298,6 +299,11 @@ class Status extends BaseController{
         $result = yield ProcessManager::getInstance()->getRpcCallWorker(0)->getPoolStatus();
         print_r(get_instance()->getWorkerId());
         //var_dump($result);
+        $this->http_output->end($data);
+    }
+
+    public function http_rpc(){
+        $data = yield ProcessManager::getInstance()->getRpcCall(MyAMQPTaskProcess::class,'auto',0)->basicPublish();
         $this->http_output->end($data);
     }
 

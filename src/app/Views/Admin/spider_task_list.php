@@ -167,9 +167,10 @@ Purchase: http://wrapbootstrap.com
 <script src="assets/js/phpSerializer.js"></script>
 <script>
     function spider_start(task_id,obj) {
-        var json = ('(' + unserialize($(obj).attr('data')) + ')');
-        console.log(json)
-
+        var data = $(obj).attr('data');
+        console.log(data)
+        $(obj).find('#task_'+task_id).text('正在抓取..');
+        sendData('Admin/SpiderWs','run',data);
     }
     function spider_delete(content_id) {
         var url = '<?php echo url('','',"content_delete");?>';
@@ -255,6 +256,9 @@ Purchase: http://wrapbootstrap.com
                 //加载正在运行的爬虫
                 if(json.cur_queue){
                    console.log(json.cur_queue)
+                    $(json.cur_queue).each(function (i,e) {
+                        $('#task_'+e['task_id']).text('正在抓取..');
+                    })
                 }
                 break;
             case 'ready':

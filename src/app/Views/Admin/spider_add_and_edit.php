@@ -172,8 +172,8 @@ Purchase: http://wrapbootstrap.com
                                                                     <textarea name="info[rule]" class="form-control" rows="3"><?php echo $data['d_spider_model']['rule']??'';?></textarea>
 <pre>
 具体规则需要根据每个页面的不同进行定制获取页面列表URL
-'div .alist li',//规则1
-'li h3 a',//规则2
+div .alist li,//规则1
+li h3 a,//规则2
 <!--
 /*'#/<a .*?>.*?<\/a>/#',*
 -->

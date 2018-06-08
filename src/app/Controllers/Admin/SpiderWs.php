@@ -47,21 +47,26 @@ class SpiderWs extends BaseController
         $this->bindUid($this->client_data->uid);
         //检测任务状态  返回当前任务队列
         $this->Data['cur_queue'] = yield $this->redis_pool->getCoroutine()->lRange($this->redis_home_webPage_spider_task_queue_key,0,-1);
+        foreach ( $this->Data['cur_queue'] as $key=>$value ){
+            $this->Data['cur_queue'][$key] = unserialize($value);
+        }
         $this->send(['type' => 'welcome', 'id' => $this->client_data->uid,'fd'=>$this->fd,'cur_queue'=>$this->Data['cur_queue']]);
     }
 
     public function run(){
-        $this->Data['uid'] = $this->client_data->uid;
         //任务id
-        $this->Data['task_id'] = '';
-        $this->Data['url'] = '';
-        $this->Data['match'] = [];
+        $this->Data['message'] =json_decode($this->client_data->message,true);
+        $this->Data['task_id'] = $this->Data['message']['id'];
+        $this->Data['url'] = $this->Data['message']['url'];
+        $this->Data['match'] = explode("\r\n", $this->Data['message']['rule']);
         $this->Data['add'] = false; //任务添加情况
+        print_r($this->Data);
 
+        //读取任务数
         $queue_count = intval( yield $this->redis_pool->getCoroutine()->lLen($this->redis_home_webPage_spider_task_queue_key) );
         if($queue_count < $this->redis_home_webPage_spider_task_limt){
             //任务列表
-            yield $this->redis_pool->getCoroutine()->rpush( $this->redis_home_webPage_spider_task_queue_key,['task_id'=>$this->Data['task_id'],'url'=>$this->Data['url'],'match'=>$this->Data['match']]);
+            yield $this->redis_pool->getCoroutine()->rpush( $this->redis_home_webPage_spider_task_queue_key,serialize(['task_id'=>$this->Data['task_id'],'url'=>$this->Data['url'],'match'=>$this->Data['match']]));
 
             //页码参数
             $this->Data['param_p'] = 'p';
@@ -71,7 +76,7 @@ class SpiderWs extends BaseController
 
             //子任务列队
             for ($i=1;$i<=$this->Data['count_p'];$i++){
-                yield $this->redis_pool->getCoroutine()->rpush( $this->redis_home_webPage_spider_task_queue_sub_key_.$this->Data['task_id'],$this->Data['url'].'?'.$this->Data['param_p'].'='.$i);
+                yield $this->redis_pool->getCoroutine()->rpush( $this->redis_home_webPage_spider_task_queue_key.'_'.$this->Data['task_id'],$this->Data['url'].'?'.$this->Data['param_p'].'='.$i);
             }
             $add = true;
 
@@ -80,7 +85,19 @@ class SpiderWs extends BaseController
         }
         //检测任务状态  返回当前任务队列
         $this->Data['cur_queue'] = yield $this->redis_pool->getCoroutine()->lRange($this->redis_home_webPage_spider_task_queue_key,0,-1);
-        $this->sendToUid($this->Data['user_info']['uid'],['cur_queue'=>$this->Data['cur_queue']]);
+        print_r($this->client_data->uid);
+        $this->sendToUid($this->client_data->uid,['cur_queue'=>$this->Data['cur_queue'],'status'=>$add]);
+    }
+
+    public function http_clean_all(){
+        $this->Data['userlocks'] = yield $this->redis_pool->getCoroutine()->keys($this->redis_home_webPage_spider_task_queue_key.'*');
+        yield $this->redis_pool->getCoroutine()->del($this->redis_home_webPage_spider_task_queue_key);
+        foreach ($this->Data['userlocks'] as $key=>$value){
+            yield $this->redis_pool->getCoroutine()->del($value);
+        }
+
+        $this->Data['message'] = 'clear all.';
+        $this->http_output->end($this->Data);
     }
 
     /**

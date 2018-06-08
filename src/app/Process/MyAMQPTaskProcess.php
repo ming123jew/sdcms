@@ -12,6 +12,7 @@ namespace app\Process;
 use app\AMQPTasks\TestAMQPTask;
 use PhpAmqpLib\Message\AMQPMessage;
 use Server\Components\AMQPTaskSystem\AMQPTaskProcess;
+
 //创建异步作业进程
 class MyAMQPTaskProcess extends AMQPTaskProcess
 {
@@ -47,6 +48,30 @@ class MyAMQPTaskProcess extends AMQPTaskProcess
         $this->channel->queue_bind($queue, $exchange);
         //$this->channel->basic_qos(0, $prefetch_count, $global);
         $this->channel->basic_consume($queue, $consumerTag, false, false, false, false, [$this, 'process_message']);
+    }
+
+    public function basicPublish(){
+        //投递一个任务
+        $this->AMQPMessage =  new AMQPMessage('', ['content_type' => 'text/plain', 'delivery_mode' => 2]);
+        $msgBody = json_encode([
+            'url'=> 'https://www.sanwen8.cn/sanwen/',
+            'match'=>
+            [
+                'div .alist li',
+                'li h3 a'
+            ],
+            'params'=>['EventType'=>'xxx'],
+            'callBackClass'=>\app\Controllers\Spider\AnalyseUrl::class,//必须带/路径，pool才能找到class
+            'action'=>'getUrlList']);
+        $this->AMQPMessage->setBody($msgBody);
+        //$msg = new AMQPMessage($this->AMQPMessage, ['content_type' => 'text/plain', 'delivery_mode' => 2]); //生成消息  //, ['content_type' => 'text/plain', 'delivery_mode' => 2]
+        $this->channel->basic_publish($this->AMQPMessage,$this->exchange); //推送消息到某个交换机
+    }
+
+
+    public function getData()
+    {
+        return '123';
     }
 
     /**

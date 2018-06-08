@@ -63,7 +63,7 @@ class Spider extends Base
                     //var_dump($v);
                     $this->Data['SpiderTaskModel']['result'][$n]['str_manage'] = (yield check_role('Admin', 'Spider', 'spider_edit', $this)) ? '<a href="' . url('Admin', 'Spider', 'spider_edit', ["id" => $v['id']]) . '">编辑</a> |' : '';
                     $this->Data['SpiderTaskModel']['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Spider', 'spider_delete', $this)) ? '<a  onclick="spider_delete(' . $v['id'] . ')" href="javascript:;">删除</a> |' : '';
-                    $this->Data['SpiderTaskModel']['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Spider', 'spider_delete', $this)) ? '<a  onclick="spider_start(' . $v['id'] .',this)" data=\''.serialize($v).'\' href="javascript:;"><em id="task_'.$v['id'].'">开始抓取</em></a>' : '';
+                    $this->Data['SpiderTaskModel']['result'][$n]['str_manage'] .= (yield check_role('Admin', 'Spider', 'spider_delete', $this)) ? '<a  onclick="spider_start(' . $v['id'] .',this)" data=\''.json_encode($v).'\' href="javascript:;"><em id="task_'.$v['id'].'">开始抓取</em></a>' : '';
                 }
             }
 
@@ -132,21 +132,15 @@ class Spider extends Base
     {
         if($this->http_input->getRequestMethod()=='POST')
         {
-            $data['info'] = ($this->http_input->postGet('info'));
-            $data['info']['setting'] = json_encode($this->http_input->postGet('setting'));
-            $this->Model['CategoryModel'] =  $this->loader->model(CategoryModel::class,$this);
-            $id = intval($data['info']['id']);
-            unset($data['info']['id']);
-            $oldcatid = intval($data['info']['oldcatid']);
-            unset($data['info']['oldcatid']);
-            $r_category_model = yield $this->Model['CategoryModel']->updateById($id,$data['info']);
-            if(!$r_category_model)
+            $this->Data['info'] = ($this->http_input->postGet('info'));
+            $this->Model['SpiderTaskModel'] =  $this->loader->model(SpiderTaskModel::class,$this);
+            $this->Data['SpiderTaskModel'] = yield $this->Model['SpiderTaskModel']->updateById(intval($this->Data['info']['id']),$this->Data['info']);
+            if(!$this->Data['SpiderTaskModel'])
             {
-                unset($data,$id,$oldcatid,$r_category_model);
-                parent::httpOutputTis('CategoryModel更新请求失败.');
+                parent::httpOutputTis('SpiderTaskModel.');
             }else{
                 unset($data,$id,$oldcatid);
-                parent::httpOutputEnd('爬虫任务更新成功.','爬虫任务更新失败.',$r_category_model);
+                parent::httpOutputEnd('爬虫任务更新成功.','爬虫任务更新失败.',$this->Data['SpiderTaskModel']);
             }
         }else{
             $id = intval($this->http_input->postGet('id'));
