@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : ming123jew
-Source Server Version : 50635
-Source Host           : 118.89.26.188:3306
+Source Server Version : 50628
+Source Host           : gz-cdb-lziftg0k.sql.tencentcdb.com:62644
 Source Database       : sd
 
 Target Server Type    : MYSQL
-Target Server Version : 50635
+Target Server Version : 50628
 File Encoding         : 65001
 
-Date: 2018-05-21 16:02:53
+Date: 2018-06-08 17:35:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,12 +41,12 @@ CREATE TABLE `sd_admin_menu` (
   KEY `status` (`status`) USING BTREE,
   KEY `model` (`c`) USING BTREE,
   KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
 -- Records of sd_admin_menu
 -- ----------------------------
-INSERT INTO `sd_admin_menu` VALUES ('1', '0', 'Admin', 'System', '##', '', '0', '1', '系统设置', 'menu-icon glyphicon glyphicon-tasks', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('1', '0', 'Admin', 'System', '#', '', '0', '1', '系统设置', 'menu-icon glyphicon glyphicon-tasks', '', '0', null, '0', null, null, '');
 INSERT INTO `sd_admin_menu` VALUES ('2', '1', 'Admin', 'System', 'config', '', '0', '1', '基本设置', null, '', '0', null, '0', null, null, null);
 INSERT INTO `sd_admin_menu` VALUES ('3', '1', 'Admin', 'System', 'menu', '', '0', '1', '后台菜单', null, '', '0', null, '0', null, null, null);
 INSERT INTO `sd_admin_menu` VALUES ('4', '0', 'Admin', 'User', '#', '', '0', '1', '用户管理', 'menu-icon fa fa-user', '', '0', null, '0', null, null, 'User,Role');
@@ -72,6 +72,12 @@ INSERT INTO `sd_admin_menu` VALUES ('25', '24', 'Admin', 'Content', 'content_lis
 INSERT INTO `sd_admin_menu` VALUES ('26', '24', 'Admin', 'Content', 'content_add', '', '0', '0', '添加内容', '', '', '0', null, '0', null, null, '');
 INSERT INTO `sd_admin_menu` VALUES ('27', '24', 'Admin', 'Content', 'content_edit', '', '0', '0', '编辑内容', '', '', '0', null, '0', null, null, '');
 INSERT INTO `sd_admin_menu` VALUES ('28', '24', 'Admin', 'Content', 'content_delete', '', '0', '0', '删除内容', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('29', '0', 'Admin', 'Spider', '#', '', '0', '1', '爬虫任务', 'menu-icon  glyphicon glyphicon-eye-close', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('30', '29', 'Admin', 'Spider', 'spider_add', '', '0', '1', '添加任务', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('31', '29', 'Admin', 'Spider', 'spider_list', '', '0', '1', '爬虫任务', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('32', '29', 'Admin', 'Spider', 'spider_edit', '', '0', '0', '编辑任务', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('33', '29', 'Admin', 'Spider', 'spider_delete', '', '0', '0', '删除任务', '', '', '0', null, '0', null, null, '');
+INSERT INTO `sd_admin_menu` VALUES ('34', '29', 'Admin', 'Spider', 'start', '', '0', '0', '开始抓取', '', '', '0', null, '0', null, null, '');
 
 -- ----------------------------
 -- Table structure for `sd_admin_role`
@@ -116,7 +122,7 @@ CREATE TABLE `sd_admin_role_priv` (
 -- ----------------------------
 -- Records of sd_admin_role_priv
 -- ----------------------------
-INSERT INTO `sd_admin_role_priv` VALUES ('1', '1', 'Admin', 'System', '##', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '1', 'Admin', 'System', '#', '');
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '2', 'Admin', 'System', 'config', '');
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '3', 'Admin', 'System', 'menu', '');
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '9', 'Admin', 'System', 'menu_add', '');
@@ -142,6 +148,11 @@ INSERT INTO `sd_admin_role_priv` VALUES ('1', '25', 'Admin', 'Content', 'content
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '26', 'Admin', 'Content', 'content_add', '');
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '27', 'Admin', 'Content', 'content_edit', '');
 INSERT INTO `sd_admin_role_priv` VALUES ('1', '28', 'Admin', 'Content', 'content_delete', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '29', 'Admin', 'Spider', '#', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '30', 'Admin', 'Spider', 'spider_add', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '31', 'Admin', 'Spider', 'spider_list', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '32', 'Admin', 'Spider', 'spider_edit', '');
+INSERT INTO `sd_admin_role_priv` VALUES ('1', '33', 'Admin', 'Spider', 'spider_delete', '');
 
 -- ----------------------------
 -- Table structure for `sd_category`
@@ -563,17 +574,17 @@ INSERT INTO `sd_content_hits` VALUES ('6', '1', '0', '0', '0', '0', '0', '152239
 INSERT INTO `sd_content_hits` VALUES ('7', '1', '5', '0', '2', '2', '5', '1524994964', '0');
 INSERT INTO `sd_content_hits` VALUES ('8', '1', '5', '0', '5', '5', '5', '1523591119', '0');
 INSERT INTO `sd_content_hits` VALUES ('9', '1', '2', '0', '2', '2', '2', '1523958187', '0');
-INSERT INTO `sd_content_hits` VALUES ('10', '1', '5', '1', '2', '3', '3', '1526521707', '1');
+INSERT INTO `sd_content_hits` VALUES ('10', '1', '6', '1', '1', '1', '4', '1526905415', '1');
 INSERT INTO `sd_content_hits` VALUES ('11', '1', '6', '0', '6', '6', '6', '1524222525', '0');
-INSERT INTO `sd_content_hits` VALUES ('12', '1', '15', '0', '2', '2', '5', '1525685949', '0');
-INSERT INTO `sd_content_hits` VALUES ('13', '1', '1348', '0', '5', '1327', '1327', '1525409718', '1');
-INSERT INTO `sd_content_hits` VALUES ('14', '1', '57', '1', '4', '10', '49', '1526433318', '0');
+INSERT INTO `sd_content_hits` VALUES ('12', '1', '19', '0', '2', '2', '2', '1528077847', '0');
+INSERT INTO `sd_content_hits` VALUES ('13', '1', '1353', '0', '5', '5', '5', '1528118082', '1');
+INSERT INTO `sd_content_hits` VALUES ('14', '1', '70', '1', '5', '5', '5', '1528082238', '0');
 INSERT INTO `sd_content_hits` VALUES ('15', '2', '2', '0', '2', '2', '2', '1523863694', '0');
 INSERT INTO `sd_content_hits` VALUES ('16', '2', '2', '0', '2', '2', '2', '1523863762', '0');
 INSERT INTO `sd_content_hits` VALUES ('17', '2', '10', '2', '2', '2', '5', '1526287574', '1');
-INSERT INTO `sd_content_hits` VALUES ('18', '2', '31', '3', '2', '2', '7', '1525759320', '1');
-INSERT INTO `sd_content_hits` VALUES ('19', '2', '1686', '3', '2', '5', '777', '1526485332', '4');
-INSERT INTO `sd_content_hits` VALUES ('20', '2', '78', '3', '1', '4', '25', '1526375871', '2');
+INSERT INTO `sd_content_hits` VALUES ('18', '2', '37', '3', '3', '3', '13', '1527502989', '2');
+INSERT INTO `sd_content_hits` VALUES ('19', '2', '1690', '3', '4', '4', '781', '1527502127', '5');
+INSERT INTO `sd_content_hits` VALUES ('20', '2', '88', '4', '4', '10', '4', '1528032166', '2');
 
 -- ----------------------------
 -- Table structure for `sd_im_group`
@@ -626,7 +637,7 @@ CREATE TABLE `sd_im_history` (
   `receiver_uid` int(11) NOT NULL COMMENT '接受者uid',
   `status` tinyint(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sd_im_history
@@ -676,6 +687,9 @@ INSERT INTO `sd_im_history` VALUES ('43', 'friend', '{\"mine\":{\"username\":\"m
 INSERT INTO `sd_im_history` VALUES ('44', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"\\u554a\\u554a\",\"fd\":6},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming\",\"type\":\"friend\"}}', '1526634261', '2', '1', '0');
 INSERT INTO `sd_im_history` VALUES ('45', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"aaaaaaaaa\",\"fd\":397},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"offline\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526887886', '1', '2', '0');
 INSERT INTO `sd_im_history` VALUES ('46', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"f\",\"fd\":397},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"offline\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526887902', '1', '2', '0');
+INSERT INTO `sd_im_history` VALUES ('47', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"hi\",\"fd\":10},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526904568', '1', '2', '1');
+INSERT INTO `sd_im_history` VALUES ('48', 'friend', '{\"mine\":{\"username\":\"ming2\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"2\",\"mine\":true,\"content\":\"\\u5728\\u7684\",\"fd\":13},\"to\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"type\":\"friend\",\"name\":\"ming\"}}', '1526904578', '2', '1', '1');
+INSERT INTO `sd_im_history` VALUES ('49', 'friend', '{\"mine\":{\"username\":\"ming\",\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"id\":\"1\",\"mine\":true,\"content\":\"a\",\"fd\":10},\"to\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http:\\/\\/cdn.firstlinkapp.com\\/upload\\/2016_6\\/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\"}}', '1526904627', '1', '2', '1');
 
 -- ----------------------------
 -- Table structure for `sd_im_history_log`
@@ -690,8 +704,8 @@ CREATE TABLE `sd_im_history_log` (
 -- ----------------------------
 -- Records of sd_im_history_log
 -- ----------------------------
-INSERT INTO `sd_im_history_log` VALUES ('{\"1\":{\"spread0\":\"true\",\"history\":{\"friend2\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\",\"historyTime\":1526633437812},\"friend3\":{\"username\":\"ming3\",\"id\":\"3\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming3\",\"type\":\"friend\",\"historyTime\":1526631043014}},\"chatlog\":{\"friend2\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"fuck\",\"timestamp\":1526630930379,\"mine\":true},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"what the fuck\",\"timestamp\":1526631032774,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"fuck you\",\"timestamp\":1526631038416},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526633575292}],\"friend3\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"3\",\"type\":\"friend\",\"content\":\"hi 在吗\",\"timestamp\":1526631051026,\"mine\":true}]}},\"2\":{\"spread0\":\"true\",\"history\":{\"friend1\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming\",\"type\":\"friend\",\"historyTime\":1526631023067}},\"chatlog\":{\"friend1\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"fuck\",\"timestamp\":1526630930405},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"what the fuck\",\"timestamp\":1526631032819},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"fuck you\",\"timestamp\":1526631038394,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526633575267,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526634258110,\"mine\":true}]}}}', '1526634261', '2');
-INSERT INTO `sd_im_history_log` VALUES ('{\"1\":{\"spread0\":\"true\",\"history\":{\"friend2\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"offline\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\",\"historyTime\":1526887884293},\"friend3\":{\"username\":\"ming3\",\"id\":\"3\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming3\",\"type\":\"friend\",\"historyTime\":1526631043014}},\"chatlog\":{\"friend2\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"fuck\",\"timestamp\":1526630930379,\"mine\":true},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"what the fuck\",\"timestamp\":1526631032774,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"fuck you\",\"timestamp\":1526631038416},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526633575292},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526634258145},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"aaaaaaaaa\",\"timestamp\":1526887888454,\"mine\":true},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"f\",\"timestamp\":1526887903846,\"mine\":true}],\"friend3\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"3\",\"type\":\"friend\",\"content\":\"hi 在吗\",\"timestamp\":1526631051026,\"mine\":true}]}},\"2\":{\"spread0\":\"true\",\"history\":{\"friend1\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming\",\"type\":\"friend\",\"historyTime\":1526631023067}},\"chatlog\":{\"friend1\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"fuck\",\"timestamp\":1526630930405},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"what the fuck\",\"timestamp\":1526631032819},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"fuck you\",\"timestamp\":1526631038394,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526633575267,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526634258110,\"mine\":true}]}}}', '1526887902', '1');
+INSERT INTO `sd_im_history_log` VALUES ('{\"1\":{\"spread0\":\"true\",\"history\":{\"friend2\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\",\"historyTime\":1526904566996},\"friend3\":{\"username\":\"ming3\",\"id\":\"3\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming3\",\"type\":\"friend\",\"historyTime\":1526631043014}},\"chatlog\":{\"friend2\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"fuck\",\"timestamp\":1526630930379,\"mine\":true},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"what the fuck\",\"timestamp\":1526631032774,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"fuck you\",\"timestamp\":1526631038416},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526633575292},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"hi\",\"timestamp\":1526904569420,\"mine\":true}],\"friend3\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"3\",\"type\":\"friend\",\"content\":\"hi 在吗\",\"timestamp\":1526631051026,\"mine\":true}]}},\"2\":{\"spread0\":\"true\",\"history\":{\"friend1\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"type\":\"friend\",\"name\":\"ming\",\"historyTime\":1526904573517}},\"chatlog\":{\"friend1\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"fuck\",\"timestamp\":1526630930405},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"what the fuck\",\"timestamp\":1526631032819},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"fuck you\",\"timestamp\":1526631038394,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526633575267,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526634258110,\"mine\":true},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"hi\",\"timestamp\":1526904569432},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"在的\",\"timestamp\":1526904578711,\"mine\":true}]}}}', '1526904578', '2');
+INSERT INTO `sd_im_history_log` VALUES ('{\"1\":{\"spread0\":\"true\",\"history\":{\"friend2\":{\"username\":\"ming2\",\"id\":\"2\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming2\",\"type\":\"friend\",\"historyTime\":1526904566996},\"friend3\":{\"username\":\"ming3\",\"id\":\"3\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"name\":\"ming3\",\"type\":\"friend\",\"historyTime\":1526631043014}},\"chatlog\":{\"friend2\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"fuck\",\"timestamp\":1526630930379,\"mine\":true},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"what the fuck\",\"timestamp\":1526631032774,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"fuck you\",\"timestamp\":1526631038416},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526633575292},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"hi\",\"timestamp\":1526904569420,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"在的\",\"timestamp\":1526904578726},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"2\",\"type\":\"friend\",\"content\":\"a\",\"timestamp\":1526904628415,\"mine\":true}],\"friend3\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"3\",\"type\":\"friend\",\"content\":\"hi 在吗\",\"timestamp\":1526631051026,\"mine\":true}]}},\"2\":{\"spread0\":\"true\",\"history\":{\"friend1\":{\"username\":\"ming\",\"id\":\"1\",\"status\":\"online\",\"sign\":null,\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"type\":\"friend\",\"name\":\"ming\",\"historyTime\":1526904573517}},\"chatlog\":{\"friend1\":[{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"fuck\",\"timestamp\":1526630930405},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"what the fuck\",\"timestamp\":1526631032819},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"fuck you\",\"timestamp\":1526631038394,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526633575267,\"mine\":true},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"啊啊\",\"timestamp\":1526634258110,\"mine\":true},{\"username\":\"ming\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"hi\",\"timestamp\":1526904569432},{\"username\":\"ming2\",\"avatar\":\"http://cdn.firstlinkapp.com/upload/2016_6/1465575923433_33812.jpg\",\"id\":\"1\",\"type\":\"friend\",\"content\":\"在的\",\"timestamp\":1526904578711,\"mine\":true}]}}}', '1526904627', '1');
 
 -- ----------------------------
 -- Table structure for `sd_im_user_friend`
@@ -5723,6 +5737,51 @@ CREATE TABLE `sd_model` (
 -- ----------------------------
 INSERT INTO `sd_model` VALUES ('1', '文章模型', null, '0');
 INSERT INTO `sd_model` VALUES ('2', '单页', null, '0');
+
+-- ----------------------------
+-- Table structure for `sd_spider_content`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_spider_content`;
+CREATE TABLE `sd_spider_content` (
+  `task_id` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `content` text,
+  `keywords` varchar(60) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_spider_content
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `sd_spider_task`
+-- ----------------------------
+DROP TABLE IF EXISTS `sd_spider_task`;
+CREATE TABLE `sd_spider_task` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(60) NOT NULL,
+  `model_id` int(8) NOT NULL,
+  `catid` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `page_param` varchar(10) NOT NULL DEFAULT 'p',
+  `start` int(6) NOT NULL DEFAULT '0',
+  `end` int(6) NOT NULL DEFAULT '0',
+  `rule` text,
+  `priority` tinyint(2) NOT NULL DEFAULT '1',
+  `description` varchar(200) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未执行   1:已完成',
+  `uid` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sd_spider_task
+-- ----------------------------
+INSERT INTO `sd_spider_task` VALUES ('2', '经典散文', '1', '1', 'https://www.sanwen.net/sanwen/', 'p', '1', '5', 'div .alist li,\r\nli h3 a,', '1', '', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for `sd_stats`
