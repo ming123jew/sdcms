@@ -5,6 +5,129 @@
  * Date: 2018-4-17
  * Time: 10:15
  */
+//for($i=0;$i<=3;$i++){
+//    echo str_repeat(" ",3-$i);
+//    echo str_repeat("*",$i*2+1);
+//    echo "\n";
+//}
+
+$arr = [
+    'result'=>[
+        'id'=>1,
+        'name'=>'ming'
+    ],
+    'ext'=>[]
+];
+$arr = json_decode(json_encode($arr));
+
+$arr['result'][1]['manage'] = 'fuck';
+
+print_r($arr);
+
+
+$a = 'hello';
+$b = &$a;
+//unset($b);
+$b = 'world';
+echo $a;
+exit;
+
+
+
+//二分法/折半查找
+//二分查找的基本思想是将n个元素分成大致相等的两部分，取a[n/2]与x做比较，如果x=a[n/2],则找到x,算法中止；如果x<a[n/2],则只要在数组a的左半部分继续搜索x,如果x>a[n/2],则只要在数组a的右半部搜索x.
+//时间复杂度无非就是while循环的次数！
+//总共有n个元素，
+//渐渐跟下去就是n,n/2,n/4,....n/2^k（接下来操作元素的剩余个数），其中k就是循环的次数
+//由于你n/2^k取整后>=1
+//即令n/2^k=1
+//可得k=log2n,（是以2为底，n的对数）
+//所以时间复杂度可以表示O(h)=O(log2n)
+function bin_search($s,$a){
+    $low = 0;
+    $height = count($a)-1;
+    while($low<=$height){
+        //取中间
+        $mid = intval(($low+$height)/2);
+        if($a[$mid]>$s){
+            //比较，如果中间元素比S大，则height-1
+            $height = $mid -1;
+        }else if($a[$mid]<$s){
+            //比较，如果中间元素比S小，则low+1
+            $low = $mid + 1;
+        }else{
+            return $mid;
+        }
+    }
+    return -1;
+}
+//折半查找要求线性表必须采用顺序存储结构，而且表中元素按关键字有序排列。
+$start_time = microtime(true);
+$array = [1,5,3,6,6,8,9,10];
+var_dump(bin_search(10,$array));
+echo "\nused:".round(microtime(true)-$start_time,3)." {".memory_get_usage()."}\n";
+
+
+//顺序查找  缺点是效率低下
+//顺序查找是在一个已知无(或有序）序队列中找出与给定关键字相同的数的具体位置。原理是让关键字与队列中的数从最后一个开始逐个比较，直到找出与给定关键字相同的数为止，它的缺点是效率低下。
+function seq_search($arr,$k){
+    $n = count($arr);
+    for ($i=0;$i<$n;$i++){
+        if($arr[$i]==$k){
+            break;
+        }
+    }
+    if($i<$n){
+        return $i;
+    }else{
+        return -1;
+    }
+
+}
+$array = [1,5,9,3,6,6,8,10];
+$start_time = microtime(true);
+var_dump(seq_search($array,10));
+echo "\nused:".round(microtime(true)-$start_time,3)."{".memory_get_usage()."}\n";
+
+//冒泡
+//冒泡排序算法的原理如下：
+//比较相邻的元素。如果第一个比第二个大，就交换他们两个。
+//对每一对相邻元素做同样的工作，从开始第一对到结尾的最后一对。在这一点，最后的元素应该会是最大的数。
+//针对所有的元素重复以上的步骤，除了最后一个。
+//持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较
+function bubble_search($arr){
+    $c = count($arr);
+    for ($i=0;$i<$c;$i++){
+        for ($j=0;$j<$c-$i-1;$j++){
+            if($arr[$j]>$arr[$j+1]){
+                $p = $arr[$j];//交换
+                $arr[$j] = $arr[$j+1];
+                $arr[$j+1] = $p;
+            }
+        }
+    }
+    return $arr;
+}
+$array = [1,5,9,3,6,6,8,10];
+$start_time = microtime(true);
+print_r(bubble_search($array));
+echo "\nused:".round(microtime(true)-$start_time,3)."{".memory_get_usage()."}\n";
+
+
+
+function check_string($str){
+    if(!get_magic_quotes_gpc()){
+        $str = addslashes($str);
+    }
+
+    $str = htmlspecialchars($str);
+    return $str;
+}
+
+
+exit(0);
+
+//
 
 class T
 {

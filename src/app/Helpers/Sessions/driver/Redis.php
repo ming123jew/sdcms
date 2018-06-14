@@ -30,8 +30,10 @@ class Redis extends SessionHandler
 
     public function __construct($config = [])
     {
-        $this->config = array_merge($this->config, $config);
-        //print_r( $this->config);
+        $configs = get_instance()->config;
+        $configs_redis = ($configs['redis']);
+        $this->config = array_merge($this->config, $config,$configs_redis[$configs_redis['active']]);
+
     }
 
     /**
